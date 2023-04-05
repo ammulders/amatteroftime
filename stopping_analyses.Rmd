@@ -426,12 +426,12 @@ bootFunc <- function(data, i) {
     dfmencm$gender <- factor(dfmencm$gender, levels=levels(df$gender))
     
     # assigning ethnicity to the dataframes
-    dfmincp$ethnicity <- dfmincm$ethnicity <- "women"
-    dfmajcp$ethnicity <- dfmajcm$ethnicity <- "men"
-    dfmincp$ethnicity <- factor(dfmincp$ethnicity, levels=levels(df$ethnicity2))
-    dfmincm$ethnicity <- factor(dfmincm$ethnicity, levels=levels(df$ethnicity2))
-    dfmajcp$ethnicity <- factor(dfmajcp$ethnicity, levels=levels(df$ethnicity2))
-    dfmajcm$ethnicity <- factor(dfmajcm$ethnicity, levels=levels(df$ethnicity2))
+    dfmincp$ethnicity2 <- dfmincm$ethnicity2 <- "minority"
+    dfmajcp$ethnicity2 <- dfmajcm$ethnicity2 <- "majority"
+    dfmincp$ethnicity2 <- factor(dfmincp$ethnicity2, levels=levels(df$ethnicity2))
+    dfmincm$ethnicity2 <- factor(dfmincm$ethnicity2, levels=levels(df$ethnicity2))
+    dfmajcp$ethnicity2 <- factor(dfmajcp$ethnicity2, levels=levels(df$ethnicity2))
+    dfmajcm$ethnicity2 <- factor(dfmajcm$ethnicity2, levels=levels(df$ethnicity2))
     
     
     # adding/subtracting small changes PhD cohort
@@ -468,6 +468,7 @@ b4 <- boot(df_ppf3, bootFunc, R = 999, parallel="snow", ncpus=10)
 
 
 fsave(b4, file = "boot4.rda", location = "./results/stopping/")
+
 
 ```
 
@@ -517,7 +518,7 @@ minc <- "#B85042"
 ```
 
 
-## Plot 5: Survival times by gender and ethnicity
+## Figure 5: Survival times by gender and ethnicity
 
 Based on M1: gender only.
 
@@ -611,7 +612,7 @@ plot5b$data # predicted survival time by ethnicity
 
 
 
-## Plot 6: Gender * cohort
+## Figure 6: Gender * cohort
 
 Here, I check the predicted values based on model 3. I found that the predicted values based on the full model were extreme in some cases. By adding the variables in model 3 one by one, I check which variables lead to large deviations from normal predicted values. Inclusion of university, field, cohort and veni leads to a small percentage of unrealistic predicted values, while previous publications seems to add quite a few. 
 
@@ -649,7 +650,7 @@ ggsave("./output/stopping/plot6_logn.jpg", height=5, width=8, dpi=1200)
 ```
 
 
-## Plot 7: Ethnicity * cohort
+## Figure 7: Ethnicity * cohort
 
 ```{r}
 

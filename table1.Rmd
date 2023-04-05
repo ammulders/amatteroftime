@@ -1,5 +1,4 @@
 ---
-
 title: "Table 1"
 date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
 output: 
@@ -10,10 +9,12 @@ output:
     number_sections: true
     code_folding: show
     code_download: yes
----
+    
+---  
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
