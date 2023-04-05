@@ -369,17 +369,11 @@ phdethnicity$ethnicity <- phdethnicity$origin1
 ```
 
 
-#check origin4!
-
 
 
 
 
 # Method 2: Moroccan name list
-
-
-** ! Vraag Bas/Jochem: hier de scraper laten staan, of gewoon de lijst inladen en aangeven van welke website dit komt? **
-
 
 
 In addition to determining ethnicity based on last names, we look at first names. Specifically, we use a list of Moroccan first names to detect whether an individual is likely of Moroccan descent. Untill very recently, first names of Moroccan individuals were regulated by Moroccan law [@haskouri]. This implies that many Moroccan individuals choose names for their children from a list of accepted girls and boys names. We load in a list of names by @`Morocco Guide` as an additional indicator that a PhD is Moroccan and add this to our example data frame. 

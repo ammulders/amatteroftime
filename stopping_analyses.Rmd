@@ -1,0 +1,870 @@
+---
+title: "Analyses 'ceasing to publish'"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: false
+    code_folding: show
+    code_download: yes
+
+---
+
+
+This lab journal replicates the analyses for 'ceasing to publish'. 
+
+  
+
+----
+
+
+```{r, echo=FALSE}
+
+rm(list = ls())
+
+
+```
+
+
+
+# Custom functions
+
+- `package.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+
+```{r, results='hide'}
+
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+```
+
+
+---  
+
+# Packages
+
+- `survival`: general package to create life tables and survival models, needed for flexsurv
+- `flexsurv`: fitting flexible survival regression models
+- `boot`: bootstrapping for SEs of AMEs
+- `tidyverse`: for data manipulation
+- `ggplot2`: for creating figures 5-7
+- `ggpubr`: for combining two figures in one (plot 5)
+- `kableExtra`: formatting tables
+
+```{r, results='hide'}
+
+packages = c("survival", "flexsurv", "boot", "tidyverse", "ggplot2", "ggpubr", "kableExtra") 
+
+fpackage.check(packages)
+
+```
+
+
+--- 
+
+# Input
+
+
+
+We use two processed datasets.
+
+* [df_stopping.rda]("./data/processed/df_stopping.rda"): person-period file containing publications and all relevant variables for the survival models, time window for inactivity is 3 years
+    - For construction of this dataset see [(datapreparation.html)]  
+    - name of dataset: `df_ppf3` 
+
+* [df_stopping5.rda]("data/processed/df_stopping_5.rda"): person-period file containing publications and all relevant variables for the survival models, time-window for inactivity is years
+    - For construction of this dataset see [(datapreparation.html)]  
+    - name of dataset: `df_ppf5` 
+
+
+
+
+```{r}
+
+load(file = "./data/processed/df_stopping.rda")
+
+
+load(file = "data/processed/df_stopping5.rda")
+
+```
+
+
+
+# Checking distributions
+
+Kaplan-Meier curve
+```{r}
+
+KM1 <- survfit(Surv(time-1, time, inactive) ~ 1, conf.lower='usual', data = df_ppf3)
+KM2 <- survfit(Surv(time-1, time, inactive) ~ gender, conf.lower='usual', data = df_ppf3)
+KM3 <- survfit(Surv(time-1, time, inactive) ~ ethnicity2, conf.lower='usual', data = df_ppf3)
+
+
+plot(KM1)
+plot(KM2)
+plot(KM3)
+
+```
+
+
+```{r, eval=FALSE}
+
+#MC1 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "gengamma") # commented: no convergence
+#MC2 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "genf")     # commented: no convergence
+MC3 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "weibull")
+MC4 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "gamma")
+MC5 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "exp")
+MC6 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "llogis")
+MC7 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "gompertz")
+MC8 <- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = "lognormal")
+
+testdist <- AIC(MC3, MC4, MC5, MC6, MC7, MC8)
+testdist[order(testdist$AIC),]
+
+```
+
+
+
+
+
+# Model 1: Gender only
+
+```{r, eval=FALSE}
+
+M1 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender , data = df_ppf3, dist = "lognormal")
+
+```
+
+```{r, echo=FALSE}
+
+load("results/stopping/20230405M1.rda")
+
+M1 <- x
+
+rm(x)
+
+```
+
+```{r}
+
+M1
+
+```
+
+
+```{r, echo=FALSE}
+
+# p-values
+
+M1$pvals <- 2*pnorm(-abs(M1$res[,1]/M1$res[,4]))
+round(M1$pvals, 4)
+
+```
+
+
+
+
+# Model 2: Ethnicity only
+
+```{r, eval=FALSE}
+
+M2 <- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity2 , data = df_ppf3, dist = "lognormal")
+
+
+```
+
+```{r, echo=FALSE}
+
+load("./results/stopping/20230405M2.rda")
+
+M2 <- x
+
+rm(x)
+
+```
+
+```{r}
+
+M2 
+
+```
+
+
+```{r, echo=FALSE}
+
+# Computing p-values
+
+M2$pvals <- 2*pnorm(-abs(M2$res[,1]/M2$res[,4]))
+
+round(M2$pvals, 4)
+
+```
+
+
+
+
+
+# Model 3: Gender and ethnicity, controls
+
+```{r, eval=FALSE}
+
+M3 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df_ppf3, dist = "lognormal")
+
+```
+
+```{r, echo=FALSE}
+
+load("./results/stopping/20230405M3.rda")
+
+M3 <- x
+
+rm(x)
+
+```
+
+
+```{r}
+
+M3
+
+```
+
+
+```{r, echo=FALSE}
+
+# computing p-values
+
+M3$pvals <- 2*pnorm(-abs(M3$res[,1]/M3$res[,4]))
+
+round(M3$pvals, 4)
+
+```
+
+
+
+## Average marginal effects (AMEs)
+
+
+```{r, eval=FALSE}
+
+bootFunc <- function(data, i) {
+  df <- data[i,] #bootstrap datasets
+  
+  
+  M <- flexsurv::flexsurvreg(survival::Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df, dist = "lognormal")
+  
+  suppressWarnings({
+  
+    dfmaj <- dfmin <- dfmen <- dfwomen <- df
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity2 <- "minority" # one dataset all minority
+    dfmaj$ethnicity2 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df$gender))
+    dfmin$ethnicity2 <- factor(dfmin$ethnicity2, levels=levels(df$ethnicity2))
+    dfmaj$ethnicity2 <- factor(dfmaj$ethnicity2, levels=levels(df$ethnicity2))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(M, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(M, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(M, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(M, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+  })
+  
+  c(AME_gender, AME_ethnicity)
+   #save results
+}
+
+b3 <- boot(df_ppf3, bootFunc, R = 999, parallel="snow", ncpus=10)
+
+
+fsave(b3, file = "boot3.rda", location = "./results/stopping/")
+
+
+```
+
+```{r, echo=FALSE}
+
+load("./results/stopping/boot3.rda")
+b3 <- x
+rm(x)
+
+```
+
+
+```{r}
+
+original <- b3$t0
+bias <- colMeans(b3$t) - b3$t0
+se <- apply(b3$t, 2, sd)
+
+boot.df3 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df3) <- c("AME_gender", "AME_ethnicity")
+
+boot.df3$t <- (boot.df3$original / boot.df3$se)
+
+round(boot.df3, 5)
+
+
+```
+
+
+
+# Model 4: Gender + ethnicity + cohort x gender + cohort x ethnicity + controls
+
+```{r, eval=FALSE}
+
+M4 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf3, dist = "lognormal")
+
+
+```
+
+
+```{r, echo=FALSE}
+
+load("./results/stopping/20230405M4.rda")
+
+M4 <- x
+
+rm(x)
+
+```
+
+```{r}
+
+M4
+
+```
+
+
+```{r, echo=FALSE}
+
+# calculating p-values
+
+M4$pvals <- 2*pnorm(-abs(M4$res[,1]/M4$res[,4]))
+
+round(M4$pvals, 4)
+
+```
+
+
+
+## Average marginal effects (AMEs)
+
+```{r, eval=FALSE}
+
+
+bootFunc <- function(data, i) {
+  df <- data[i,] #bootstrap datasets
+  
+  
+  M <- flexsurv::flexsurvreg(survival::Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df, dist = "lognormal")
+  
+  suppressWarnings({
+  
+    dfmaj <- dfmin <- dfmen <- dfwomen <- df
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity2 <- "minority" # one dataset all minority
+    dfmaj$ethnicity2 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df$gender))
+    dfmin$ethnicity2 <- factor(dfmin$ethnicity2, levels=levels(df$ethnicity2))
+    dfmaj$ethnicity2 <- factor(dfmaj$ethnicity2, levels=levels(df$ethnicity2))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(M, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(M, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(M, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(M, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+    
+    # cohort interactions
+    
+    s <- 0.1
+    # copying our data into separate dataframes
+    dfwomencp <- dfwomencm <- dfmencp <- dfmencm <- df
+    dfmincp <- dfmincm <- dfmajcp <- dfmajcm <- df
+    
+    # assigning gender to each of the dataframes
+    dfwomencp$gender <- dfwomencm$gender <- "women"
+    dfmencp$gender <- dfmencm$gender <- "men"
+    dfwomencp$gender <- factor(dfwomencp$gender, levels=levels(df$gender))
+    dfwomencm$gender <- factor(dfwomencm$gender, levels=levels(df$gender))
+    dfmencp$gender <- factor(dfmencp$gender, levels=levels(df$gender))
+    dfmencm$gender <- factor(dfmencm$gender, levels=levels(df$gender))
+    
+    # assigning ethnicity to the dataframes
+    dfmincp$ethnicity <- dfmincm$ethnicity <- "women"
+    dfmajcp$ethnicity <- dfmajcm$ethnicity <- "men"
+    dfmincp$ethnicity <- factor(dfmincp$ethnicity, levels=levels(df$ethnicity2))
+    dfmincm$ethnicity <- factor(dfmincm$ethnicity, levels=levels(df$ethnicity2))
+    dfmajcp$ethnicity <- factor(dfmajcp$ethnicity, levels=levels(df$ethnicity2))
+    dfmajcm$ethnicity <- factor(dfmajcm$ethnicity, levels=levels(df$ethnicity2))
+    
+    
+    # adding/subtracting small changes PhD cohort
+    dfwomencp$phd_cohort <- dfmencp$phd_cohort <- df$phd_cohort + s
+    dfwomencm$phd_cohort <- dfmencm$phd_cohort <- df$phd_cohort - s
+    
+    dfmajcp$phd_cohort <- dfmincp$phd_cohort <- df$phd_cohort + s
+    dfmajcm$phd_cohort <- dfmincm$phd_cohort <- df$phd_cohort - s
+    
+    # calculating predicted probabilities
+    pwp <- as.numeric(unlist(predict(M, type="response", newdata=dfwomencp)))
+    pwm <- as.numeric(unlist(predict(M, type="response", newdata=dfwomencm)))
+    pmp <- as.numeric(unlist(predict(M, type="response", newdata=dfmencp)))
+    pmm <- as.numeric(unlist(predict(M, type="response", newdata=dfmencm)))
+    
+    pnp <- as.numeric(unlist(predict(M, type="response", newdata=dfmincp)))
+    pnm <- as.numeric(unlist(predict(M, type="response", newdata=dfmincm)))
+    pjp <- as.numeric(unlist(predict(M, type="response", newdata=dfmajcp)))
+    pjm <- as.numeric(unlist(predict(M, type="response", newdata=dfmajcm)))
+    
+    
+# marginal effects
+AME_gendercoh <- mean(((pwp - pmp) - (pwm - pmm)) / (2*s))
+
+AME_ethnicitycoh <- mean(((pnp - pjp) - (pnm - pjm)) / (2*s))
+
+  })
+  
+  c(AME_gender, AME_ethnicity, AME_gendercoh, AME_ethnicitycoh)
+   #save results
+}
+
+b4 <- boot(df_ppf3, bootFunc, R = 999, parallel="snow", ncpus=10)
+
+
+fsave(b4, file = "boot4.rda", location = "./results/stopping/")
+
+```
+
+```{r, echo=FALSE}
+
+load(file= "./results/stopping/boot4.rda")
+
+b4 <- x
+
+rm(x)
+
+```
+
+
+```{r}
+
+original <- b4$t0
+bias <- colMeans(b4$t) - b4$t0
+se <- apply(b4$t, 2, sd)
+
+boot.df4 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df4) <- c("AME_gender", "AME_ethnicity", "AME_gender-coh", "AME_ethnicity-coh")
+
+boot.df4$t <- (boot.df4$original / boot.df4$se)
+
+round(boot.df4, 5)
+
+```
+
+
+
+
+
+# Plotting survival times
+
+Defining colors for each group
+
+```{r}
+
+# defining colors
+menc <- "#D1C166"
+womenc <- "#48a363"
+majc <- "#39839D"
+minc <- "#B85042"
+
+
+```
+
+
+## Plot 5: Survival times by gender and ethnicity
+
+Based on M1: gender only.
+
+```{r}
+
+# Calculating predicted probabilities
+M1 %>% predict(type="response", conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -> plot5a
+
+class(plot5a)  
+plot5a <- as.data.frame(plot5a)
+
+# excluding gender = missing from the plot
+plot5a$gender <- df_ppf3$gender
+plot5a <- plot5a[plot5a$gender!="missing",]
+
+
+
+plot5a %>%
+  group_by(gender) %>%
+  summarise(fit = mean(.pred_time), 
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -> plot5a
+
+
+ggplot(plot5a,aes(gender, fit,  color=(gender)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
+  ylim(0, 20) +
+  labs(x = "Gender", y = "Average predicted survival time") +
+  theme_bw() +
+  scale_color_manual(values=c(menc, womenc), name="Gender") +
+  geom_text(x=0.7, y=19, label="A", size=10, color="black") +
+  theme(axis.title=element_text(face="bold"),
+        legend.position = "none") -> plot5a
+
+plot5a
+
+
+```
+
+Based on M2: ethnicity only.
+
+```{r}
+
+# Calculating predicted probabilities
+M2 %>% predict(type="response", conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -> plot5b
+  
+plot5b <- as.data.frame(plot5b)
+
+# excluding gender = missing from the plot
+plot5b$ethnicity <- df_ppf3$ethnicity2
+plot5b <- plot5b[plot5b$ethnicity!="other",]
+
+plot5b %>%
+  group_by(ethnicity) %>%
+  summarise(fit = mean(.pred_time), 
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -> plot5b
+
+
+ggplot(plot5b,aes(ethnicity, fit,  color=(ethnicity)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
+  ylim(0, 20) +
+  labs(x = "Ethnicity", y = "Average predicted survival time") +
+  theme_bw() +
+  scale_color_manual(values=c(majc, minc), name="Ethnicity") +
+  geom_text(x=0.7, y=19, label="B", size=10, color="black") +
+  theme(axis.title=element_text(face="bold"),
+        legend.position = "none") -> plot5b
+
+
+plot5b
+
+```
+
+Combined: plot 4
+```{r}
+
+plot5 <- ggarrange(plot5a, plot5b, ncol = 2, nrow=1, widths=c(1,1))
+
+plot5
+
+ggsave("./output/stopping/plot5_logn.jpg", height=4, width=8, dpi=1200)
+
+plot5a$data # predicted survival time by gender
+plot5b$data # predicted survival time by ethnicity
+
+```
+
+
+
+
+## Plot 6: Gender * cohort
+
+Here, I check the predicted values based on model 3. I found that the predicted values based on the full model were extreme in some cases. By adding the variables in model 3 one by one, I check which variables lead to large deviations from normal predicted values. Inclusion of university, field, cohort and veni leads to a small percentage of unrealistic predicted values, while previous publications seems to add quite a few. 
+
+```{r}
+
+M4 %>% predict(type="response", conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -> p6
+
+
+plot7 <- plot6 <- as.data.frame(p6) # same data for plot 5 and 6
+
+# excluding gender = missing from the plot
+plot6$gender <- df_ppf3$gender
+plot6$cohort <- df_ppf3$phd_cohort
+plot6 <- plot6[plot6$gender!="missing",]
+
+plot6 %>%
+  group_by(gender, cohort) %>%
+  summarise(fit = mean(.pred_time),
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -> plot6
+
+
+ggplot(plot6, aes(x=as.factor(cohort), y=fit, color=gender)) +
+  geom_boxplot(lwd=.6, position="dodge") +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
+  labs(x = "PhD cohort", y = "Average predicted survival time") +
+  theme_bw() +
+  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)))) +
+  scale_color_manual(values=c(men=menc,women=womenc), name="Gender") +
+  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
+
+ggsave("./output/stopping/plot6_logn.jpg", height=5, width=8, dpi=1200)
+
+
+```
+
+
+## Plot 7: Ethnicity * cohort
+
+```{r}
+
+# excluding ethnicity = other from the plot
+plot7$ethnicity <- df_ppf3$ethnicity2
+plot7$cohort <- df_ppf3$phd_cohort
+plot7 <- plot7[plot7$ethnicity!="other",]
+
+plot7 %>%
+  group_by(ethnicity, cohort) %>%
+  summarise(fit = mean(.pred_time),
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -> plot7
+
+
+ggplot(plot7, aes(x=as.factor(cohort), y=fit, color=ethnicity)) +
+  geom_boxplot(lwd=.6, position="dodge") +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
+  labs(x = "PhD cohort", y = "Average predicted survival time") +
+  theme_bw() +
+  scale_color_manual(values=c(majority=majc, minority=minc), name="Ethnicity") +
+  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)))) +
+  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
+
+
+ggsave("./output/stopping/plot7_logn.jpg", height=5, width=8, dpi=1200)
+
+
+```
+
+
+
+
+# Table 4
+
+
+```{r}
+
+columns <- c(rep(c("B", "C.I."), 4))
+rows <- c("<strong>Shape</strong></p>", "<strong>Scale</strong></p>", "Gender: ref=men" ,"Women", "Missing gender", "Ethnicity: ref=majority","Minority", "Other", "University: ref=Erasmus University", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "Field: ref=Biological and Health Sciences", "Physical and mathematical sciences", "Social and behavioral sciences", "Engineering", "Agricultural sciences", "Humanities", "Missing field", "<strong>PhD cohort</strong></p>", "<strong>Previous publications</strong></p>", "Cohort interactions","PhD cohort * women", "PhD cohort * missing gender", "PhD cohort * ethnic minority", "PhD cohort * other ethnicity", "<strong>AIC", "<strong>N")
+
+
+t4 <- data.frame(matrix(nrow=length(rows), ncol=length(columns)))
+colnames(t4) <- columns
+rownames(t4) <- rows
+
+
+
+# Model 1
+t4[c(1,2,4,5),1] <- format(round(as.numeric(M1$coef), 2), nsmall=2) # estimates
+t4[c(1,2),2] <- paste0("[", format(round(log(M1$res[c(1,2),2]), 2), nsmall=2), " , ", format(round(log(M1$res[c(1,2),3]), 2), nsmall=2), "]") # CI for shape and scale
+t4[c(4,5),2] <- paste0("[", format(round(M1$res[c(3,4),2], 2), nsmall=2), " , ", format(round(M1$res[c(3,4),3], 3), nsmall=2), "]") # CI for other covariates
+
+
+# Model 2
+t4[c(1,2,7,8),3] <- format(round(M2$coef, 2), nsmall=2)
+t4[c(1,2),4] <- paste0("[", format(round(log(M2$res[c(1,2),2]), 2), nsmall=2), " , ", format(round(log(M2$res[c(1,2),3]), 2), nsmall=2), "]")
+t4[c(7,8),4] <- paste0("[", format(round(M2$res[c(3,4),2], 2), nsmall=2), " , ", format(round(M2$res[c(3,4),3], 2), nsmall=2), "]")
+
+# Model 3
+t4[c(1,2,4,5,7,8,10:21,23:30),5] <- format(round(M3$coef, 2), nsmall=2)
+#t4[c(1,2), 6] <- paste("[", round(log(M3$res[c(1,2),2]), 3), ",", round(log(M3$res[c(1,2),3]), 3), "]")
+t4[c(1,2,4,5,7,8,10:21,23:30), 6] <- paste0("[", format(round(M3$res[c(1,2,3:26),2], 2), nsmall=2), " , ", format(round(M3$res[c(1,2,3:26),3], 2), nsmall=2), "]")
+
+# Model 4 
+t4[c(1,2,4,5,7,8,10:21,23:30,32:35),7] <- format(round(M4$coef, 2), nsmall=2)
+#t4[c(1,2), 8] <- paste("[", round(log(M4$res[c(1:2),2]), 3), ",", round(log(M4$res[c(1:2),3]), 3), "]")
+t4[c(1,2,4,5,7,8,10:21,23:30,32:35), 8] <- paste0("[", format(round(M4$res[c(1,2,3:30),2], 2), nsmall=2), " , ", format(round(M4$res[c(1,2,3:30),3], 2), nsmall=2), "]")
+
+
+# AIC
+t4[36,1] <- round(M1$AIC, 0)
+t4[36,3] <- round(M2$AIC, 0)
+t4[36,5] <- round(M3$AIC, 0)
+t4[36,7] <- round(M4$AIC, 0)
+
+# sample size
+t4[37, c(1,3,5,7)] <- rep(nrow(df_ppf3[!duplicated(df_ppf3$id),]), 4)
+
+
+t4[is.na(t4)] <- ""
+
+
+```
+
+
+```{r}
+
+t4 %>%
+  kable(format = 'html', caption = '<b>Table 4.</b> Log-normal regression analyses on stopping to publish', escape=FALSE) %>%
+  add_header_above(.,c(' '=1, 'Model 1'=2, 'Model 2'=2, 'Model 3'=2, 'Model 4'=2), escape = FALSE, bold = TRUE) %>%
+  row_spec(row=c(3,6,9,22,31), bold=T) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(font_size = 11) -> table4
+
+table4
+
+```
+
+
+
+
+# Robustness checks
+
+## R1: 5-year publica
+
+
+```{r, eval=FALSE}
+
+R1 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender , data = df_ppf5, dist = "lognormal")
+R1
+
+R2 <- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity2 , data = df_ppf5, dist = "lognormal")
+R2
+
+R3 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df_ppf5, dist = "lognormal")
+R3
+
+R4 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf5, dist = "lognormal")
+R4
+
+```
+
+
+## R2: ethnicity-missing excluded
+
+
+```{r, eval=FALSE}
+
+R5 <- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity3 , data = df_ppf3, dist = "lognormal")
+R5
+
+R6 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + veni, data = df_ppf3, dist = "lognormal")
+R6
+
+R7 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + veni + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf3, dist = "lognormal")
+R7
+
+```
+
+
+## R3: discrete-time event history regression
+
+
+```{r, eval=FALSE}
+
+df_ppf3 %>%
+  group_by(time) %>%
+  summarise(event = sum(inactive),
+            total = n()) %>%
+  mutate(hazard = event/total) %>%
+  ggplot(aes(x=time, y = log(-log(1-hazard)))) +
+  geom_point() +
+  geom_smooth()
+
+# C-log-log link
+
+```
+
+
+```{r, eval=FALSE}
+
+
+R8 <- glm(formula = inactive ~ time + gender,
+          family = binomial(link="cloglog"),
+          data = df_ppf3)
+
+R9 <- glm(formula = inactive ~ time + ethnicity2,
+          family = binomial(link="cloglog"),
+          data = df_ppf3)
+
+R10 <- glm(formula = inactive ~ time + gender + ethnicity2 + uni + field + phd_cohort + npubs_prev_s,
+          family = binomial(link="cloglog"),
+          data = df_ppf3)
+
+R11 <- glm(formula = inactive ~ time + gender + ethnicity2 + uni + field + phd_cohort + npubs_prev_s + gender*phd_cohort + ethnicity2*phd_cohort,
+          family = binomial(link="cloglog"),
+          data = df_ppf3)
+
+summ(R8, exp = T)
+summ(R9, exp = T)
+summ(R10, exp = T)
+summ(R11, exp = T)
+
+
+```
+
+
+
+## R4: robustness of gender-cohort interaction to choice of cohorts
+
+In cohort 3 (i.e. 1993), Figure 6 shows a divergent gender pattern: women tend to survive much longer than men in this specific cohort. Hence, the observed cohort effect might be due to this exceptional year. We look into this by removing this cohort and rerunning model 4. 
+
+```{r, eval=FALSE}
+
+# Removing cohort 3
+df_nocoh2 <- df_ppf3[df_ppf3$phd_cohort!=2,]
+
+M4_no2 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_nocoh2, dist = "lognormal")
+
+M4_no2
+
+
+# Removing cohort 0-2
+df_nocoh02 <- df_ppf3[df_ppf3$phd_cohort>2,]
+
+M4_no02 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_nocoh02, dist = "lognormal")
+
+M4_no02
+
+# Removing cohort 0-4
+df_nocoh04 <- df_ppf3[df_ppf3$phd_cohort>4,]
+
+M4_no04 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_nocoh04, dist = "lognormal")
+
+M4_no04
+
+```

@@ -31,6 +31,8 @@ navbar:
     menu:
     - text: "Analyses 'starting to publish'"
       href: starting_analyses.html
+    - text: "Analyses 'ceasing to publish'"
+      href: stopping_analyses.html
   - text: "Appendices"
     menu:
     - text: "Splines"

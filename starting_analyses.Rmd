@@ -79,9 +79,17 @@ ddlogis <- function(X) {
 
 # Packages
 
+
+- `tidyverse`: for data manipulation
+- `ggplot2`: for creating figures 2-4
+- `ggpubr`: for combining two figures in one (plot 2)
+- `splines` `splines2`: for modelling non-linear cohort relations
+- `boot`: bootstrapping for SEs of AMEs
+- `kableExtra`: formatting tables
+
 ```{r, results='hide'}
 
-packages = c("tidyverse","ggplot2", "ggpubr","RColorBrewer", "margins", "splines", "splines2", "boot", "kableExtra", "DescTools")
+packages = c("tidyverse", "ggplot2", "ggpubr", "splines", "splines2", "boot", "kableExtra")
 
 fpackage.check(packages)
 

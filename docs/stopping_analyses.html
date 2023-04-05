@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Analyses ‘ceasing to publish’</title>
+
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Independent variables
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="names.html">Names</a>
+    </li>
+    <li>
+      <a href="gender.html">Gender</a>
+    </li>
+    <li>
+      <a href="ethnicity.html">Ethnicity</a>
+    </li>
+    <li>
+      <a href="discipline.html">Discipline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data preparation
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datapreparation.html">Preparation 'starting / ceasing to publish'</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Descriptives
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="table1.html">Table 1</a>
+    </li>
+    <li>
+      <a href="table2.html">Table 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="starting_analyses.html">Analyses 'starting to publish'</a>
+    </li>
+    <li>
+      <a href="stopping_analyses.html">Analyses 'ceasing to publish'</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Appendices
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="splines.html">Splines</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/ammulders/amatteroftime">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Analyses ‘ceasing to publish’</h1>
+<h4 class="date">Last compiled on april, 2023</h4>
+
+</div>
+
+
+<p>This lab journal replicates the analyses for ‘ceasing to
+publish’.</p>
+<hr />
+<div id="custom-functions" class="section level1">
+<h1>Custom functions</h1>
+<ul>
+<li><code>package.check</code>: Check if packages are installed (and
+install if not) in R (<a
+href="https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/">source</a>).</li>
+</ul>
+<pre class="r"><code>fpackage.check &lt;- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}</code></pre>
+<hr />
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<ul>
+<li><code>survival</code>: general package to create life tables and
+survival models, needed for flexsurv</li>
+<li><code>flexsurv</code>: fitting flexible survival regression
+models</li>
+<li><code>boot</code>: bootstrapping for SEs of AMEs</li>
+<li><code>tidyverse</code>: for data manipulation</li>
+<li><code>ggplot2</code>: for creating figures 5-7</li>
+<li><code>ggpubr</code>: for combining two figures in one (plot 5)</li>
+<li><code>kableExtra</code>: formatting tables</li>
+</ul>
+<pre class="r"><code>packages = c(&quot;survival&quot;, &quot;flexsurv&quot;, &quot;boot&quot;, &quot;tidyverse&quot;, &quot;ggplot2&quot;, &quot;ggpubr&quot;, &quot;kableExtra&quot;) 
+
+fpackage.check(packages)</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre><code>## Warning: package &#39;survival&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;survival&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:boot&#39;:
+## 
+##     aml</code></pre>
+<pre><code>## Loading required package: flexsurv</code></pre>
+<pre><code>## Warning: package &#39;flexsurv&#39; was built under R version 4.1.3</code></pre>
+<hr />
+</div>
+<div id="input" class="section level1">
+<h1>Input</h1>
+<p>We use two processed datasets.</p>
+<ul>
+<li><a
+href="%22./data/processed/df_stopping.rda%22">df_stopping.rda</a>:
+person-period file containing publications and all relevant variables
+for the survival models, time window for inactivity is 3 years
+<ul>
+<li>For construction of this dataset see [(datapreparation.html)]<br />
+</li>
+<li>name of dataset: <code>df_ppf3</code></li>
+</ul></li>
+<li><a
+href="%22data/processed/df_stopping_5.rda%22">df_stopping5.rda</a>:
+person-period file containing publications and all relevant variables
+for the survival models, time-window for inactivity is years
+<ul>
+<li>For construction of this dataset see [(datapreparation.html)]<br />
+</li>
+<li>name of dataset: <code>df_ppf5</code></li>
+</ul></li>
+</ul>
+<pre class="r"><code>load(file = &quot;./data/processed/df_stopping.rda&quot;)
+
+
+load(file = &quot;data/processed/df_stopping5.rda&quot;)</code></pre>
+</div>
+<div id="checking-distributions" class="section level1">
+<h1>Checking distributions</h1>
+<p>Kaplan-Meier curve</p>
+<pre class="r"><code>KM1 &lt;- survfit(Surv(time-1, time, inactive) ~ 1, conf.lower=&#39;usual&#39;, data = df_ppf3)
+KM2 &lt;- survfit(Surv(time-1, time, inactive) ~ gender, conf.lower=&#39;usual&#39;, data = df_ppf3)
+KM3 &lt;- survfit(Surv(time-1, time, inactive) ~ ethnicity2, conf.lower=&#39;usual&#39;, data = df_ppf3)
+
+
+plot(KM1)</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>plot(KM2)</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<pre class="r"><code>plot(KM3)</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+<pre class="r"><code>#MC1 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;gengamma&quot;) # commented: no convergence
+#MC2 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;genf&quot;)     # commented: no convergence
+MC3 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;weibull&quot;)
+MC4 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;gamma&quot;)
+MC5 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;exp&quot;)
+MC6 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;llogis&quot;)
+MC7 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;gompertz&quot;)
+MC8 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ 1, data = df_ppf3, dist = &quot;lognormal&quot;)
+
+testdist &lt;- AIC(MC3, MC4, MC5, MC6, MC7, MC8)
+testdist[order(testdist$AIC),]</code></pre>
+</div>
+<div id="model-1-gender-only" class="section level1">
+<h1>Model 1: Gender only</h1>
+<pre class="r"><code>M1 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender , data = df_ppf3, dist = &quot;lognormal&quot;)</code></pre>
+<pre class="r"><code>M1</code></pre>
+<pre><code>## Call:
+## flexsurvreg(formula = Surv((time - 1), time, inactive) ~ gender, 
+##     data = df_ppf3, dist = &quot;lognormal&quot;)
+## 
+## Estimates: 
+##                data mean  est       L95%      U95%      se        exp(est)  L95%      U95%    
+## meanlog              NA    2.19181   2.16380   2.21983   0.01429        NA        NA        NA
+## sdlog                NA    1.06590   1.05003   1.08202   0.00816        NA        NA        NA
+## genderwomen     0.32431   -0.19212  -0.23351  -0.15073   0.02112   0.82521   0.79175   0.86008
+## gendermissing   0.15973   -0.62256  -0.66863  -0.57649   0.02351   0.53657   0.51241   0.56187
+## 
+## N = 118372,  Events: 9951,  Censored: 108421
+## Total time at risk: 118372
+## Log-likelihood = -32564.76, df = 4
+## AIC = 65137.52</code></pre>
+<pre><code>##       meanlog         sdlog   genderwomen gendermissing 
+##             0             0             0             0</code></pre>
+</div>
+<div id="model-2-ethnicity-only" class="section level1">
+<h1>Model 2: Ethnicity only</h1>
+<pre class="r"><code>M2 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity2 , data = df_ppf3, dist = &quot;lognormal&quot;)</code></pre>
+<pre class="r"><code>M2 </code></pre>
+<pre><code>## Call:
+## flexsurvreg(formula = Surv((time - 1), time, inactive) ~ ethnicity2, 
+##     data = df_ppf3, dist = &quot;lognormal&quot;)
+## 
+## Estimates: 
+##                     data mean  est       L95%      U95%      se        exp(est)  L95%      U95%    
+## meanlog                   NA    2.11350   2.09063   2.13636   0.01167        NA        NA        NA
+## sdlog                     NA    1.07443   1.05840   1.09070   0.00824        NA        NA        NA
+## ethnicity2minority   0.01282   -0.45499  -0.58923  -0.32075   0.06849   0.63445   0.55475   0.72561
+## ethnicity2other      0.24807   -0.37859  -0.41738  -0.33980   0.01979   0.68483   0.65877   0.71191
+## 
+## N = 118372,  Events: 9951,  Censored: 108421
+## Total time at risk: 118372
+## Log-likelihood = -32721.55, df = 4
+## AIC = 65451.1</code></pre>
+<pre><code>##            meanlog              sdlog ethnicity2minority    ethnicity2other 
+##                  0                  0                  0                  0</code></pre>
+</div>
+<div id="model-3-gender-and-ethnicity-controls" class="section level1">
+<h1>Model 3: Gender and ethnicity, controls</h1>
+<pre class="r"><code>M3 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df_ppf3, dist = &quot;lognormal&quot;)</code></pre>
+<pre class="r"><code>M3</code></pre>
+<pre><code>## Call:
+## flexsurvreg(formula = Surv((time - 1), time, inactive) ~ gender + 
+##     ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df_ppf3, 
+##     dist = &quot;lognormal&quot;)
+## 
+## Estimates: 
+##                                           data mean  est        L95%       U95%       se       
+## meanlog                                          NA   2.254134   2.172277   2.335991   0.041765
+## sdlog                                            NA   0.847069   0.834590   0.859736   0.006415
+## genderwomen                                0.324308  -0.084489  -0.118045  -0.050932   0.017121
+## gendermissing                              0.159734  -0.436816  -0.475709  -0.397922   0.019844
+## ethnicity2minority                         0.012824  -0.119125  -0.224714  -0.013536   0.053873
+## ethnicity2other                            0.248065  -0.101543  -0.133789  -0.069298   0.016452
+## uniLU                                      0.016947  -0.054197  -0.173059   0.064666   0.060645
+## uniRU                                      0.211317  -0.205849  -0.284479  -0.127219   0.040118
+## uniRUG                                     0.040846   0.608518   0.457734   0.759303   0.076932
+## uniTUD                                     0.004131   0.367652   0.163204   0.572100   0.104312
+## uniTUE                                     0.023840   0.503403   0.342315   0.664492   0.082190
+## uniTI                                      0.010873  -0.435195  -0.578198  -0.292192   0.072962
+## uniUM                                      0.096568  -0.023207  -0.109659   0.063245   0.044109
+## uniUT                                      0.080543  -0.605701  -0.691606  -0.519796   0.043830
+## uniUU                                      0.090376  -0.181588  -0.265715  -0.097462   0.042922
+## uniUvA                                     0.121828  -0.049879  -0.136390   0.036633   0.044139
+## uniVU                                      0.090748  -0.048208  -0.137242   0.040825   0.045426
+## uniWUR                                     0.158940  -0.000619  -0.085835   0.084596   0.043478
+## field2Physical and Mathematical Sciences   0.116016  -0.201981  -0.248623  -0.155340   0.023797
+## field2Social and Behavioral Sciences       0.145904   0.193687   0.146858   0.240516   0.023893
+## field2Engineering                          0.077620  -0.119362  -0.176828  -0.061897   0.029320
+## field2Agricultural Sciences                0.085899   0.048752  -0.010329   0.107833   0.030144
+## field2Humanities                           0.041429   0.293647   0.209210   0.378085   0.043081
+## field2missing                              0.160798   0.290978   0.243449   0.338508   0.024250
+## phd_cohort                                15.109840  -0.033922  -0.036236  -0.031609   0.001180
+## npubs_prev_s                               0.479051   1.500639   1.434418   1.566861   0.033787
+##                                           exp(est)   L95%       U95%     
+## meanlog                                          NA         NA         NA
+## sdlog                                            NA         NA         NA
+## genderwomen                                0.918982   0.888656   0.950343
+## gendermissing                              0.646090   0.621444   0.671714
+## ethnicity2minority                         0.887697   0.798745   0.986556
+## ethnicity2other                            0.903442   0.874775   0.933049
+## uniLU                                      0.947246   0.841088   1.066802
+## uniRU                                      0.813956   0.752406   0.880540
+## uniRUG                                     1.837707   1.580489   2.136786
+## uniTUD                                     1.444340   1.177277   1.771985
+## uniTUE                                     1.654342   1.408203   1.943503
+## uniTI                                      0.647138   0.560908   0.746625
+## uniUM                                      0.977060   0.896139   1.065288
+## uniUT                                      0.545692   0.500771   0.594642
+## uniUU                                      0.833945   0.766658   0.907137
+## uniUvA                                     0.951345   0.872502   1.037312
+## uniVU                                      0.952935   0.871759   1.041670
+## uniWUR                                     0.999381   0.917746   1.088278
+## field2Physical and Mathematical Sciences   0.817110   0.779874   0.856124
+## field2Social and Behavioral Sciences       1.213716   1.158189   1.271905
+## field2Engineering                          0.887486   0.837924   0.939980
+## field2Agricultural Sciences                1.049960   0.989724   1.113862
+## field2Humanities                           1.341311   1.232703   1.459487
+## field2missing                              1.337736   1.275641   1.402853
+## phd_cohort                                 0.966647   0.964413   0.968886
+## npubs_prev_s                               4.484555   4.197201   4.791582
+## 
+## N = 118372,  Events: 9951,  Censored: 108421
+## Total time at risk: 118372
+## Log-likelihood = -30292, df = 26
+## AIC = 60636</code></pre>
+<pre><code>##                                  meanlog                                    sdlog 
+##                                   0.0000                                   0.0000 
+##                              genderwomen                            gendermissing 
+##                                   0.0000                                   0.0000 
+##                       ethnicity2minority                          ethnicity2other 
+##                                   0.0270                                   0.0000 
+##                                    uniLU                                    uniRU 
+##                                   0.3715                                   0.0000 
+##                                   uniRUG                                   uniTUD 
+##                                   0.0000                                   0.0004 
+##                                   uniTUE                                    uniTI 
+##                                   0.0000                                   0.0000 
+##                                    uniUM                                    uniUT 
+##                                   0.5988                                   0.0000 
+##                                    uniUU                                   uniUvA 
+##                                   0.0000                                   0.2585 
+##                                    uniVU                                   uniWUR 
+##                                   0.2886                                   0.9886 
+## field2Physical and Mathematical Sciences     field2Social and Behavioral Sciences 
+##                                   0.0000                                   0.0000 
+##                        field2Engineering              field2Agricultural Sciences 
+##                                   0.0000                                   0.1058 
+##                         field2Humanities                            field2missing 
+##                                   0.0000                                   0.0000 
+##                               phd_cohort                             npubs_prev_s 
+##                                   0.0000                                   0.0000</code></pre>
+<div id="average-marginal-effects-ames" class="section level2">
+<h2>Average marginal effects (AMEs)</h2>
+<pre class="r"><code>bootFunc &lt;- function(data, i) {
+  df &lt;- data[i,] #bootstrap datasets
+  
+  
+  M &lt;- flexsurv::flexsurvreg(survival::Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df, dist = &quot;lognormal&quot;)
+  
+  suppressWarnings({
+  
+    dfmaj &lt;- dfmin &lt;- dfmen &lt;- dfwomen &lt;- df
+    dfwomen$gender &lt;- &quot;women&quot; # one dataset of all women
+    dfmen$gender &lt;- &quot;men&quot; # one dataset of all men
+    dfmin$ethnicity2 &lt;- &quot;minority&quot; # one dataset all minority
+    dfmaj$ethnicity2 &lt;- &quot;majority&quot; # one dataset all majority
+    
+    dfwomen$gender &lt;- factor(dfwomen$gender, levels=levels(df$gender))
+    dfmen$gender &lt;- factor(dfmen$gender, levels=levels(df$gender))
+    dfmin$ethnicity2 &lt;- factor(dfmin$ethnicity2, levels=levels(df$ethnicity2))
+    dfmaj$ethnicity2 &lt;- factor(dfmaj$ethnicity2, levels=levels(df$ethnicity2))
+
+    #calculate the predicted probabilities for gender
+    pw &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfwomen)))
+    pm &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender &lt;- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmin)))
+    pmj &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity &lt;- mean(pmn - pmj)
+    
+  })
+  
+  c(AME_gender, AME_ethnicity)
+   #save results
+}
+
+b3 &lt;- boot(df_ppf3, bootFunc, R = 999, parallel=&quot;snow&quot;, ncpus=10)
+
+
+fsave(b3, file = &quot;boot3.rda&quot;, location = &quot;./results/stopping/&quot;)</code></pre>
+<pre class="r"><code>original &lt;- b3$t0
+bias &lt;- colMeans(b3$t) - b3$t0
+se &lt;- apply(b3$t, 2, sd)
+
+boot.df3 &lt;- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df3) &lt;- c(&quot;AME_gender&quot;, &quot;AME_ethnicity&quot;)
+
+boot.df3$t &lt;- (boot.df3$original / boot.df3$se)
+
+round(boot.df3, 5)</code></pre>
+<pre><code>##               original     bias      se        t
+## AME_gender    -1.65428 -0.00432 0.31677 -5.22231
+## AME_ethnicity -2.18740  0.04751 0.84055 -2.60236</code></pre>
+</div>
+</div>
+<div
+id="model-4-gender-ethnicity-cohort-x-gender-cohort-x-ethnicity-controls"
+class="section level1">
+<h1>Model 4: Gender + ethnicity + cohort x gender + cohort x ethnicity +
+controls</h1>
+<pre class="r"><code>M4 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf3, dist = &quot;lognormal&quot;)</code></pre>
+<pre class="r"><code>M4</code></pre>
+<pre><code>## Call:
+## flexsurvreg(formula = Surv((time - 1), time, inactive) ~ gender + 
+##     ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort * 
+##     gender + phd_cohort * ethnicity2, data = df_ppf3, dist = &quot;lognormal&quot;)
+## 
+## Estimates: 
+##                                           data mean  est        L95%       U95%       se       
+## meanlog                                          NA   2.241756   2.152108   2.331405   0.045740
+## sdlog                                            NA   0.845462   0.833004   0.858107   0.006404
+## genderwomen                                0.324308   0.021328  -0.074926   0.117582   0.049110
+## gendermissing                              0.159734  -0.656435  -0.759920  -0.552949   0.052800
+## ethnicity2minority                         0.012824  -0.138562  -0.533041   0.255916   0.201268
+## ethnicity2other                            0.248065  -0.020699  -0.118039   0.076640   0.049664
+## uniLU                                      0.016947  -0.036353  -0.155113   0.082408   0.060593
+## uniRU                                      0.211317  -0.195520  -0.274085  -0.116955   0.040085
+## uniRUG                                     0.040846   0.606243   0.455623   0.756863   0.076848
+## uniTUD                                     0.004131   0.392737   0.188261   0.597213   0.104326
+## uniTUE                                     0.023840   0.515919   0.354808   0.677030   0.082201
+## uniTI                                      0.010873  -0.416125  -0.559084  -0.273166   0.072940
+## uniUM                                      0.096568  -0.004576  -0.091134   0.081982   0.044163
+## uniUT                                      0.080543  -0.584547  -0.670719  -0.498374   0.043966
+## uniUU                                      0.090376  -0.164626  -0.248936  -0.080315   0.043016
+## uniUvA                                     0.121828  -0.034374  -0.121055   0.052307   0.044226
+## uniVU                                      0.090748  -0.033359  -0.122402   0.055684   0.045431
+## uniWUR                                     0.158940   0.010904  -0.074224   0.096032   0.043434
+## field2Physical and Mathematical Sciences   0.116016  -0.202237  -0.248801  -0.155672   0.023758
+## field2Social and Behavioral Sciences       0.145904   0.190841   0.144093   0.237589   0.023852
+## field2Engineering                          0.077620  -0.118354  -0.175720  -0.060987   0.029269
+## field2Agricultural Sciences                0.085899   0.044306  -0.014673   0.103284   0.030092
+## field2Humanities                           0.041429   0.293140   0.208847   0.377434   0.043008
+## field2missing                              0.160798   0.291224   0.243740   0.338708   0.024227
+## phd_cohort                                15.109840  -0.033855  -0.037081  -0.030628   0.001646
+## npubs_prev_s                               0.479051   1.496518   1.430389   1.562648   0.033740
+## genderwomen:phd_cohort                     5.472333  -0.005237  -0.010027  -0.000446   0.002444
+## gendermissing:phd_cohort                   2.550983   0.012432   0.006944   0.017920   0.002800
+## ethnicity2minority:phd_cohort              0.242718   0.000462  -0.017883   0.018808   0.009360
+## ethnicity2other:phd_cohort                 4.313131  -0.004433  -0.009240   0.000374   0.002453
+##                                           exp(est)   L95%       U95%     
+## meanlog                                          NA         NA         NA
+## sdlog                                            NA         NA         NA
+## genderwomen                                1.021557   0.927813   1.124774
+## gendermissing                              0.518697   0.467704   0.575251
+## ethnicity2minority                         0.870609   0.586818   1.291645
+## ethnicity2other                            0.979513   0.888661   1.079654
+## uniLU                                      0.964300   0.856318   1.085899
+## uniRU                                      0.822407   0.760267   0.889625
+## uniRUG                                     1.833530   1.577155   2.131579
+## uniTUD                                     1.481029   1.207148   1.817048
+## uniTUE                                     1.675177   1.425907   1.968024
+## uniTI                                      0.659598   0.571733   0.760966
+## uniUM                                      0.995435   0.912896   1.085436
+## uniUT                                      0.557359   0.511341   0.607517
+## uniUU                                      0.848211   0.779630   0.922825
+## uniUvA                                     0.966210   0.885985   1.053699
+## uniVU                                      0.967191   0.884793   1.057263
+## uniWUR                                     1.010964   0.928463   1.100795
+## field2Physical and Mathematical Sciences   0.816902   0.779735   0.855840
+## field2Social and Behavioral Sciences       1.210267   1.154992   1.268188
+## field2Engineering                          0.888382   0.838853   0.940835
+## field2Agricultural Sciences                1.045302   0.985434   1.108807
+## field2Humanities                           1.340631   1.232256   1.458537
+## field2missing                              1.338065   1.276013   1.403134
+## phd_cohort                                 0.966712   0.963598   0.969836
+## npubs_prev_s                               4.466113   4.180324   4.771440
+## genderwomen:phd_cohort                     0.994777   0.990023   0.999554
+## gendermissing:phd_cohort                   1.012510   1.006968   1.018082
+## ethnicity2minority:phd_cohort              1.000462   0.982276   1.018986
+## ethnicity2other:phd_cohort                 0.995577   0.990802   1.000374
+## 
+## N = 118372,  Events: 9951,  Censored: 108421
+## Total time at risk: 118372
+## Log-likelihood = -30274.33, df = 30
+## AIC = 60608.66</code></pre>
+<pre><code>##                                  meanlog                                    sdlog 
+##                                   0.0000                                   0.0000 
+##                              genderwomen                            gendermissing 
+##                                   0.6641                                   0.0000 
+##                       ethnicity2minority                          ethnicity2other 
+##                                   0.4912                                   0.6768 
+##                                    uniLU                                    uniRU 
+##                                   0.5485                                   0.0000 
+##                                   uniRUG                                   uniTUD 
+##                                   0.0000                                   0.0002 
+##                                   uniTUE                                    uniTI 
+##                                   0.0000                                   0.0000 
+##                                    uniUM                                    uniUT 
+##                                   0.9175                                   0.0000 
+##                                    uniUU                                   uniUvA 
+##                                   0.0001                                   0.4370 
+##                                    uniVU                                   uniWUR 
+##                                   0.4628                                   0.8018 
+## field2Physical and Mathematical Sciences     field2Social and Behavioral Sciences 
+##                                   0.0000                                   0.0000 
+##                        field2Engineering              field2Agricultural Sciences 
+##                                   0.0001                                   0.1409 
+##                         field2Humanities                            field2missing 
+##                                   0.0000                                   0.0000 
+##                               phd_cohort                             npubs_prev_s 
+##                                   0.0000                                   0.0000 
+##                   genderwomen:phd_cohort                 gendermissing:phd_cohort 
+##                                   0.0322                                   0.0000 
+##            ethnicity2minority:phd_cohort               ethnicity2other:phd_cohort 
+##                                   0.9606                                   0.0707</code></pre>
+<div id="average-marginal-effects-ames-1" class="section level2">
+<h2>Average marginal effects (AMEs)</h2>
+<pre class="r"><code>bootFunc &lt;- function(data, i) {
+  df &lt;- data[i,] #bootstrap datasets
+  
+  
+  M &lt;- flexsurv::flexsurvreg(survival::Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df, dist = &quot;lognormal&quot;)
+  
+  suppressWarnings({
+  
+    dfmaj &lt;- dfmin &lt;- dfmen &lt;- dfwomen &lt;- df
+    dfwomen$gender &lt;- &quot;women&quot; # one dataset of all women
+    dfmen$gender &lt;- &quot;men&quot; # one dataset of all men
+    dfmin$ethnicity2 &lt;- &quot;minority&quot; # one dataset all minority
+    dfmaj$ethnicity2 &lt;- &quot;majority&quot; # one dataset all majority
+    
+    dfwomen$gender &lt;- factor(dfwomen$gender, levels=levels(df$gender))
+    dfmen$gender &lt;- factor(dfmen$gender, levels=levels(df$gender))
+    dfmin$ethnicity2 &lt;- factor(dfmin$ethnicity2, levels=levels(df$ethnicity2))
+    dfmaj$ethnicity2 &lt;- factor(dfmaj$ethnicity2, levels=levels(df$ethnicity2))
+
+    #calculate the predicted probabilities for gender
+    pw &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfwomen)))
+    pm &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender &lt;- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmin)))
+    pmj &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity &lt;- mean(pmn - pmj)
+    
+    
+    # cohort interactions
+    
+    s &lt;- 0.1
+    # copying our data into separate dataframes
+    dfwomencp &lt;- dfwomencm &lt;- dfmencp &lt;- dfmencm &lt;- df
+    dfmincp &lt;- dfmincm &lt;- dfmajcp &lt;- dfmajcm &lt;- df
+    
+    # assigning gender to each of the dataframes
+    dfwomencp$gender &lt;- dfwomencm$gender &lt;- &quot;women&quot;
+    dfmencp$gender &lt;- dfmencm$gender &lt;- &quot;men&quot;
+    dfwomencp$gender &lt;- factor(dfwomencp$gender, levels=levels(df$gender))
+    dfwomencm$gender &lt;- factor(dfwomencm$gender, levels=levels(df$gender))
+    dfmencp$gender &lt;- factor(dfmencp$gender, levels=levels(df$gender))
+    dfmencm$gender &lt;- factor(dfmencm$gender, levels=levels(df$gender))
+    
+    # assigning ethnicity to the dataframes
+    dfmincp$ethnicity &lt;- dfmincm$ethnicity &lt;- &quot;women&quot;
+    dfmajcp$ethnicity &lt;- dfmajcm$ethnicity &lt;- &quot;men&quot;
+    dfmincp$ethnicity &lt;- factor(dfmincp$ethnicity, levels=levels(df$ethnicity2))
+    dfmincm$ethnicity &lt;- factor(dfmincm$ethnicity, levels=levels(df$ethnicity2))
+    dfmajcp$ethnicity &lt;- factor(dfmajcp$ethnicity, levels=levels(df$ethnicity2))
+    dfmajcm$ethnicity &lt;- factor(dfmajcm$ethnicity, levels=levels(df$ethnicity2))
+    
+    
+    # adding/subtracting small changes PhD cohort
+    dfwomencp$phd_cohort &lt;- dfmencp$phd_cohort &lt;- df$phd_cohort + s
+    dfwomencm$phd_cohort &lt;- dfmencm$phd_cohort &lt;- df$phd_cohort - s
+    
+    dfmajcp$phd_cohort &lt;- dfmincp$phd_cohort &lt;- df$phd_cohort + s
+    dfmajcm$phd_cohort &lt;- dfmincm$phd_cohort &lt;- df$phd_cohort - s
+    
+    # calculating predicted probabilities
+    pwp &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfwomencp)))
+    pwm &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfwomencm)))
+    pmp &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmencp)))
+    pmm &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmencm)))
+    
+    pnp &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmincp)))
+    pnm &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmincm)))
+    pjp &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmajcp)))
+    pjm &lt;- as.numeric(unlist(predict(M, type=&quot;response&quot;, newdata=dfmajcm)))
+    
+    
+# marginal effects
+AME_gendercoh &lt;- mean(((pwp - pmp) - (pwm - pmm)) / (2*s))
+
+AME_ethnicitycoh &lt;- mean(((pnp - pjp) - (pnm - pjm)) / (2*s))
+
+  })
+  
+  c(AME_gender, AME_ethnicity, AME_gendercoh, AME_ethnicitycoh)
+   #save results
+}
+
+b4 &lt;- boot(df_ppf3, bootFunc, R = 999, parallel=&quot;snow&quot;, ncpus=10)
+
+
+fsave(b4, file = &quot;boot4.rda&quot;, location = &quot;./results/stopping/&quot;)</code></pre>
+<pre class="r"><code>original &lt;- b4$t0
+bias &lt;- colMeans(b4$t) - b4$t0
+se &lt;- apply(b4$t, 2, sd)
+
+boot.df4 &lt;- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df4) &lt;- c(&quot;AME_gender&quot;, &quot;AME_ethnicity&quot;, &quot;AME_gender-coh&quot;, &quot;AME_ethnicity-coh&quot;)
+
+boot.df4$t &lt;- (boot.df4$original / boot.df4$se)
+
+round(boot.df4, 5)</code></pre>
+<pre><code>##                   original     bias      se        t
+## AME_gender        -0.78358  0.03668 0.52747 -1.48555
+## AME_ethnicity     -2.43144  0.19732 1.61701 -1.50367
+## AME_gender-coh    -0.07530 -0.00532 0.06784 -1.10994
+## AME_ethnicity-coh  0.00000  0.00000 0.00000      NaN</code></pre>
+</div>
+</div>
+<div id="plotting-survival-times" class="section level1">
+<h1>Plotting survival times</h1>
+<p>Defining colors for each group</p>
+<pre class="r"><code># defining colors
+menc &lt;- &quot;#D1C166&quot;
+womenc &lt;- &quot;#48a363&quot;
+majc &lt;- &quot;#39839D&quot;
+minc &lt;- &quot;#B85042&quot;</code></pre>
+<div id="plot-5-survival-times-by-gender-and-ethnicity"
+class="section level2">
+<h2>Plot 5: Survival times by gender and ethnicity</h2>
+<p>Based on M1: gender only.</p>
+<pre class="r"><code># Calculating predicted probabilities
+M1 %&gt;% predict(type=&quot;response&quot;, conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -&gt; plot5a
+
+class(plot5a)  </code></pre>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>plot5a &lt;- as.data.frame(plot5a)
+
+# excluding gender = missing from the plot
+plot5a$gender &lt;- df_ppf3$gender
+plot5a &lt;- plot5a[plot5a$gender!=&quot;missing&quot;,]
+
+
+
+plot5a %&gt;%
+  group_by(gender) %&gt;%
+  summarise(fit = mean(.pred_time), 
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot5a
+
+
+ggplot(plot5a,aes(gender, fit,  color=(gender)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
+  ylim(0, 20) +
+  labs(x = &quot;Gender&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(menc, womenc), name=&quot;Gender&quot;) +
+  geom_text(x=0.7, y=19, label=&quot;A&quot;, size=10, color=&quot;black&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;),
+        legend.position = &quot;none&quot;) -&gt; plot5a</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.</code></pre>
+<pre class="r"><code>plot5a</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>Based on M2: ethnicity only.</p>
+<pre class="r"><code># Calculating predicted probabilities
+M2 %&gt;% predict(type=&quot;response&quot;, conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -&gt; plot5b
+  
+plot5b &lt;- as.data.frame(plot5b)
+
+# excluding gender = missing from the plot
+plot5b$ethnicity &lt;- df_ppf3$ethnicity2
+plot5b &lt;- plot5b[plot5b$ethnicity!=&quot;other&quot;,]
+
+plot5b %&gt;%
+  group_by(ethnicity) %&gt;%
+  summarise(fit = mean(.pred_time), 
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot5b
+
+
+ggplot(plot5b,aes(ethnicity, fit,  color=(ethnicity)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
+  ylim(0, 20) +
+  labs(x = &quot;Ethnicity&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(majc, minc), name=&quot;Ethnicity&quot;) +
+  geom_text(x=0.7, y=19, label=&quot;B&quot;, size=10, color=&quot;black&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;),
+        legend.position = &quot;none&quot;) -&gt; plot5b
+
+
+plot5b</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>Combined: plot 4</p>
+<pre class="r"><code>plot5 &lt;- ggarrange(plot5a, plot5b, ncol = 2, nrow=1, widths=c(1,1))
+
+plot5</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/stopping/plot5_logn.jpg&quot;, height=4, width=8, dpi=1200)
+
+plot5a$data # predicted survival time by gender</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   gender   fit upper lower
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 men     15.8  16.3  15.3
+## 2 women   13.0  13.6  12.5</code></pre>
+<pre class="r"><code>plot5b$data # predicted survival time by ethnicity</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   ethnicity   fit upper lower
+##   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 majority  14.7   15.2 14.3 
+## 2 minority   9.35  10.7  8.16</code></pre>
+</div>
+<div id="plot-6-gender-cohort" class="section level2">
+<h2>Plot 6: Gender * cohort</h2>
+<p>Here, I check the predicted values based on model 3. I found that the
+predicted values based on the full model were extreme in some cases. By
+adding the variables in model 3 one by one, I check which variables lead
+to large deviations from normal predicted values. Inclusion of
+university, field, cohort and veni leads to a small percentage of
+unrealistic predicted values, while previous publications seems to add
+quite a few.</p>
+<pre class="r"><code>M4 %&gt;% predict(type=&quot;response&quot;, conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -&gt; p6
+
+
+plot7 &lt;- plot6 &lt;- as.data.frame(p6) # same data for plot 5 and 6
+
+# excluding gender = missing from the plot
+plot6$gender &lt;- df_ppf3$gender
+plot6$cohort &lt;- df_ppf3$phd_cohort
+plot6 &lt;- plot6[plot6$gender!=&quot;missing&quot;,]
+
+plot6 %&gt;%
+  group_by(gender, cohort) %&gt;%
+  summarise(fit = mean(.pred_time),
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot6</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(plot6, aes(x=as.factor(cohort), y=fit, color=gender)) +
+  geom_boxplot(lwd=.6, position=&quot;dodge&quot;) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position=&quot;dodge&quot;) +
+  labs(x = &quot;PhD cohort&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_x_discrete(labels = c(&quot;0&quot;, c(rep(&quot; &quot;, 4)), &quot;5&quot;, c(rep(&quot; &quot;, 4)), &quot;10&quot;, c(rep(&quot; &quot;, 4)), &quot;15&quot;, c(rep(&quot; &quot;, 4)), &quot;20&quot;, c(rep(&quot; &quot;, 4)), &quot;25&quot;, c(rep(&quot;&quot;, 3)))) +
+  scale_color_manual(values=c(men=menc,women=womenc), name=&quot;Gender&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;), legend.title=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/stopping/plot6_logn.jpg&quot;, height=5, width=8, dpi=1200)</code></pre>
+</div>
+<div id="plot-7-ethnicity-cohort" class="section level2">
+<h2>Plot 7: Ethnicity * cohort</h2>
+<pre class="r"><code># excluding ethnicity = other from the plot
+plot7$ethnicity &lt;- df_ppf3$ethnicity2
+plot7$cohort &lt;- df_ppf3$phd_cohort
+plot7 &lt;- plot7[plot7$ethnicity!=&quot;other&quot;,]
+
+plot7 %&gt;%
+  group_by(ethnicity, cohort) %&gt;%
+  summarise(fit = mean(.pred_time),
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot7</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;ethnicity&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(plot7, aes(x=as.factor(cohort), y=fit, color=ethnicity)) +
+  geom_boxplot(lwd=.6, position=&quot;dodge&quot;) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position=&quot;dodge&quot;) +
+  labs(x = &quot;PhD cohort&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(majority=majc, minority=minc), name=&quot;Ethnicity&quot;) +
+  scale_x_discrete(labels = c(&quot;0&quot;, c(rep(&quot; &quot;, 4)), &quot;5&quot;, c(rep(&quot; &quot;, 4)), &quot;10&quot;, c(rep(&quot; &quot;, 4)), &quot;15&quot;, c(rep(&quot; &quot;, 4)), &quot;20&quot;, c(rep(&quot; &quot;, 4)), &quot;25&quot;, c(rep(&quot;&quot;, 3)))) +
+  theme(axis.title=element_text(face=&quot;bold&quot;), legend.title=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="stopping_analyses_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/stopping/plot7_logn.jpg&quot;, height=5, width=8, dpi=1200)</code></pre>
+</div>
+</div>
+<div id="table-4" class="section level1">
+<h1>Table 4</h1>
+<pre class="r"><code>columns &lt;- c(rep(c(&quot;B&quot;, &quot;C.I.&quot;), 4))
+rows &lt;- c(&quot;&lt;strong&gt;Shape&lt;/strong&gt;&lt;/p&gt;&quot;, &quot;&lt;strong&gt;Scale&lt;/strong&gt;&lt;/p&gt;&quot;, &quot;Gender: ref=men&quot; ,&quot;Women&quot;, &quot;Missing gender&quot;, &quot;Ethnicity: ref=majority&quot;,&quot;Minority&quot;, &quot;Other&quot;, &quot;University: ref=Erasmus University&quot;, &quot;Leiden University&quot;, &quot;Radboud University&quot;, &quot;University of Groningen&quot;, &quot;Delft University of Technology&quot;, &quot;Eindhoven University of Technology&quot;, &quot;Tilburg University&quot;, &quot;Maastricht University&quot;, &quot;University of Twente&quot;, &quot;Utrecht University&quot;, &quot;University of Amsterdam&quot;, &quot;Vrije Universiteit Amsterdam&quot;, &quot;Wageningen University and Research Centre&quot;, &quot;Field: ref=Biological and Health Sciences&quot;, &quot;Physical and mathematical sciences&quot;, &quot;Social and behavioral sciences&quot;, &quot;Engineering&quot;, &quot;Agricultural sciences&quot;, &quot;Humanities&quot;, &quot;Missing field&quot;, &quot;&lt;strong&gt;PhD cohort&lt;/strong&gt;&lt;/p&gt;&quot;, &quot;&lt;strong&gt;Previous publications&lt;/strong&gt;&lt;/p&gt;&quot;, &quot;Cohort interactions&quot;,&quot;PhD cohort * women&quot;, &quot;PhD cohort * missing gender&quot;, &quot;PhD cohort * ethnic minority&quot;, &quot;PhD cohort * other ethnicity&quot;, &quot;&lt;strong&gt;AIC&quot;, &quot;&lt;strong&gt;N&quot;)
+
+
+t4 &lt;- data.frame(matrix(nrow=length(rows), ncol=length(columns)))
+colnames(t4) &lt;- columns
+rownames(t4) &lt;- rows
+
+
+
+# Model 1
+t4[c(1,2,4,5),1] &lt;- format(round(as.numeric(M1$coef), 2), nsmall=2) # estimates
+t4[c(1,2),2] &lt;- paste0(&quot;[&quot;, format(round(log(M1$res[c(1,2),2]), 2), nsmall=2), &quot; , &quot;, format(round(log(M1$res[c(1,2),3]), 2), nsmall=2), &quot;]&quot;) # CI for shape and scale
+t4[c(4,5),2] &lt;- paste0(&quot;[&quot;, format(round(M1$res[c(3,4),2], 2), nsmall=2), &quot; , &quot;, format(round(M1$res[c(3,4),3], 3), nsmall=2), &quot;]&quot;) # CI for other covariates
+
+
+# Model 2
+t4[c(1,2,7,8),3] &lt;- format(round(M2$coef, 2), nsmall=2)
+t4[c(1,2),4] &lt;- paste0(&quot;[&quot;, format(round(log(M2$res[c(1,2),2]), 2), nsmall=2), &quot; , &quot;, format(round(log(M2$res[c(1,2),3]), 2), nsmall=2), &quot;]&quot;)
+t4[c(7,8),4] &lt;- paste0(&quot;[&quot;, format(round(M2$res[c(3,4),2], 2), nsmall=2), &quot; , &quot;, format(round(M2$res[c(3,4),3], 2), nsmall=2), &quot;]&quot;)
+
+# Model 3
+t4[c(1,2,4,5,7,8,10:21,23:30),5] &lt;- format(round(M3$coef, 2), nsmall=2)
+#t4[c(1,2), 6] &lt;- paste(&quot;[&quot;, round(log(M3$res[c(1,2),2]), 3), &quot;,&quot;, round(log(M3$res[c(1,2),3]), 3), &quot;]&quot;)
+t4[c(1,2,4,5,7,8,10:21,23:30), 6] &lt;- paste0(&quot;[&quot;, format(round(M3$res[c(1,2,3:26),2], 2), nsmall=2), &quot; , &quot;, format(round(M3$res[c(1,2,3:26),3], 2), nsmall=2), &quot;]&quot;)
+
+# Model 4 
+t4[c(1,2,4,5,7,8,10:21,23:30,32:35),7] &lt;- format(round(M4$coef, 2), nsmall=2)
+#t4[c(1,2), 8] &lt;- paste(&quot;[&quot;, round(log(M4$res[c(1:2),2]), 3), &quot;,&quot;, round(log(M4$res[c(1:2),3]), 3), &quot;]&quot;)
+t4[c(1,2,4,5,7,8,10:21,23:30,32:35), 8] &lt;- paste0(&quot;[&quot;, format(round(M4$res[c(1,2,3:30),2], 2), nsmall=2), &quot; , &quot;, format(round(M4$res[c(1,2,3:30),3], 2), nsmall=2), &quot;]&quot;)
+
+
+# AIC
+t4[36,1] &lt;- round(M1$AIC, 0)
+t4[36,3] &lt;- round(M2$AIC, 0)
+t4[36,5] &lt;- round(M3$AIC, 0)
+t4[36,7] &lt;- round(M4$AIC, 0)
+
+# sample size
+t4[37, c(1,3,5,7)] &lt;- rep(nrow(df_ppf3[!duplicated(df_ppf3$id),]), 4)
+
+
+t4[is.na(t4)] &lt;- &quot;&quot;</code></pre>
+<pre class="r"><code>t4 %&gt;%
+  kable(format = &#39;html&#39;, caption = &#39;&lt;b&gt;Table 4.&lt;/b&gt; Log-normal regression analyses on stopping to publish&#39;, escape=FALSE) %&gt;%
+  add_header_above(.,c(&#39; &#39;=1, &#39;Model 1&#39;=2, &#39;Model 2&#39;=2, &#39;Model 3&#39;=2, &#39;Model 4&#39;=2), escape = FALSE, bold = TRUE) %&gt;%
+  row_spec(row=c(3,6,9,22,31), bold=T) %&gt;%
+  kable_classic(full_width = F, html_font = &quot;Cambria&quot;) %&gt;%
+  kable_styling(font_size = 11) -&gt; table4
+
+table4</code></pre>
+<table class=" lightable-classic table" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; font-size: 11px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+<b>Table 4.</b> Log-normal regression analyses on stopping to publish
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Model 1
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Model 2
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Model 3
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Model 4
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+B
+</th>
+<th style="text-align:left;">
+C.I.
+</th>
+<th style="text-align:left;">
+B
+</th>
+<th style="text-align:left;">
+C.I.
+</th>
+<th style="text-align:left;">
+B
+</th>
+<th style="text-align:left;">
+C.I.
+</th>
+<th style="text-align:left;">
+B
+</th>
+<th style="text-align:left;">
+C.I.
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<strong>Shape</strong>
+</td>
+<td style="text-align:left;">
+2.19
+</td>
+<td style="text-align:left;">
+[0.77 , 0.80]
+</td>
+<td style="text-align:left;">
+2.11
+</td>
+<td style="text-align:left;">
+[0.74 , 0.76]
+</td>
+<td style="text-align:left;">
+2.25
+</td>
+<td style="text-align:left;">
+[ 2.17 , 2.34]
+</td>
+<td style="text-align:left;">
+2.24
+</td>
+<td style="text-align:left;">
+[ 2.15 , 2.33]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<strong>Scale</strong>
+</td>
+<td style="text-align:left;">
+0.06
+</td>
+<td style="text-align:left;">
+[0.05 , 0.08]
+</td>
+<td style="text-align:left;">
+0.07
+</td>
+<td style="text-align:left;">
+[0.06 , 0.09]
+</td>
+<td style="text-align:left;">
+-0.17
+</td>
+<td style="text-align:left;">
+[ 0.83 , 0.86]
+</td>
+<td style="text-align:left;">
+-0.17
+</td>
+<td style="text-align:left;">
+[ 0.83 , 0.86]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Gender: ref=men
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Women
+</td>
+<td style="text-align:left;">
+-0.19
+</td>
+<td style="text-align:left;">
+[-0.23 , -0.151]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.08
+</td>
+<td style="text-align:left;">
+[-0.12 , -0.05]
+</td>
+<td style="text-align:left;">
+0.02
+</td>
+<td style="text-align:left;">
+[-0.07 , 0.12]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Missing gender
+</td>
+<td style="text-align:left;">
+-0.62
+</td>
+<td style="text-align:left;">
+[-0.67 , -0.576]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.44
+</td>
+<td style="text-align:left;">
+[-0.48 , -0.40]
+</td>
+<td style="text-align:left;">
+-0.66
+</td>
+<td style="text-align:left;">
+[-0.76 , -0.55]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Ethnicity: ref=majority
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Minority
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.45
+</td>
+<td style="text-align:left;">
+[-0.59 , -0.32]
+</td>
+<td style="text-align:left;">
+-0.12
+</td>
+<td style="text-align:left;">
+[-0.22 , -0.01]
+</td>
+<td style="text-align:left;">
+-0.14
+</td>
+<td style="text-align:left;">
+[-0.53 , 0.26]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.38
+</td>
+<td style="text-align:left;">
+[-0.42 , -0.34]
+</td>
+<td style="text-align:left;">
+-0.10
+</td>
+<td style="text-align:left;">
+[-0.13 , -0.07]
+</td>
+<td style="text-align:left;">
+-0.02
+</td>
+<td style="text-align:left;">
+[-0.12 , 0.08]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+University: ref=Erasmus University
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leiden University
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.05
+</td>
+<td style="text-align:left;">
+[-0.17 , 0.06]
+</td>
+<td style="text-align:left;">
+-0.04
+</td>
+<td style="text-align:left;">
+[-0.16 , 0.08]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Radboud University
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.21
+</td>
+<td style="text-align:left;">
+[-0.28 , -0.13]
+</td>
+<td style="text-align:left;">
+-0.20
+</td>
+<td style="text-align:left;">
+[-0.27 , -0.12]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+University of Groningen
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.61
+</td>
+<td style="text-align:left;">
+[ 0.46 , 0.76]
+</td>
+<td style="text-align:left;">
+0.61
+</td>
+<td style="text-align:left;">
+[ 0.46 , 0.76]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delft University of Technology
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.37
+</td>
+<td style="text-align:left;">
+[ 0.16 , 0.57]
+</td>
+<td style="text-align:left;">
+0.39
+</td>
+<td style="text-align:left;">
+[ 0.19 , 0.60]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eindhoven University of Technology
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.50
+</td>
+<td style="text-align:left;">
+[ 0.34 , 0.66]
+</td>
+<td style="text-align:left;">
+0.52
+</td>
+<td style="text-align:left;">
+[ 0.35 , 0.68]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tilburg University
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.44
+</td>
+<td style="text-align:left;">
+[-0.58 , -0.29]
+</td>
+<td style="text-align:left;">
+-0.42
+</td>
+<td style="text-align:left;">
+[-0.56 , -0.27]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maastricht University
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.02
+</td>
+<td style="text-align:left;">
+[-0.11 , 0.06]
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[-0.09 , 0.08]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+University of Twente
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.61
+</td>
+<td style="text-align:left;">
+[-0.69 , -0.52]
+</td>
+<td style="text-align:left;">
+-0.58
+</td>
+<td style="text-align:left;">
+[-0.67 , -0.50]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Utrecht University
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.18
+</td>
+<td style="text-align:left;">
+[-0.27 , -0.10]
+</td>
+<td style="text-align:left;">
+-0.16
+</td>
+<td style="text-align:left;">
+[-0.25 , -0.08]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+University of Amsterdam
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.05
+</td>
+<td style="text-align:left;">
+[-0.14 , 0.04]
+</td>
+<td style="text-align:left;">
+-0.03
+</td>
+<td style="text-align:left;">
+[-0.12 , 0.05]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vrije Universiteit Amsterdam
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.05
+</td>
+<td style="text-align:left;">
+[-0.14 , 0.04]
+</td>
+<td style="text-align:left;">
+-0.03
+</td>
+<td style="text-align:left;">
+[-0.12 , 0.06]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wageningen University and Research Centre
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[-0.09 , 0.08]
+</td>
+<td style="text-align:left;">
+0.01
+</td>
+<td style="text-align:left;">
+[-0.07 , 0.10]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Field: ref=Biological and Health Sciences
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Physical and mathematical sciences
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.20
+</td>
+<td style="text-align:left;">
+[-0.25 , -0.16]
+</td>
+<td style="text-align:left;">
+-0.20
+</td>
+<td style="text-align:left;">
+[-0.25 , -0.16]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Social and behavioral sciences
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.19
+</td>
+<td style="text-align:left;">
+[ 0.15 , 0.24]
+</td>
+<td style="text-align:left;">
+0.19
+</td>
+<td style="text-align:left;">
+[ 0.14 , 0.24]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Engineering
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.12
+</td>
+<td style="text-align:left;">
+[-0.18 , -0.06]
+</td>
+<td style="text-align:left;">
+-0.12
+</td>
+<td style="text-align:left;">
+[-0.18 , -0.06]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Agricultural sciences
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.05
+</td>
+<td style="text-align:left;">
+[-0.01 , 0.11]
+</td>
+<td style="text-align:left;">
+0.04
+</td>
+<td style="text-align:left;">
+[-0.01 , 0.10]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Humanities
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.29
+</td>
+<td style="text-align:left;">
+[ 0.21 , 0.38]
+</td>
+<td style="text-align:left;">
+0.29
+</td>
+<td style="text-align:left;">
+[ 0.21 , 0.38]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Missing field
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.29
+</td>
+<td style="text-align:left;">
+[ 0.24 , 0.34]
+</td>
+<td style="text-align:left;">
+0.29
+</td>
+<td style="text-align:left;">
+[ 0.24 , 0.34]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<strong>PhD cohort</strong>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.03
+</td>
+<td style="text-align:left;">
+[-0.04 , -0.03]
+</td>
+<td style="text-align:left;">
+-0.03
+</td>
+<td style="text-align:left;">
+[-0.04 , -0.03]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<strong>Previous publications</strong>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+1.50
+</td>
+<td style="text-align:left;">
+[ 1.43 , 1.57]
+</td>
+<td style="text-align:left;">
+1.50
+</td>
+<td style="text-align:left;">
+[ 1.43 , 1.56]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Cohort interactions
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PhD cohort * women
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-0.01
+</td>
+<td style="text-align:left;">
+[-0.01 , 0.00]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PhD cohort * missing gender
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.01
+</td>
+<td style="text-align:left;">
+[ 0.01 , 0.02]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PhD cohort * ethnic minority
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[-0.02 , 0.02]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PhD cohort * other ethnicity
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[-0.01 , 0.00]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<strong>AIC </strong>
+</td>
+<td style="text-align:left;">
+65138
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+65451
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+60636
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+60609
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<strong>N </strong>
+</td>
+<td style="text-align:left;">
+15021
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+15021
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+15021
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+15021
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="robustness-checks" class="section level1">
+<h1>Robustness checks</h1>
+<div id="r1-5-year-publica" class="section level2">
+<h2>R1: 5-year publica</h2>
+<pre class="r"><code>R1 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender , data = df_ppf5, dist = &quot;lognormal&quot;)
+R1
+
+R2 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity2 , data = df_ppf5, dist = &quot;lognormal&quot;)
+R2
+
+R3 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df_ppf5, dist = &quot;lognormal&quot;)
+R3
+
+R4 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf5, dist = &quot;lognormal&quot;)
+R4</code></pre>
+</div>
+<div id="r2-ethnicity-missing-excluded" class="section level2">
+<h2>R2: ethnicity-missing excluded</h2>
+<pre class="r"><code>R5 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity3 , data = df_ppf3, dist = &quot;lognormal&quot;)
+R5
+
+R6 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + veni, data = df_ppf3, dist = &quot;lognormal&quot;)
+R6
+
+R7 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + veni + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf3, dist = &quot;lognormal&quot;)
+R7</code></pre>
+</div>
+<div id="r3-discrete-time-event-history-regression"
+class="section level2">
+<h2>R3: discrete-time event history regression</h2>
+<pre class="r"><code>df_ppf3 %&gt;%
+  group_by(time) %&gt;%
+  summarise(event = sum(inactive),
+            total = n()) %&gt;%
+  mutate(hazard = event/total) %&gt;%
+  ggplot(aes(x=time, y = log(-log(1-hazard)))) +
+  geom_point() +
+  geom_smooth()
+
+# C-log-log link</code></pre>
+<pre class="r"><code>R8 &lt;- glm(formula = inactive ~ time + gender,
+          family = binomial(link=&quot;cloglog&quot;),
+          data = df_ppf3)
+
+R9 &lt;- glm(formula = inactive ~ time + ethnicity2,
+          family = binomial(link=&quot;cloglog&quot;),
+          data = df_ppf3)
+
+R10 &lt;- glm(formula = inactive ~ time + gender + ethnicity2 + uni + field + phd_cohort + npubs_prev_s,
+          family = binomial(link=&quot;cloglog&quot;),
+          data = df_ppf3)
+
+R11 &lt;- glm(formula = inactive ~ time + gender + ethnicity2 + uni + field + phd_cohort + npubs_prev_s + gender*phd_cohort + ethnicity2*phd_cohort,
+          family = binomial(link=&quot;cloglog&quot;),
+          data = df_ppf3)
+
+summ(R8, exp = T)
+summ(R9, exp = T)
+summ(R10, exp = T)
+summ(R11, exp = T)</code></pre>
+</div>
+<div
+id="r4-robustness-of-gender-cohort-interaction-to-choice-of-cohorts"
+class="section level2">
+<h2>R4: robustness of gender-cohort interaction to choice of
+cohorts</h2>
+<p>In cohort 3 (i.e. 1993), Figure 6 shows a divergent gender pattern:
+women tend to survive much longer than men in this specific cohort.
+Hence, the observed cohort effect might be due to this exceptional year.
+We look into this by removing this cohort and rerunning model 4.</p>
+<pre class="r"><code># Removing cohort 3
+df_nocoh2 &lt;- df_ppf3[df_ppf3$phd_cohort!=2,]
+
+M4_no2 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_nocoh2, dist = &quot;lognormal&quot;)
+
+M4_no2
+
+
+# Removing cohort 0-2
+df_nocoh02 &lt;- df_ppf3[df_ppf3$phd_cohort&gt;2,]
+
+M4_no02 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_nocoh02, dist = &quot;lognormal&quot;)
+
+M4_no02
+
+# Removing cohort 0-4
+df_nocoh04 &lt;- df_ppf3[df_ppf3$phd_cohort&gt;4,]
+
+M4_no04 &lt;- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_nocoh04, dist = &quot;lognormal&quot;)
+
+M4_no04</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFuYWx5c2VzICdjZWFzaW5nIHRvIHB1Ymxpc2gnIg0KZGF0ZTogIkxhc3QgY29tcGlsZWQgb24gYHIgZm9ybWF0KFN5cy50aW1lKCksICclQiwgJVknKWAiDQpvdXRwdXQ6IA0KICBodG1sX2RvY3VtZW50Og0KICAgIGNzczogdHdlYWtzLmNzcw0KICAgIHRvYzogIHRydWUNCiAgICB0b2NfZmxvYXQ6IHRydWUNCiAgICBudW1iZXJfc2VjdGlvbnM6IGZhbHNlDQogICAgY29kZV9mb2xkaW5nOiBzaG93DQogICAgY29kZV9kb3dubG9hZDogeWVzDQoNCi0tLQ0KDQoNClRoaXMgbGFiIGpvdXJuYWwgcmVwbGljYXRlcyB0aGUgYW5hbHlzZXMgZm9yICdjZWFzaW5nIHRvIHB1Ymxpc2gnLiANCg0KICANCg0KLS0tLQ0KDQoNCmBgYHtyLCBlY2hvPUZBTFNFfQ0KDQpybShsaXN0ID0gbHMoKSkNCg0KDQpgYGANCg0KDQoNCiMgQ3VzdG9tIGZ1bmN0aW9ucw0KDQotIGBwYWNrYWdlLmNoZWNrYDogQ2hlY2sgaWYgcGFja2FnZXMgYXJlIGluc3RhbGxlZCAoYW5kIGluc3RhbGwgaWYgbm90KSBpbiBSIChbc291cmNlXShodHRwczovL3ZiYWxpZ2EuZ2l0aHViLmlvL3ZlcmlmeS10aGF0LXItcGFja2FnZXMtYXJlLWluc3RhbGxlZC1hbmQtbG9hZGVkLykpLiAgDQoNCg0KYGBge3IsIHJlc3VsdHM9J2hpZGUnfQ0KDQpmcGFja2FnZS5jaGVjayA8LSBmdW5jdGlvbihwYWNrYWdlcykgew0KICBsYXBwbHkocGFja2FnZXMsIEZVTiA9IGZ1bmN0aW9uKHgpIHsNCiAgICBpZiAoIXJlcXVpcmUoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKSkgew0KICAgICAgaW5zdGFsbC5wYWNrYWdlcyh4LCBkZXBlbmRlbmNpZXMgPSBUUlVFKQ0KICAgICAgbGlicmFyeSh4LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpDQogICAgfQ0KICB9KQ0KfQ0KDQpgYGANCg0KDQotLS0gIA0KDQojIFBhY2thZ2VzDQoNCi0gYHN1cnZpdmFsYDogZ2VuZXJhbCBwYWNrYWdlIHRvIGNyZWF0ZSBsaWZlIHRhYmxlcyBhbmQgc3Vydml2YWwgbW9kZWxzLCBuZWVkZWQgZm9yIGZsZXhzdXJ2DQotIGBmbGV4c3VydmA6IGZpdHRpbmcgZmxleGlibGUgc3Vydml2YWwgcmVncmVzc2lvbiBtb2RlbHMNCi0gYGJvb3RgOiBib290c3RyYXBwaW5nIGZvciBTRXMgb2YgQU1Fcw0KLSBgdGlkeXZlcnNlYDogZm9yIGRhdGEgbWFuaXB1bGF0aW9uDQotIGBnZ3Bsb3QyYDogZm9yIGNyZWF0aW5nIGZpZ3VyZXMgNS03DQotIGBnZ3B1YnJgOiBmb3IgY29tYmluaW5nIHR3byBmaWd1cmVzIGluIG9uZSAocGxvdCA1KQ0KLSBga2FibGVFeHRyYWA6IGZvcm1hdHRpbmcgdGFibGVzDQoNCmBgYHtyLCByZXN1bHRzPSdoaWRlJ30NCg0KcGFja2FnZXMgPSBjKCJzdXJ2aXZhbCIsICJmbGV4c3VydiIsICJib290IiwgInRpZHl2ZXJzZSIsICJnZ3Bsb3QyIiwgImdncHViciIsICJrYWJsZUV4dHJhIikgDQoNCmZwYWNrYWdlLmNoZWNrKHBhY2thZ2VzKQ0KDQpgYGANCg0KDQotLS0gDQoNCiMgSW5wdXQNCg0KDQoNCldlIHVzZSB0d28gcHJvY2Vzc2VkIGRhdGFzZXRzLg0KDQoqIFtkZl9zdG9wcGluZy5yZGFdKCIuL2RhdGEvcHJvY2Vzc2VkL2RmX3N0b3BwaW5nLnJkYSIpOiBwZXJzb24tcGVyaW9kIGZpbGUgY29udGFpbmluZyBwdWJsaWNhdGlvbnMgYW5kIGFsbCByZWxldmFudCB2YXJpYWJsZXMgZm9yIHRoZSBzdXJ2aXZhbCBtb2RlbHMsIHRpbWUgd2luZG93IGZvciBpbmFjdGl2aXR5IGlzIDMgeWVhcnMNCiAgICAtIEZvciBjb25zdHJ1Y3Rpb24gb2YgdGhpcyBkYXRhc2V0IHNlZSBbKGRhdGFwcmVwYXJhdGlvbi5odG1sKV0gIA0KICAgIC0gbmFtZSBvZiBkYXRhc2V0OiBgZGZfcHBmM2AgDQoNCiogW2RmX3N0b3BwaW5nNS5yZGFdKCJkYXRhL3Byb2Nlc3NlZC9kZl9zdG9wcGluZ181LnJkYSIpOiBwZXJzb24tcGVyaW9kIGZpbGUgY29udGFpbmluZyBwdWJsaWNhdGlvbnMgYW5kIGFsbCByZWxldmFudCB2YXJpYWJsZXMgZm9yIHRoZSBzdXJ2aXZhbCBtb2RlbHMsIHRpbWUtd2luZG93IGZvciBpbmFjdGl2aXR5IGlzIHllYXJzDQogICAgLSBGb3IgY29uc3RydWN0aW9uIG9mIHRoaXMgZGF0YXNldCBzZWUgWyhkYXRhcHJlcGFyYXRpb24uaHRtbCldICANCiAgICAtIG5hbWUgb2YgZGF0YXNldDogYGRmX3BwZjVgIA0KDQoNCg0KDQpgYGB7cn0NCg0KbG9hZChmaWxlID0gIi4vZGF0YS9wcm9jZXNzZWQvZGZfc3RvcHBpbmcucmRhIikNCg0KDQpsb2FkKGZpbGUgPSAiZGF0YS9wcm9jZXNzZWQvZGZfc3RvcHBpbmc1LnJkYSIpDQoNCmBgYA0KDQoNCg0KIyBDaGVja2luZyBkaXN0cmlidXRpb25zDQoNCkthcGxhbi1NZWllciBjdXJ2ZQ0KYGBge3J9DQoNCktNMSA8LSBzdXJ2Zml0KFN1cnYodGltZS0xLCB0aW1lLCBpbmFjdGl2ZSkgfiAxLCBjb25mLmxvd2VyPSd1c3VhbCcsIGRhdGEgPSBkZl9wcGYzKQ0KS00yIDwtIHN1cnZmaXQoU3Vydih0aW1lLTEsIHRpbWUsIGluYWN0aXZlKSB+IGdlbmRlciwgY29uZi5sb3dlcj0ndXN1YWwnLCBkYXRhID0gZGZfcHBmMykNCktNMyA8LSBzdXJ2Zml0KFN1cnYodGltZS0xLCB0aW1lLCBpbmFjdGl2ZSkgfiBldGhuaWNpdHkyLCBjb25mLmxvd2VyPSd1c3VhbCcsIGRhdGEgPSBkZl9wcGYzKQ0KDQoNCnBsb3QoS00xKQ0KcGxvdChLTTIpDQpwbG90KEtNMykNCg0KYGBgDQoNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCiNNQzEgPC0gZmxleHN1cnZyZWcoU3VydigodGltZSAtMSksIHRpbWUsIGluYWN0aXZlKSB+IDEsIGRhdGEgPSBkZl9wcGYzLCBkaXN0ID0gImdlbmdhbW1hIikgIyBjb21tZW50ZWQ6IG5vIGNvbnZlcmdlbmNlDQojTUMyIDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiAxLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJnZW5mIikgICAgICMgY29tbWVudGVkOiBubyBjb252ZXJnZW5jZQ0KTUMzIDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiAxLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJ3ZWlidWxsIikNCk1DNCA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gMSwgZGF0YSA9IGRmX3BwZjMsIGRpc3QgPSAiZ2FtbWEiKQ0KTUM1IDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiAxLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJleHAiKQ0KTUM2IDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiAxLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJsbG9naXMiKQ0KTUM3IDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiAxLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJnb21wZXJ0eiIpDQpNQzggPC0gZmxleHN1cnZyZWcoU3VydigodGltZSAtMSksIHRpbWUsIGluYWN0aXZlKSB+IDEsIGRhdGEgPSBkZl9wcGYzLCBkaXN0ID0gImxvZ25vcm1hbCIpDQoNCnRlc3RkaXN0IDwtIEFJQyhNQzMsIE1DNCwgTUM1LCBNQzYsIE1DNywgTUM4KQ0KdGVzdGRpc3Rbb3JkZXIodGVzdGRpc3QkQUlDKSxdDQoNCmBgYA0KDQoNCg0KDQoNCiMgTW9kZWwgMTogR2VuZGVyIG9ubHkNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCk0xIDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBnZW5kZXIgLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJsb2dub3JtYWwiKQ0KDQpgYGANCg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCmxvYWQoInJlc3VsdHMvc3RvcHBpbmcvMjAyMzA0MDVNMS5yZGEiKQ0KDQpNMSA8LSB4DQoNCnJtKHgpDQoNCmBgYA0KDQpgYGB7cn0NCg0KTTENCg0KYGBgDQoNCg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCiMgcC12YWx1ZXMNCg0KTTEkcHZhbHMgPC0gMipwbm9ybSgtYWJzKE0xJHJlc1ssMV0vTTEkcmVzWyw0XSkpDQpyb3VuZChNMSRwdmFscywgNCkNCg0KYGBgDQoNCg0KDQoNCiMgTW9kZWwgMjogRXRobmljaXR5IG9ubHkNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCk0yIDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBldGhuaWNpdHkyICwgZGF0YSA9IGRmX3BwZjMsIGRpc3QgPSAibG9nbm9ybWFsIikNCg0KDQpgYGANCg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCmxvYWQoIi4vcmVzdWx0cy9zdG9wcGluZy8yMDIzMDQwNU0yLnJkYSIpDQoNCk0yIDwtIHgNCg0Kcm0oeCkNCg0KYGBgDQoNCmBgYHtyfQ0KDQpNMiANCg0KYGBgDQoNCg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCiMgQ29tcHV0aW5nIHAtdmFsdWVzDQoNCk0yJHB2YWxzIDwtIDIqcG5vcm0oLWFicyhNMiRyZXNbLDFdL00yJHJlc1ssNF0pKQ0KDQpyb3VuZChNMiRwdmFscywgNCkNCg0KYGBgDQoNCg0KDQoNCg0KIyBNb2RlbCAzOiBHZW5kZXIgYW5kIGV0aG5pY2l0eSwgY29udHJvbHMNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCk0zIDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgZmllbGQyICsgcGhkX2NvaG9ydCArIG5wdWJzX3ByZXZfcywgZGF0YSA9IGRmX3BwZjMsIGRpc3QgPSAibG9nbm9ybWFsIikNCg0KYGBgDQoNCmBgYHtyLCBlY2hvPUZBTFNFfQ0KDQpsb2FkKCIuL3Jlc3VsdHMvc3RvcHBpbmcvMjAyMzA0MDVNMy5yZGEiKQ0KDQpNMyA8LSB4DQoNCnJtKHgpDQoNCmBgYA0KDQoNCmBgYHtyfQ0KDQpNMw0KDQpgYGANCg0KDQpgYGB7ciwgZWNobz1GQUxTRX0NCg0KIyBjb21wdXRpbmcgcC12YWx1ZXMNCg0KTTMkcHZhbHMgPC0gMipwbm9ybSgtYWJzKE0zJHJlc1ssMV0vTTMkcmVzWyw0XSkpDQoNCnJvdW5kKE0zJHB2YWxzLCA0KQ0KDQpgYGANCg0KDQoNCiMjIEF2ZXJhZ2UgbWFyZ2luYWwgZWZmZWN0cyAoQU1FcykNCg0KDQpgYGB7ciwgZXZhbD1GQUxTRX0NCg0KYm9vdEZ1bmMgPC0gZnVuY3Rpb24oZGF0YSwgaSkgew0KICBkZiA8LSBkYXRhW2ksXSAjYm9vdHN0cmFwIGRhdGFzZXRzDQogIA0KICANCiAgTSA8LSBmbGV4c3Vydjo6ZmxleHN1cnZyZWcoc3Vydml2YWw6OlN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgZmllbGQyICsgcGhkX2NvaG9ydCArIG5wdWJzX3ByZXZfcywgZGF0YSA9IGRmLCBkaXN0ID0gImxvZ25vcm1hbCIpDQogIA0KICBzdXBwcmVzc1dhcm5pbmdzKHsNCiAgDQogICAgZGZtYWogPC0gZGZtaW4gPC0gZGZtZW4gPC0gZGZ3b21lbiA8LSBkZg0KICAgIGRmd29tZW4kZ2VuZGVyIDwtICJ3b21lbiIgIyBvbmUgZGF0YXNldCBvZiBhbGwgd29tZW4NCiAgICBkZm1lbiRnZW5kZXIgPC0gIm1lbiIgIyBvbmUgZGF0YXNldCBvZiBhbGwgbWVuDQogICAgZGZtaW4kZXRobmljaXR5MiA8LSAibWlub3JpdHkiICMgb25lIGRhdGFzZXQgYWxsIG1pbm9yaXR5DQogICAgZGZtYWokZXRobmljaXR5MiA8LSAibWFqb3JpdHkiICMgb25lIGRhdGFzZXQgYWxsIG1ham9yaXR5DQogICAgDQogICAgZGZ3b21lbiRnZW5kZXIgPC0gZmFjdG9yKGRmd29tZW4kZ2VuZGVyLCBsZXZlbHM9bGV2ZWxzKGRmJGdlbmRlcikpDQogICAgZGZtZW4kZ2VuZGVyIDwtIGZhY3RvcihkZm1lbiRnZW5kZXIsIGxldmVscz1sZXZlbHMoZGYkZ2VuZGVyKSkNCiAgICBkZm1pbiRldGhuaWNpdHkyIDwtIGZhY3RvcihkZm1pbiRldGhuaWNpdHkyLCBsZXZlbHM9bGV2ZWxzKGRmJGV0aG5pY2l0eTIpKQ0KICAgIGRmbWFqJGV0aG5pY2l0eTIgPC0gZmFjdG9yKGRmbWFqJGV0aG5pY2l0eTIsIGxldmVscz1sZXZlbHMoZGYkZXRobmljaXR5MikpDQoNCg0KICAgICNjYWxjdWxhdGUgdGhlIHByZWRpY3RlZCBwcm9iYWJpbGl0aWVzIGZvciBnZW5kZXINCiAgICBwdyA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZndvbWVuKSkpDQogICAgcG0gPC0gYXMubnVtZXJpYyh1bmxpc3QocHJlZGljdChNLCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGE9ZGZtZW4pKSkNCiAgICANCiAgICAjIGF2ZXJhZ2UgbWFyZ2luYWwgZWZmZWN0cw0KICAgIEFNRV9nZW5kZXIgPC0gbWVhbihwdyAtIHBtKQ0KICAgIA0KICAgICNjYWxjdWxhdGUgdGhlIHByZWRpY3RlZCBwcm9iYWJpbGl0aWVzIGZvciBldGhuaWNpdHkNCiAgICBwbW4gPC0gYXMubnVtZXJpYyh1bmxpc3QocHJlZGljdChNLCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGE9ZGZtaW4pKSkNCiAgICBwbWogPC0gYXMubnVtZXJpYyh1bmxpc3QocHJlZGljdChNLCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGE9ZGZtYWopKSkNCg0KICAgICMgYXZlcmFnZSBtYXJnaW5hbCBlZmZlY3RzDQogICAgQU1FX2V0aG5pY2l0eSA8LSBtZWFuKHBtbiAtIHBtaikNCiAgICANCiAgfSkNCiAgDQogIGMoQU1FX2dlbmRlciwgQU1FX2V0aG5pY2l0eSkNCiAgICNzYXZlIHJlc3VsdHMNCn0NCg0KYjMgPC0gYm9vdChkZl9wcGYzLCBib290RnVuYywgUiA9IDk5OSwgcGFyYWxsZWw9InNub3ciLCBuY3B1cz0xMCkNCg0KDQpmc2F2ZShiMywgZmlsZSA9ICJib290My5yZGEiLCBsb2NhdGlvbiA9ICIuL3Jlc3VsdHMvc3RvcHBpbmcvIikNCg0KDQpgYGANCg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCmxvYWQoIi4vcmVzdWx0cy9zdG9wcGluZy9ib290My5yZGEiKQ0KYjMgPC0geA0Kcm0oeCkNCg0KYGBgDQoNCg0KYGBge3J9DQoNCm9yaWdpbmFsIDwtIGIzJHQwDQpiaWFzIDwtIGNvbE1lYW5zKGIzJHQpIC0gYjMkdDANCnNlIDwtIGFwcGx5KGIzJHQsIDIsIHNkKQ0KDQpib290LmRmMyA8LSBkYXRhLmZyYW1lKG9yaWdpbmFsPW9yaWdpbmFsLCBiaWFzPWJpYXMsIHNlPXNlKQ0Kcm93Lm5hbWVzKGJvb3QuZGYzKSA8LSBjKCJBTUVfZ2VuZGVyIiwgIkFNRV9ldGhuaWNpdHkiKQ0KDQpib290LmRmMyR0IDwtIChib290LmRmMyRvcmlnaW5hbCAvIGJvb3QuZGYzJHNlKQ0KDQpyb3VuZChib290LmRmMywgNSkNCg0KDQpgYGANCg0KDQoNCiMgTW9kZWwgNDogR2VuZGVyICsgZXRobmljaXR5ICsgY29ob3J0IHggZ2VuZGVyICsgY29ob3J0IHggZXRobmljaXR5ICsgY29udHJvbHMNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCk00IDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgZmllbGQyICsgcGhkX2NvaG9ydCArIG5wdWJzX3ByZXZfcyArIHBoZF9jb2hvcnQqZ2VuZGVyICsgcGhkX2NvaG9ydCpldGhuaWNpdHkyLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJsb2dub3JtYWwiKQ0KDQoNCmBgYA0KDQoNCmBgYHtyLCBlY2hvPUZBTFNFfQ0KDQpsb2FkKCIuL3Jlc3VsdHMvc3RvcHBpbmcvMjAyMzA0MDVNNC5yZGEiKQ0KDQpNNCA8LSB4DQoNCnJtKHgpDQoNCmBgYA0KDQpgYGB7cn0NCg0KTTQNCg0KYGBgDQoNCg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCiMgY2FsY3VsYXRpbmcgcC12YWx1ZXMNCg0KTTQkcHZhbHMgPC0gMipwbm9ybSgtYWJzKE00JHJlc1ssMV0vTTQkcmVzWyw0XSkpDQoNCnJvdW5kKE00JHB2YWxzLCA0KQ0KDQpgYGANCg0KDQoNCiMjIEF2ZXJhZ2UgbWFyZ2luYWwgZWZmZWN0cyAoQU1FcykNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCg0KYm9vdEZ1bmMgPC0gZnVuY3Rpb24oZGF0YSwgaSkgew0KICBkZiA8LSBkYXRhW2ksXSAjYm9vdHN0cmFwIGRhdGFzZXRzDQogIA0KICANCiAgTSA8LSBmbGV4c3Vydjo6ZmxleHN1cnZyZWcoc3Vydml2YWw6OlN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgZmllbGQyICsgcGhkX2NvaG9ydCArIG5wdWJzX3ByZXZfcyArIHBoZF9jb2hvcnQqZ2VuZGVyICsgcGhkX2NvaG9ydCpldGhuaWNpdHkyLCBkYXRhID0gZGYsIGRpc3QgPSAibG9nbm9ybWFsIikNCiAgDQogIHN1cHByZXNzV2FybmluZ3Moew0KICANCiAgICBkZm1haiA8LSBkZm1pbiA8LSBkZm1lbiA8LSBkZndvbWVuIDwtIGRmDQogICAgZGZ3b21lbiRnZW5kZXIgPC0gIndvbWVuIiAjIG9uZSBkYXRhc2V0IG9mIGFsbCB3b21lbg0KICAgIGRmbWVuJGdlbmRlciA8LSAibWVuIiAjIG9uZSBkYXRhc2V0IG9mIGFsbCBtZW4NCiAgICBkZm1pbiRldGhuaWNpdHkyIDwtICJtaW5vcml0eSIgIyBvbmUgZGF0YXNldCBhbGwgbWlub3JpdHkNCiAgICBkZm1haiRldGhuaWNpdHkyIDwtICJtYWpvcml0eSIgIyBvbmUgZGF0YXNldCBhbGwgbWFqb3JpdHkNCiAgICANCiAgICBkZndvbWVuJGdlbmRlciA8LSBmYWN0b3IoZGZ3b21lbiRnZW5kZXIsIGxldmVscz1sZXZlbHMoZGYkZ2VuZGVyKSkNCiAgICBkZm1lbiRnZW5kZXIgPC0gZmFjdG9yKGRmbWVuJGdlbmRlciwgbGV2ZWxzPWxldmVscyhkZiRnZW5kZXIpKQ0KICAgIGRmbWluJGV0aG5pY2l0eTIgPC0gZmFjdG9yKGRmbWluJGV0aG5pY2l0eTIsIGxldmVscz1sZXZlbHMoZGYkZXRobmljaXR5MikpDQogICAgZGZtYWokZXRobmljaXR5MiA8LSBmYWN0b3IoZGZtYWokZXRobmljaXR5MiwgbGV2ZWxzPWxldmVscyhkZiRldGhuaWNpdHkyKSkNCg0KDQogICAgI2NhbGN1bGF0ZSB0aGUgcHJlZGljdGVkIHByb2JhYmlsaXRpZXMgZm9yIGdlbmRlcg0KICAgIHB3IDwtIGFzLm51bWVyaWModW5saXN0KHByZWRpY3QoTSwgdHlwZT0icmVzcG9uc2UiLCBuZXdkYXRhPWRmd29tZW4pKSkNCiAgICBwbSA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZm1lbikpKQ0KICAgIA0KICAgICMgYXZlcmFnZSBtYXJnaW5hbCBlZmZlY3RzDQogICAgQU1FX2dlbmRlciA8LSBtZWFuKHB3IC0gcG0pDQogICAgDQogICAgI2NhbGN1bGF0ZSB0aGUgcHJlZGljdGVkIHByb2JhYmlsaXRpZXMgZm9yIGV0aG5pY2l0eQ0KICAgIHBtbiA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZm1pbikpKQ0KICAgIHBtaiA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZm1haikpKQ0KDQogICAgIyBhdmVyYWdlIG1hcmdpbmFsIGVmZmVjdHMNCiAgICBBTUVfZXRobmljaXR5IDwtIG1lYW4ocG1uIC0gcG1qKQ0KICAgIA0KICAgIA0KICAgICMgY29ob3J0IGludGVyYWN0aW9ucw0KICAgIA0KICAgIHMgPC0gMC4xDQogICAgIyBjb3B5aW5nIG91ciBkYXRhIGludG8gc2VwYXJhdGUgZGF0YWZyYW1lcw0KICAgIGRmd29tZW5jcCA8LSBkZndvbWVuY20gPC0gZGZtZW5jcCA8LSBkZm1lbmNtIDwtIGRmDQogICAgZGZtaW5jcCA8LSBkZm1pbmNtIDwtIGRmbWFqY3AgPC0gZGZtYWpjbSA8LSBkZg0KICAgIA0KICAgICMgYXNzaWduaW5nIGdlbmRlciB0byBlYWNoIG9mIHRoZSBkYXRhZnJhbWVzDQogICAgZGZ3b21lbmNwJGdlbmRlciA8LSBkZndvbWVuY20kZ2VuZGVyIDwtICJ3b21lbiINCiAgICBkZm1lbmNwJGdlbmRlciA8LSBkZm1lbmNtJGdlbmRlciA8LSAibWVuIg0KICAgIGRmd29tZW5jcCRnZW5kZXIgPC0gZmFjdG9yKGRmd29tZW5jcCRnZW5kZXIsIGxldmVscz1sZXZlbHMoZGYkZ2VuZGVyKSkNCiAgICBkZndvbWVuY20kZ2VuZGVyIDwtIGZhY3RvcihkZndvbWVuY20kZ2VuZGVyLCBsZXZlbHM9bGV2ZWxzKGRmJGdlbmRlcikpDQogICAgZGZtZW5jcCRnZW5kZXIgPC0gZmFjdG9yKGRmbWVuY3AkZ2VuZGVyLCBsZXZlbHM9bGV2ZWxzKGRmJGdlbmRlcikpDQogICAgZGZtZW5jbSRnZW5kZXIgPC0gZmFjdG9yKGRmbWVuY20kZ2VuZGVyLCBsZXZlbHM9bGV2ZWxzKGRmJGdlbmRlcikpDQogICAgDQogICAgIyBhc3NpZ25pbmcgZXRobmljaXR5IHRvIHRoZSBkYXRhZnJhbWVzDQogICAgZGZtaW5jcCRldGhuaWNpdHkgPC0gZGZtaW5jbSRldGhuaWNpdHkgPC0gIndvbWVuIg0KICAgIGRmbWFqY3AkZXRobmljaXR5IDwtIGRmbWFqY20kZXRobmljaXR5IDwtICJtZW4iDQogICAgZGZtaW5jcCRldGhuaWNpdHkgPC0gZmFjdG9yKGRmbWluY3AkZXRobmljaXR5LCBsZXZlbHM9bGV2ZWxzKGRmJGV0aG5pY2l0eTIpKQ0KICAgIGRmbWluY20kZXRobmljaXR5IDwtIGZhY3RvcihkZm1pbmNtJGV0aG5pY2l0eSwgbGV2ZWxzPWxldmVscyhkZiRldGhuaWNpdHkyKSkNCiAgICBkZm1hamNwJGV0aG5pY2l0eSA8LSBmYWN0b3IoZGZtYWpjcCRldGhuaWNpdHksIGxldmVscz1sZXZlbHMoZGYkZXRobmljaXR5MikpDQogICAgZGZtYWpjbSRldGhuaWNpdHkgPC0gZmFjdG9yKGRmbWFqY20kZXRobmljaXR5LCBsZXZlbHM9bGV2ZWxzKGRmJGV0aG5pY2l0eTIpKQ0KICAgIA0KICAgIA0KICAgICMgYWRkaW5nL3N1YnRyYWN0aW5nIHNtYWxsIGNoYW5nZXMgUGhEIGNvaG9ydA0KICAgIGRmd29tZW5jcCRwaGRfY29ob3J0IDwtIGRmbWVuY3AkcGhkX2NvaG9ydCA8LSBkZiRwaGRfY29ob3J0ICsgcw0KICAgIGRmd29tZW5jbSRwaGRfY29ob3J0IDwtIGRmbWVuY20kcGhkX2NvaG9ydCA8LSBkZiRwaGRfY29ob3J0IC0gcw0KICAgIA0KICAgIGRmbWFqY3AkcGhkX2NvaG9ydCA8LSBkZm1pbmNwJHBoZF9jb2hvcnQgPC0gZGYkcGhkX2NvaG9ydCArIHMNCiAgICBkZm1hamNtJHBoZF9jb2hvcnQgPC0gZGZtaW5jbSRwaGRfY29ob3J0IDwtIGRmJHBoZF9jb2hvcnQgLSBzDQogICAgDQogICAgIyBjYWxjdWxhdGluZyBwcmVkaWN0ZWQgcHJvYmFiaWxpdGllcw0KICAgIHB3cCA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZndvbWVuY3ApKSkNCiAgICBwd20gPC0gYXMubnVtZXJpYyh1bmxpc3QocHJlZGljdChNLCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGE9ZGZ3b21lbmNtKSkpDQogICAgcG1wIDwtIGFzLm51bWVyaWModW5saXN0KHByZWRpY3QoTSwgdHlwZT0icmVzcG9uc2UiLCBuZXdkYXRhPWRmbWVuY3ApKSkNCiAgICBwbW0gPC0gYXMubnVtZXJpYyh1bmxpc3QocHJlZGljdChNLCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGE9ZGZtZW5jbSkpKQ0KICAgIA0KICAgIHBucCA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZm1pbmNwKSkpDQogICAgcG5tIDwtIGFzLm51bWVyaWModW5saXN0KHByZWRpY3QoTSwgdHlwZT0icmVzcG9uc2UiLCBuZXdkYXRhPWRmbWluY20pKSkNCiAgICBwanAgPC0gYXMubnVtZXJpYyh1bmxpc3QocHJlZGljdChNLCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGE9ZGZtYWpjcCkpKQ0KICAgIHBqbSA8LSBhcy5udW1lcmljKHVubGlzdChwcmVkaWN0KE0sIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YT1kZm1hamNtKSkpDQogICAgDQogICAgDQojIG1hcmdpbmFsIGVmZmVjdHMNCkFNRV9nZW5kZXJjb2ggPC0gbWVhbigoKHB3cCAtIHBtcCkgLSAocHdtIC0gcG1tKSkgLyAoMipzKSkNCg0KQU1FX2V0aG5pY2l0eWNvaCA8LSBtZWFuKCgocG5wIC0gcGpwKSAtIChwbm0gLSBwam0pKSAvICgyKnMpKQ0KDQogIH0pDQogIA0KICBjKEFNRV9nZW5kZXIsIEFNRV9ldGhuaWNpdHksIEFNRV9nZW5kZXJjb2gsIEFNRV9ldGhuaWNpdHljb2gpDQogICAjc2F2ZSByZXN1bHRzDQp9DQoNCmI0IDwtIGJvb3QoZGZfcHBmMywgYm9vdEZ1bmMsIFIgPSA5OTksIHBhcmFsbGVsPSJzbm93IiwgbmNwdXM9MTApDQoNCg0KZnNhdmUoYjQsIGZpbGUgPSAiYm9vdDQucmRhIiwgbG9jYXRpb24gPSAiLi9yZXN1bHRzL3N0b3BwaW5nLyIpDQoNCmBgYA0KDQpgYGB7ciwgZWNobz1GQUxTRX0NCg0KbG9hZChmaWxlPSAiLi9yZXN1bHRzL3N0b3BwaW5nL2Jvb3Q0LnJkYSIpDQoNCmI0IDwtIHgNCg0Kcm0oeCkNCg0KYGBgDQoNCg0KYGBge3J9DQoNCm9yaWdpbmFsIDwtIGI0JHQwDQpiaWFzIDwtIGNvbE1lYW5zKGI0JHQpIC0gYjQkdDANCnNlIDwtIGFwcGx5KGI0JHQsIDIsIHNkKQ0KDQpib290LmRmNCA8LSBkYXRhLmZyYW1lKG9yaWdpbmFsPW9yaWdpbmFsLCBiaWFzPWJpYXMsIHNlPXNlKQ0Kcm93Lm5hbWVzKGJvb3QuZGY0KSA8LSBjKCJBTUVfZ2VuZGVyIiwgIkFNRV9ldGhuaWNpdHkiLCAiQU1FX2dlbmRlci1jb2giLCAiQU1FX2V0aG5pY2l0eS1jb2giKQ0KDQpib290LmRmNCR0IDwtIChib290LmRmNCRvcmlnaW5hbCAvIGJvb3QuZGY0JHNlKQ0KDQpyb3VuZChib290LmRmNCwgNSkNCg0KYGBgDQoNCg0KDQoNCg0KIyBQbG90dGluZyBzdXJ2aXZhbCB0aW1lcw0KDQpEZWZpbmluZyBjb2xvcnMgZm9yIGVhY2ggZ3JvdXANCg0KYGBge3J9DQoNCiMgZGVmaW5pbmcgY29sb3JzDQptZW5jIDwtICIjRDFDMTY2Ig0Kd29tZW5jIDwtICIjNDhhMzYzIg0KbWFqYyA8LSAiIzM5ODM5RCINCm1pbmMgPC0gIiNCODUwNDIiDQoNCg0KYGBgDQoNCg0KIyMgUGxvdCA1OiBTdXJ2aXZhbCB0aW1lcyBieSBnZW5kZXIgYW5kIGV0aG5pY2l0eQ0KDQpCYXNlZCBvbiBNMTogZ2VuZGVyIG9ubHkuDQoNCmBgYHtyfQ0KDQojIENhbGN1bGF0aW5nIHByZWRpY3RlZCBwcm9iYWJpbGl0aWVzDQpNMSAlPiUgcHJlZGljdCh0eXBlPSJyZXNwb25zZSIsIGNvbmYuaW50PVRSVUUsIGNvbmYubGV2ZWw9Ljk1LCBuZXdkYXRhPWRmX3BwZjMpIC0+IHBsb3Q1YQ0KDQpjbGFzcyhwbG90NWEpICANCnBsb3Q1YSA8LSBhcy5kYXRhLmZyYW1lKHBsb3Q1YSkNCg0KIyBleGNsdWRpbmcgZ2VuZGVyID0gbWlzc2luZyBmcm9tIHRoZSBwbG90DQpwbG90NWEkZ2VuZGVyIDwtIGRmX3BwZjMkZ2VuZGVyDQpwbG90NWEgPC0gcGxvdDVhW3Bsb3Q1YSRnZW5kZXIhPSJtaXNzaW5nIixdDQoNCg0KDQpwbG90NWEgJT4lDQogIGdyb3VwX2J5KGdlbmRlcikgJT4lDQogIHN1bW1hcmlzZShmaXQgPSBtZWFuKC5wcmVkX3RpbWUpLCANCiAgICAgICAgICAgIHVwcGVyID0gbWVhbigucHJlZF91cHBlciksIA0KICAgICAgICAgICAgbG93ZXIgPSBtZWFuKC5wcmVkX2xvd2VyKSkgLT4gcGxvdDVhDQoNCg0KZ2dwbG90KHBsb3Q1YSxhZXMoZ2VuZGVyLCBmaXQsICBjb2xvcj0oZ2VuZGVyKSkpKw0KICBnZW9tX2JveHBsb3Qod2lkdGggPSAuMSkgKw0KICBnZW9tX2Vycm9yYmFyKGFlcyh5bWluID0gbG93ZXIsIHltYXggPSB1cHBlciksIGx3ZCA9IDAuOCwgd2lkdGggPSAuMDUpICsgDQogIHlsaW0oMCwgMjApICsNCiAgbGFicyh4ID0gIkdlbmRlciIsIHkgPSAiQXZlcmFnZSBwcmVkaWN0ZWQgc3Vydml2YWwgdGltZSIpICsNCiAgdGhlbWVfYncoKSArDQogIHNjYWxlX2NvbG9yX21hbnVhbCh2YWx1ZXM9YyhtZW5jLCB3b21lbmMpLCBuYW1lPSJHZW5kZXIiKSArDQogIGdlb21fdGV4dCh4PTAuNywgeT0xOSwgbGFiZWw9IkEiLCBzaXplPTEwLCBjb2xvcj0iYmxhY2siKSArDQogIHRoZW1lKGF4aXMudGl0bGU9ZWxlbWVudF90ZXh0KGZhY2U9ImJvbGQiKSwNCiAgICAgICAgbGVnZW5kLnBvc2l0aW9uID0gIm5vbmUiKSAtPiBwbG90NWENCg0KcGxvdDVhDQoNCg0KYGBgDQoNCkJhc2VkIG9uIE0yOiBldGhuaWNpdHkgb25seS4NCg0KYGBge3J9DQoNCiMgQ2FsY3VsYXRpbmcgcHJlZGljdGVkIHByb2JhYmlsaXRpZXMNCk0yICU+JSBwcmVkaWN0KHR5cGU9InJlc3BvbnNlIiwgY29uZi5pbnQ9VFJVRSwgY29uZi5sZXZlbD0uOTUsIG5ld2RhdGE9ZGZfcHBmMykgLT4gcGxvdDViDQogIA0KcGxvdDViIDwtIGFzLmRhdGEuZnJhbWUocGxvdDViKQ0KDQojIGV4Y2x1ZGluZyBnZW5kZXIgPSBtaXNzaW5nIGZyb20gdGhlIHBsb3QNCnBsb3Q1YiRldGhuaWNpdHkgPC0gZGZfcHBmMyRldGhuaWNpdHkyDQpwbG90NWIgPC0gcGxvdDViW3Bsb3Q1YiRldGhuaWNpdHkhPSJvdGhlciIsXQ0KDQpwbG90NWIgJT4lDQogIGdyb3VwX2J5KGV0aG5pY2l0eSkgJT4lDQogIHN1bW1hcmlzZShmaXQgPSBtZWFuKC5wcmVkX3RpbWUpLCANCiAgICAgICAgICAgIHVwcGVyID0gbWVhbigucHJlZF91cHBlciksIA0KICAgICAgICAgICAgbG93ZXIgPSBtZWFuKC5wcmVkX2xvd2VyKSkgLT4gcGxvdDViDQoNCg0KZ2dwbG90KHBsb3Q1YixhZXMoZXRobmljaXR5LCBmaXQsICBjb2xvcj0oZXRobmljaXR5KSkpKw0KICBnZW9tX2JveHBsb3Qod2lkdGggPSAuMSkgKw0KICBnZW9tX2Vycm9yYmFyKGFlcyh5bWluID0gbG93ZXIsIHltYXggPSB1cHBlciksIGx3ZCA9IDAuOCwgd2lkdGggPSAuMDUpICsgDQogIHlsaW0oMCwgMjApICsNCiAgbGFicyh4ID0gIkV0aG5pY2l0eSIsIHkgPSAiQXZlcmFnZSBwcmVkaWN0ZWQgc3Vydml2YWwgdGltZSIpICsNCiAgdGhlbWVfYncoKSArDQogIHNjYWxlX2NvbG9yX21hbnVhbCh2YWx1ZXM9YyhtYWpjLCBtaW5jKSwgbmFtZT0iRXRobmljaXR5IikgKw0KICBnZW9tX3RleHQoeD0wLjcsIHk9MTksIGxhYmVsPSJCIiwgc2l6ZT0xMCwgY29sb3I9ImJsYWNrIikgKw0KICB0aGVtZShheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChmYWNlPSJib2xkIiksDQogICAgICAgIGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikgLT4gcGxvdDViDQoNCg0KcGxvdDViDQoNCmBgYA0KDQpDb21iaW5lZDogcGxvdCA0DQpgYGB7cn0NCg0KcGxvdDUgPC0gZ2dhcnJhbmdlKHBsb3Q1YSwgcGxvdDViLCBuY29sID0gMiwgbnJvdz0xLCB3aWR0aHM9YygxLDEpKQ0KDQpwbG90NQ0KDQpnZ3NhdmUoIi4vb3V0cHV0L3N0b3BwaW5nL3Bsb3Q1X2xvZ24uanBnIiwgaGVpZ2h0PTQsIHdpZHRoPTgsIGRwaT0xMjAwKQ0KDQpwbG90NWEkZGF0YSAjIHByZWRpY3RlZCBzdXJ2aXZhbCB0aW1lIGJ5IGdlbmRlcg0KcGxvdDViJGRhdGEgIyBwcmVkaWN0ZWQgc3Vydml2YWwgdGltZSBieSBldGhuaWNpdHkNCg0KYGBgDQoNCg0KDQoNCiMjIFBsb3QgNjogR2VuZGVyICogY29ob3J0DQoNCkhlcmUsIEkgY2hlY2sgdGhlIHByZWRpY3RlZCB2YWx1ZXMgYmFzZWQgb24gbW9kZWwgMy4gSSBmb3VuZCB0aGF0IHRoZSBwcmVkaWN0ZWQgdmFsdWVzIGJhc2VkIG9uIHRoZSBmdWxsIG1vZGVsIHdlcmUgZXh0cmVtZSBpbiBzb21lIGNhc2VzLiBCeSBhZGRpbmcgdGhlIHZhcmlhYmxlcyBpbiBtb2RlbCAzIG9uZSBieSBvbmUsIEkgY2hlY2sgd2hpY2ggdmFyaWFibGVzIGxlYWQgdG8gbGFyZ2UgZGV2aWF0aW9ucyBmcm9tIG5vcm1hbCBwcmVkaWN0ZWQgdmFsdWVzLiBJbmNsdXNpb24gb2YgdW5pdmVyc2l0eSwgZmllbGQsIGNvaG9ydCBhbmQgdmVuaSBsZWFkcyB0byBhIHNtYWxsIHBlcmNlbnRhZ2Ugb2YgdW5yZWFsaXN0aWMgcHJlZGljdGVkIHZhbHVlcywgd2hpbGUgcHJldmlvdXMgcHVibGljYXRpb25zIHNlZW1zIHRvIGFkZCBxdWl0ZSBhIGZldy4gDQoNCmBgYHtyfQ0KDQpNNCAlPiUgcHJlZGljdCh0eXBlPSJyZXNwb25zZSIsIGNvbmYuaW50PVRSVUUsIGNvbmYubGV2ZWw9Ljk1LCBuZXdkYXRhPWRmX3BwZjMpIC0+IHA2DQoNCg0KcGxvdDcgPC0gcGxvdDYgPC0gYXMuZGF0YS5mcmFtZShwNikgIyBzYW1lIGRhdGEgZm9yIHBsb3QgNSBhbmQgNg0KDQojIGV4Y2x1ZGluZyBnZW5kZXIgPSBtaXNzaW5nIGZyb20gdGhlIHBsb3QNCnBsb3Q2JGdlbmRlciA8LSBkZl9wcGYzJGdlbmRlcg0KcGxvdDYkY29ob3J0IDwtIGRmX3BwZjMkcGhkX2NvaG9ydA0KcGxvdDYgPC0gcGxvdDZbcGxvdDYkZ2VuZGVyIT0ibWlzc2luZyIsXQ0KDQpwbG90NiAlPiUNCiAgZ3JvdXBfYnkoZ2VuZGVyLCBjb2hvcnQpICU+JQ0KICBzdW1tYXJpc2UoZml0ID0gbWVhbigucHJlZF90aW1lKSwNCiAgICAgICAgICAgIHVwcGVyID0gbWVhbigucHJlZF91cHBlciksIA0KICAgICAgICAgICAgbG93ZXIgPSBtZWFuKC5wcmVkX2xvd2VyKSkgLT4gcGxvdDYNCg0KDQpnZ3Bsb3QocGxvdDYsIGFlcyh4PWFzLmZhY3Rvcihjb2hvcnQpLCB5PWZpdCwgY29sb3I9Z2VuZGVyKSkgKw0KICBnZW9tX2JveHBsb3QobHdkPS42LCBwb3NpdGlvbj0iZG9kZ2UiKSArDQogIGdlb21fZXJyb3JiYXIoYWVzKHltaW49bG93ZXIsIHltYXg9dXBwZXIpLCBsd2Q9LjcsIHBvc2l0aW9uPSJkb2RnZSIpICsNCiAgbGFicyh4ID0gIlBoRCBjb2hvcnQiLCB5ID0gIkF2ZXJhZ2UgcHJlZGljdGVkIHN1cnZpdmFsIHRpbWUiKSArDQogIHRoZW1lX2J3KCkgKw0KICBzY2FsZV94X2Rpc2NyZXRlKGxhYmVscyA9IGMoIjAiLCBjKHJlcCgiICIsIDQpKSwgIjUiLCBjKHJlcCgiICIsIDQpKSwgIjEwIiwgYyhyZXAoIiAiLCA0KSksICIxNSIsIGMocmVwKCIgIiwgNCkpLCAiMjAiLCBjKHJlcCgiICIsIDQpKSwgIjI1IiwgYyhyZXAoIiIsIDMpKSkpICsNCiAgc2NhbGVfY29sb3JfbWFudWFsKHZhbHVlcz1jKG1lbj1tZW5jLHdvbWVuPXdvbWVuYyksIG5hbWU9IkdlbmRlciIpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpLCBsZWdlbmQudGl0bGU9ZWxlbWVudF90ZXh0KGZhY2U9ImJvbGQiKSkNCg0KZ2dzYXZlKCIuL291dHB1dC9zdG9wcGluZy9wbG90Nl9sb2duLmpwZyIsIGhlaWdodD01LCB3aWR0aD04LCBkcGk9MTIwMCkNCg0KDQpgYGANCg0KDQojIyBQbG90IDc6IEV0aG5pY2l0eSAqIGNvaG9ydA0KDQpgYGB7cn0NCg0KIyBleGNsdWRpbmcgZXRobmljaXR5ID0gb3RoZXIgZnJvbSB0aGUgcGxvdA0KcGxvdDckZXRobmljaXR5IDwtIGRmX3BwZjMkZXRobmljaXR5Mg0KcGxvdDckY29ob3J0IDwtIGRmX3BwZjMkcGhkX2NvaG9ydA0KcGxvdDcgPC0gcGxvdDdbcGxvdDckZXRobmljaXR5IT0ib3RoZXIiLF0NCg0KcGxvdDcgJT4lDQogIGdyb3VwX2J5KGV0aG5pY2l0eSwgY29ob3J0KSAlPiUNCiAgc3VtbWFyaXNlKGZpdCA9IG1lYW4oLnByZWRfdGltZSksDQogICAgICAgICAgICB1cHBlciA9IG1lYW4oLnByZWRfdXBwZXIpLCANCiAgICAgICAgICAgIGxvd2VyID0gbWVhbigucHJlZF9sb3dlcikpIC0+IHBsb3Q3DQoNCg0KZ2dwbG90KHBsb3Q3LCBhZXMoeD1hcy5mYWN0b3IoY29ob3J0KSwgeT1maXQsIGNvbG9yPWV0aG5pY2l0eSkpICsNCiAgZ2VvbV9ib3hwbG90KGx3ZD0uNiwgcG9zaXRpb249ImRvZGdlIikgKw0KICBnZW9tX2Vycm9yYmFyKGFlcyh5bWluPWxvd2VyLCB5bWF4PXVwcGVyKSwgbHdkPS43LCBwb3NpdGlvbj0iZG9kZ2UiKSArDQogIGxhYnMoeCA9ICJQaEQgY29ob3J0IiwgeSA9ICJBdmVyYWdlIHByZWRpY3RlZCBzdXJ2aXZhbCB0aW1lIikgKw0KICB0aGVtZV9idygpICsNCiAgc2NhbGVfY29sb3JfbWFudWFsKHZhbHVlcz1jKG1ham9yaXR5PW1hamMsIG1pbm9yaXR5PW1pbmMpLCBuYW1lPSJFdGhuaWNpdHkiKSArDQogIHNjYWxlX3hfZGlzY3JldGUobGFiZWxzID0gYygiMCIsIGMocmVwKCIgIiwgNCkpLCAiNSIsIGMocmVwKCIgIiwgNCkpLCAiMTAiLCBjKHJlcCgiICIsIDQpKSwgIjE1IiwgYyhyZXAoIiAiLCA0KSksICIyMCIsIGMocmVwKCIgIiwgNCkpLCAiMjUiLCBjKHJlcCgiIiwgMykpKSkgKw0KICB0aGVtZShheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChmYWNlPSJib2xkIiksIGxlZ2VuZC50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpKQ0KDQoNCmdnc2F2ZSgiLi9vdXRwdXQvc3RvcHBpbmcvcGxvdDdfbG9nbi5qcGciLCBoZWlnaHQ9NSwgd2lkdGg9OCwgZHBpPTEyMDApDQoNCg0KYGBgDQoNCg0KDQoNCiMgVGFibGUgNA0KDQoNCmBgYHtyfQ0KDQpjb2x1bW5zIDwtIGMocmVwKGMoIkIiLCAiQy5JLiIpLCA0KSkNCnJvd3MgPC0gYygiPHN0cm9uZz5TaGFwZTwvc3Ryb25nPjwvcD4iLCAiPHN0cm9uZz5TY2FsZTwvc3Ryb25nPjwvcD4iLCAiR2VuZGVyOiByZWY9bWVuIiAsIldvbWVuIiwgIk1pc3NpbmcgZ2VuZGVyIiwgIkV0aG5pY2l0eTogcmVmPW1ham9yaXR5IiwiTWlub3JpdHkiLCAiT3RoZXIiLCAiVW5pdmVyc2l0eTogcmVmPUVyYXNtdXMgVW5pdmVyc2l0eSIsICJMZWlkZW4gVW5pdmVyc2l0eSIsICJSYWRib3VkIFVuaXZlcnNpdHkiLCAiVW5pdmVyc2l0eSBvZiBHcm9uaW5nZW4iLCAiRGVsZnQgVW5pdmVyc2l0eSBvZiBUZWNobm9sb2d5IiwgIkVpbmRob3ZlbiBVbml2ZXJzaXR5IG9mIFRlY2hub2xvZ3kiLCAiVGlsYnVyZyBVbml2ZXJzaXR5IiwgIk1hYXN0cmljaHQgVW5pdmVyc2l0eSIsICJVbml2ZXJzaXR5IG9mIFR3ZW50ZSIsICJVdHJlY2h0IFVuaXZlcnNpdHkiLCAiVW5pdmVyc2l0eSBvZiBBbXN0ZXJkYW0iLCAiVnJpamUgVW5pdmVyc2l0ZWl0IEFtc3RlcmRhbSIsICJXYWdlbmluZ2VuIFVuaXZlcnNpdHkgYW5kIFJlc2VhcmNoIENlbnRyZSIsICJGaWVsZDogcmVmPUJpb2xvZ2ljYWwgYW5kIEhlYWx0aCBTY2llbmNlcyIsICJQaHlzaWNhbCBhbmQgbWF0aGVtYXRpY2FsIHNjaWVuY2VzIiwgIlNvY2lhbCBhbmQgYmVoYXZpb3JhbCBzY2llbmNlcyIsICJFbmdpbmVlcmluZyIsICJBZ3JpY3VsdHVyYWwgc2NpZW5jZXMiLCAiSHVtYW5pdGllcyIsICJNaXNzaW5nIGZpZWxkIiwgIjxzdHJvbmc+UGhEIGNvaG9ydDwvc3Ryb25nPjwvcD4iLCAiPHN0cm9uZz5QcmV2aW91cyBwdWJsaWNhdGlvbnM8L3N0cm9uZz48L3A+IiwgIkNvaG9ydCBpbnRlcmFjdGlvbnMiLCJQaEQgY29ob3J0ICogd29tZW4iLCAiUGhEIGNvaG9ydCAqIG1pc3NpbmcgZ2VuZGVyIiwgIlBoRCBjb2hvcnQgKiBldGhuaWMgbWlub3JpdHkiLCAiUGhEIGNvaG9ydCAqIG90aGVyIGV0aG5pY2l0eSIsICI8c3Ryb25nPkFJQyIsICI8c3Ryb25nPk4iKQ0KDQoNCnQ0IDwtIGRhdGEuZnJhbWUobWF0cml4KG5yb3c9bGVuZ3RoKHJvd3MpLCBuY29sPWxlbmd0aChjb2x1bW5zKSkpDQpjb2xuYW1lcyh0NCkgPC0gY29sdW1ucw0Kcm93bmFtZXModDQpIDwtIHJvd3MNCg0KDQoNCiMgTW9kZWwgMQ0KdDRbYygxLDIsNCw1KSwxXSA8LSBmb3JtYXQocm91bmQoYXMubnVtZXJpYyhNMSRjb2VmKSwgMiksIG5zbWFsbD0yKSAjIGVzdGltYXRlcw0KdDRbYygxLDIpLDJdIDwtIHBhc3RlMCgiWyIsIGZvcm1hdChyb3VuZChsb2coTTEkcmVzW2MoMSwyKSwyXSksIDIpLCBuc21hbGw9MiksICIgLCAiLCBmb3JtYXQocm91bmQobG9nKE0xJHJlc1tjKDEsMiksM10pLCAyKSwgbnNtYWxsPTIpLCAiXSIpICMgQ0kgZm9yIHNoYXBlIGFuZCBzY2FsZQ0KdDRbYyg0LDUpLDJdIDwtIHBhc3RlMCgiWyIsIGZvcm1hdChyb3VuZChNMSRyZXNbYygzLDQpLDJdLCAyKSwgbnNtYWxsPTIpLCAiICwgIiwgZm9ybWF0KHJvdW5kKE0xJHJlc1tjKDMsNCksM10sIDMpLCBuc21hbGw9MiksICJdIikgIyBDSSBmb3Igb3RoZXIgY292YXJpYXRlcw0KDQoNCiMgTW9kZWwgMg0KdDRbYygxLDIsNyw4KSwzXSA8LSBmb3JtYXQocm91bmQoTTIkY29lZiwgMiksIG5zbWFsbD0yKQ0KdDRbYygxLDIpLDRdIDwtIHBhc3RlMCgiWyIsIGZvcm1hdChyb3VuZChsb2coTTIkcmVzW2MoMSwyKSwyXSksIDIpLCBuc21hbGw9MiksICIgLCAiLCBmb3JtYXQocm91bmQobG9nKE0yJHJlc1tjKDEsMiksM10pLCAyKSwgbnNtYWxsPTIpLCAiXSIpDQp0NFtjKDcsOCksNF0gPC0gcGFzdGUwKCJbIiwgZm9ybWF0KHJvdW5kKE0yJHJlc1tjKDMsNCksMl0sIDIpLCBuc21hbGw9MiksICIgLCAiLCBmb3JtYXQocm91bmQoTTIkcmVzW2MoMyw0KSwzXSwgMiksIG5zbWFsbD0yKSwgIl0iKQ0KDQojIE1vZGVsIDMNCnQ0W2MoMSwyLDQsNSw3LDgsMTA6MjEsMjM6MzApLDVdIDwtIGZvcm1hdChyb3VuZChNMyRjb2VmLCAyKSwgbnNtYWxsPTIpDQojdDRbYygxLDIpLCA2XSA8LSBwYXN0ZSgiWyIsIHJvdW5kKGxvZyhNMyRyZXNbYygxLDIpLDJdKSwgMyksICIsIiwgcm91bmQobG9nKE0zJHJlc1tjKDEsMiksM10pLCAzKSwgIl0iKQ0KdDRbYygxLDIsNCw1LDcsOCwxMDoyMSwyMzozMCksIDZdIDwtIHBhc3RlMCgiWyIsIGZvcm1hdChyb3VuZChNMyRyZXNbYygxLDIsMzoyNiksMl0sIDIpLCBuc21hbGw9MiksICIgLCAiLCBmb3JtYXQocm91bmQoTTMkcmVzW2MoMSwyLDM6MjYpLDNdLCAyKSwgbnNtYWxsPTIpLCAiXSIpDQoNCiMgTW9kZWwgNCANCnQ0W2MoMSwyLDQsNSw3LDgsMTA6MjEsMjM6MzAsMzI6MzUpLDddIDwtIGZvcm1hdChyb3VuZChNNCRjb2VmLCAyKSwgbnNtYWxsPTIpDQojdDRbYygxLDIpLCA4XSA8LSBwYXN0ZSgiWyIsIHJvdW5kKGxvZyhNNCRyZXNbYygxOjIpLDJdKSwgMyksICIsIiwgcm91bmQobG9nKE00JHJlc1tjKDE6MiksM10pLCAzKSwgIl0iKQ0KdDRbYygxLDIsNCw1LDcsOCwxMDoyMSwyMzozMCwzMjozNSksIDhdIDwtIHBhc3RlMCgiWyIsIGZvcm1hdChyb3VuZChNNCRyZXNbYygxLDIsMzozMCksMl0sIDIpLCBuc21hbGw9MiksICIgLCAiLCBmb3JtYXQocm91bmQoTTQkcmVzW2MoMSwyLDM6MzApLDNdLCAyKSwgbnNtYWxsPTIpLCAiXSIpDQoNCg0KIyBBSUMNCnQ0WzM2LDFdIDwtIHJvdW5kKE0xJEFJQywgMCkNCnQ0WzM2LDNdIDwtIHJvdW5kKE0yJEFJQywgMCkNCnQ0WzM2LDVdIDwtIHJvdW5kKE0zJEFJQywgMCkNCnQ0WzM2LDddIDwtIHJvdW5kKE00JEFJQywgMCkNCg0KIyBzYW1wbGUgc2l6ZQ0KdDRbMzcsIGMoMSwzLDUsNyldIDwtIHJlcChucm93KGRmX3BwZjNbIWR1cGxpY2F0ZWQoZGZfcHBmMyRpZCksXSksIDQpDQoNCg0KdDRbaXMubmEodDQpXSA8LSAiIg0KDQoNCmBgYA0KDQoNCmBgYHtyfQ0KDQp0NCAlPiUNCiAga2FibGUoZm9ybWF0ID0gJ2h0bWwnLCBjYXB0aW9uID0gJzxiPlRhYmxlIDQuPC9iPiBMb2ctbm9ybWFsIHJlZ3Jlc3Npb24gYW5hbHlzZXMgb24gc3RvcHBpbmcgdG8gcHVibGlzaCcsIGVzY2FwZT1GQUxTRSkgJT4lDQogIGFkZF9oZWFkZXJfYWJvdmUoLixjKCcgJz0xLCAnTW9kZWwgMSc9MiwgJ01vZGVsIDInPTIsICdNb2RlbCAzJz0yLCAnTW9kZWwgNCc9MiksIGVzY2FwZSA9IEZBTFNFLCBib2xkID0gVFJVRSkgJT4lDQogIHJvd19zcGVjKHJvdz1jKDMsNiw5LDIyLDMxKSwgYm9sZD1UKSAlPiUNCiAga2FibGVfY2xhc3NpYyhmdWxsX3dpZHRoID0gRiwgaHRtbF9mb250ID0gIkNhbWJyaWEiKSAlPiUNCiAga2FibGVfc3R5bGluZyhmb250X3NpemUgPSAxMSkgLT4gdGFibGU0DQoNCnRhYmxlNA0KDQpgYGANCg0KDQoNCg0KIyBSb2J1c3RuZXNzIGNoZWNrcw0KDQojIyBSMTogNS15ZWFyIHB1YmxpY2ENCg0KDQpgYGB7ciwgZXZhbD1GQUxTRX0NCg0KUjEgPC0gZmxleHN1cnZyZWcoU3VydigodGltZSAtMSksIHRpbWUsIGluYWN0aXZlKSB+IGdlbmRlciAsIGRhdGEgPSBkZl9wcGY1LCBkaXN0ID0gImxvZ25vcm1hbCIpDQpSMQ0KDQpSMiA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gZXRobmljaXR5MiAsIGRhdGEgPSBkZl9wcGY1LCBkaXN0ID0gImxvZ25vcm1hbCIpDQpSMg0KDQpSMyA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gZ2VuZGVyICsgZXRobmljaXR5MiArIHVuaSArIGZpZWxkMiArIHBoZF9jb2hvcnQgKyBucHVic19wcmV2X3MsIGRhdGEgPSBkZl9wcGY1LCBkaXN0ID0gImxvZ25vcm1hbCIpDQpSMw0KDQpSNCA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gZ2VuZGVyICsgZXRobmljaXR5MiArIHVuaSArIGZpZWxkMiArIHBoZF9jb2hvcnQgKyBucHVic19wcmV2X3MgKyBwaGRfY29ob3J0KmdlbmRlciArIHBoZF9jb2hvcnQqZXRobmljaXR5MiwgZGF0YSA9IGRmX3BwZjUsIGRpc3QgPSAibG9nbm9ybWFsIikNClI0DQoNCmBgYA0KDQoNCiMjIFIyOiBldGhuaWNpdHktbWlzc2luZyBleGNsdWRlZA0KDQoNCmBgYHtyLCBldmFsPUZBTFNFfQ0KDQpSNSA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gZXRobmljaXR5MyAsIGRhdGEgPSBkZl9wcGYzLCBkaXN0ID0gImxvZ25vcm1hbCIpDQpSNQ0KDQpSNiA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gZ2VuZGVyICsgZXRobmljaXR5MyArIHVuaSArIGZpZWxkMiArIHBoZF9jb2hvcnQgKyBucHVic19wcmV2X3MgKyB2ZW5pLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJsb2dub3JtYWwiKQ0KUjYNCg0KUjcgPC0gZmxleHN1cnZyZWcoU3VydigodGltZSAtMSksIHRpbWUsIGluYWN0aXZlKSB+IGdlbmRlciArIGV0aG5pY2l0eTMgKyB1bmkgKyBmaWVsZDIgKyBwaGRfY29ob3J0ICsgbnB1YnNfcHJldl9zICsgdmVuaSArIHBoZF9jb2hvcnQqZ2VuZGVyICsgcGhkX2NvaG9ydCpldGhuaWNpdHkyLCBkYXRhID0gZGZfcHBmMywgZGlzdCA9ICJsb2dub3JtYWwiKQ0KUjcNCg0KYGBgDQoNCg0KIyMgUjM6IGRpc2NyZXRlLXRpbWUgZXZlbnQgaGlzdG9yeSByZWdyZXNzaW9uDQoNCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCmRmX3BwZjMgJT4lDQogIGdyb3VwX2J5KHRpbWUpICU+JQ0KICBzdW1tYXJpc2UoZXZlbnQgPSBzdW0oaW5hY3RpdmUpLA0KICAgICAgICAgICAgdG90YWwgPSBuKCkpICU+JQ0KICBtdXRhdGUoaGF6YXJkID0gZXZlbnQvdG90YWwpICU+JQ0KICBnZ3Bsb3QoYWVzKHg9dGltZSwgeSA9IGxvZygtbG9nKDEtaGF6YXJkKSkpKSArDQogIGdlb21fcG9pbnQoKSArDQogIGdlb21fc21vb3RoKCkNCg0KIyBDLWxvZy1sb2cgbGluaw0KDQpgYGANCg0KDQpgYGB7ciwgZXZhbD1GQUxTRX0NCg0KDQpSOCA8LSBnbG0oZm9ybXVsYSA9IGluYWN0aXZlIH4gdGltZSArIGdlbmRlciwNCiAgICAgICAgICBmYW1pbHkgPSBiaW5vbWlhbChsaW5rPSJjbG9nbG9nIiksDQogICAgICAgICAgZGF0YSA9IGRmX3BwZjMpDQoNClI5IDwtIGdsbShmb3JtdWxhID0gaW5hY3RpdmUgfiB0aW1lICsgZXRobmljaXR5MiwNCiAgICAgICAgICBmYW1pbHkgPSBiaW5vbWlhbChsaW5rPSJjbG9nbG9nIiksDQogICAgICAgICAgZGF0YSA9IGRmX3BwZjMpDQoNClIxMCA8LSBnbG0oZm9ybXVsYSA9IGluYWN0aXZlIH4gdGltZSArIGdlbmRlciArIGV0aG5pY2l0eTIgKyB1bmkgKyBmaWVsZCArIHBoZF9jb2hvcnQgKyBucHVic19wcmV2X3MsDQogICAgICAgICAgZmFtaWx5ID0gYmlub21pYWwobGluaz0iY2xvZ2xvZyIpLA0KICAgICAgICAgIGRhdGEgPSBkZl9wcGYzKQ0KDQpSMTEgPC0gZ2xtKGZvcm11bGEgPSBpbmFjdGl2ZSB+IHRpbWUgKyBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgZmllbGQgKyBwaGRfY29ob3J0ICsgbnB1YnNfcHJldl9zICsgZ2VuZGVyKnBoZF9jb2hvcnQgKyBldGhuaWNpdHkyKnBoZF9jb2hvcnQsDQogICAgICAgICAgZmFtaWx5ID0gYmlub21pYWwobGluaz0iY2xvZ2xvZyIpLA0KICAgICAgICAgIGRhdGEgPSBkZl9wcGYzKQ0KDQpzdW1tKFI4LCBleHAgPSBUKQ0Kc3VtbShSOSwgZXhwID0gVCkNCnN1bW0oUjEwLCBleHAgPSBUKQ0Kc3VtbShSMTEsIGV4cCA9IFQpDQoNCg0KYGBgDQoNCg0KDQojIyBSNDogcm9idXN0bmVzcyBvZiBnZW5kZXItY29ob3J0IGludGVyYWN0aW9uIHRvIGNob2ljZSBvZiBjb2hvcnRzDQoNCkluIGNvaG9ydCAzIChpLmUuIDE5OTMpLCBGaWd1cmUgNiBzaG93cyBhIGRpdmVyZ2VudCBnZW5kZXIgcGF0dGVybjogd29tZW4gdGVuZCB0byBzdXJ2aXZlIG11Y2ggbG9uZ2VyIHRoYW4gbWVuIGluIHRoaXMgc3BlY2lmaWMgY29ob3J0LiBIZW5jZSwgdGhlIG9ic2VydmVkIGNvaG9ydCBlZmZlY3QgbWlnaHQgYmUgZHVlIHRvIHRoaXMgZXhjZXB0aW9uYWwgeWVhci4gV2UgbG9vayBpbnRvIHRoaXMgYnkgcmVtb3ZpbmcgdGhpcyBjb2hvcnQgYW5kIHJlcnVubmluZyBtb2RlbCA0LiANCg0KYGBge3IsIGV2YWw9RkFMU0V9DQoNCiMgUmVtb3ZpbmcgY29ob3J0IDMNCmRmX25vY29oMiA8LSBkZl9wcGYzW2RmX3BwZjMkcGhkX2NvaG9ydCE9MixdDQoNCk00X25vMiA8LSBmbGV4c3VydnJlZyhTdXJ2KCh0aW1lIC0xKSwgdGltZSwgaW5hY3RpdmUpIH4gZ2VuZGVyICsgZXRobmljaXR5MiArIHVuaSArIGZpZWxkMiArIHBoZF9jb2hvcnQgKyBucHVic19wcmV2X3MgKyBwaGRfY29ob3J0KmdlbmRlciArIHBoZF9jb2hvcnQqZXRobmljaXR5MiwgZGF0YSA9IGRmX25vY29oMiwgZGlzdCA9ICJsb2dub3JtYWwiKQ0KDQpNNF9ubzINCg0KDQojIFJlbW92aW5nIGNvaG9ydCAwLTINCmRmX25vY29oMDIgPC0gZGZfcHBmM1tkZl9wcGYzJHBoZF9jb2hvcnQ+MixdDQoNCk00X25vMDIgPC0gZmxleHN1cnZyZWcoU3VydigodGltZSAtMSksIHRpbWUsIGluYWN0aXZlKSB+IGdlbmRlciArIGV0aG5pY2l0eTIgKyB1bmkgKyBmaWVsZDIgKyBwaGRfY29ob3J0ICsgbnB1YnNfcHJldl9zICsgcGhkX2NvaG9ydCpnZW5kZXIgKyBwaGRfY29ob3J0KmV0aG5pY2l0eTIsIGRhdGEgPSBkZl9ub2NvaDAyLCBkaXN0ID0gImxvZ25vcm1hbCIpDQoNCk00X25vMDINCg0KIyBSZW1vdmluZyBjb2hvcnQgMC00DQpkZl9ub2NvaDA0IDwtIGRmX3BwZjNbZGZfcHBmMyRwaGRfY29ob3J0PjQsXQ0KDQpNNF9ubzA0IDwtIGZsZXhzdXJ2cmVnKFN1cnYoKHRpbWUgLTEpLCB0aW1lLCBpbmFjdGl2ZSkgfiBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgZmllbGQyICsgcGhkX2NvaG9ydCArIG5wdWJzX3ByZXZfcyArIHBoZF9jb2hvcnQqZ2VuZGVyICsgcGhkX2NvaG9ydCpldGhuaWNpdHkyLCBkYXRhID0gZGZfbm9jb2gwNCwgZGlzdCA9ICJsb2dub3JtYWwiKQ0KDQpNNF9ubzA0DQoNCmBgYA==</div>
+<style>
+  .center {
+    text-align: center;
+    color: red;
+  }
+</style>
+  
+  <hr>
+  <br>
+  <p class="center">Copyright &copy; 2023 </p>
+    
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("stopping_analyses.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
