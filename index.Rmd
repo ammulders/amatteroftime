@@ -1,0 +1,51 @@
+---
+title: "Academic publishing careers in NL"
+biliography: references.bib
+output: 
+  html_document:
+    css: tweaks.css
+    toc: false
+    toc_float: true
+    number_sections: false
+    
+---
+
+```{r setup, include=FALSE}
+
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("span style= 'color: %s; '>%s</span>", color, x) }
+
+```
+
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+
+# **Replication package "A matter of time"**
+
+
+----
+
+
+This website contains supplementary information for the paper "A Matter of Time? Gender and Ethnic Inequality in the Academic Publishing Careers of Dutch PhDs". 
+
+
+----
+
+## Contact  
+
+Questions can be addressed to the first author of the corresponding article (omitted for now). 
+  
+----
+
+## References
+

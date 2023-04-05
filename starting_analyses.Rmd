@@ -1,0 +1,827 @@
+---
+title: "Analyses 'starting to publish'"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: false
+    code_folding: show
+    code_download: yes
+
+---
+
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE, eval=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+
+----
+
+This lab journal replicates the analyses for 'starting to publish'. 
+  
+
+----
+
+```{r, echo=FALSE}
+
+rm(list = ls())
+
+```
+
+
+
+# Custom functions
+
+- `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+- `ddlogis`: double derivative function for calculating marginal interaction effects 
+([source](https://jochemtolsma.github.io/MarginalEffects/#5_Logistic_with_model_interactions)).
+
+
+```{r, results='hide'}
+
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+
+ddlogis <- function(X) {
+    -(exp(-X)/(1 + exp(-X))^2 - exp(-X) * (2 * (exp(-X) * (1 + exp(-X))))/((1 + exp(-X))^2)^2)
+}
+
+
+```
+
+
+---  
+
+# Packages
+
+```{r, results='hide'}
+
+packages = c("tidyverse","ggplot2", "ggpubr","RColorBrewer", "margins", "splines", "splines2", "boot", "kableExtra", "DescTools")
+
+fpackage.check(packages)
+
+```
+
+
+--- 
+
+# Input
+
+
+
+We use one processed dataset.
+
+* [df_starting.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
+    - For construction of this dataset see [(datapreparations.html)]  
+    - name of dataset: `df_starting` 
+    
+
+```{r data}
+
+load(file = "./data/processed/df_starting.rda")
+
+```
+
+
+---
+
+We use logistic regressions to predict whether an individual has a personal NARCIS profile and at least one publication
+
+# Model 1: Gender 
+
+```{r}
+
+
+M1 <- glm(start_pub ~ gender , data = df_starting, family = binomial)
+
+summary(M1)
+
+```
+
+
+## Average marginal effects (AMEs)
+
+```{r, eval=FALSE}
+
+bootFunc <- function(data, i) {
+  df <- data[i,] #bootstrap datasets
+  
+  M <- glm(start_pub ~ gender, family=binomial, data = df)
+  
+  suppressWarnings({
+  
+  #ME gender
+  dfs0 <- dfs1 <- df
+  dfs0$gender <- "men"
+  dfs1$gender <- "women"
+  dfs1$gender <- factor(dfs1$gender, levels=levels(df$gender))
+  dfs0$gender <- factor(dfs0$gender, levels=levels(df$gender))
+
+  #calculate the predicted probabilities
+  p1 <- predict(M, type="response", newdata=dfs1)
+  p0 <- predict(M, type="response", newdata=dfs0)
+  
+  # and the marginal effects
+  AME_gender <- mean(p1-p0)
+
+  })
+  
+  AME_gender #save results
+}
+
+b1 <- boot(x, bootFunc, R = 999, parallel="snow", ncpus=10)
+fsave(b1, file="boot1.rda", location = "./results/starting/")
+
+```
+
+```{r, echo=FALSE}
+
+load("./results/starting/boot1.rda")
+b1 <- x
+rm(x)
+
+```
+
+```{r}
+
+original <- b1$t0
+bias <- colMeans(b1$t) - b1$t0
+se <- apply(b1$t, 2, sd)
+boot.df1 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df1) <- c("AME_gender")
+boot.df1$t <- (boot.df1$original / boot.df1$se)
+round(boot.df1, 5)
+
+```
+
+
+
+
+# Model 2: Ethnicity
+
+```{r}
+
+M2 <- glm(start_pub ~ ethnicity2 , data = df_starting, family = binomial)
+
+summary(M2)
+
+```
+
+## Average marginal effects (AMEs)
+
+```{r, eval=FALSE}
+
+bootFunc <- function(data, i) {
+  df <- data[i,] #bootstrap datasets
+  
+  M <- glm(start_pub ~ ethnicity2, family=binomial, data = df)
+  
+  suppressWarnings({
+  
+  #ME ethnicity
+  dfs0 <- dfs1 <- df
+  dfs0$ethnicity2 <- "majority"
+  dfs1$ethnicity2 <- "minority"
+  dfs1$ethnicity2 <- factor(dfs1$ethnicity2, levels=levels(df$ethnicity2))
+  dfs0$ethnicity2 <- factor(dfs0$ethnicity2, levels=levels(df$ethnicity2))
+
+  #calculate the predicted probabilities
+  p1 <- predict(M, type="response", newdata=dfs1)
+  p0 <- predict(M, type="response", newdata=dfs0)
+  
+  # and the marginal effects
+  AME_ethnicity <- mean(p1-p0)
+
+  })
+  
+  AME_ethnicity #save results
+}
+
+b2 <- boot(df_starting, bootFunc, R = 999, parallel="snow", ncpus=10)
+fsave(b2, file="boot2.rda", location = "./results/starting/")
+
+```
+
+```{r, ehco=FALSE}
+
+load("./results/starting/boot2.rda")
+b2 <- x
+rm(x)
+```
+
+
+```{r}
+
+original <- b2$t0
+bias <- colMeans(b2$t) - b2$t0
+se <- apply(b2$t, 2, sd)
+boot.df2 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df2) <- c("AME_ethnicity")
+boot.df2$t <- (boot.df2$original / boot.df2$se)
+round(boot.df2, 5)
+
+```
+
+
+
+# Model 3: Gender, ethnicity and controls
+
+See [Appendix 1 Splines](splines.html) to see how we selected the following spline configuration
+
+
+```
+knots5 <- quantile(df_starting$phd_cohort, probs=seq(0,1,0.25))[2:4]
+test3 <- glm(start_pub ~ bSpline(phd_cohort, knots=knots5,df=3), family = binomial, data = df_starting)
+```
+
+
+```{r}
+
+knots5 <- quantile(df_starting$phd_cohort, probs=seq(0,1,0.25))[2:4]
+
+M3 <- glm(start_pub ~ gender + ethnicity2 + uni + bSpline(phd_cohort, knots=knots5,df=3), data = df_starting, family = binomial)
+
+summary(M3)
+
+
+```
+
+
+## Average marginal effects (AMEs)
+
+```{r, eval=FALSE}
+
+bootFunc <- function(data, i) {
+  
+  df <- data[i,] #bootstrap datasets
+  
+  knots5 <- quantile(df$phd_cohort, probs=seq(0,1,0.25))[2:4]
+
+  
+  M <- glm(start_pub ~ gender + ethnicity2 + uni + splines2::bSpline(phd_cohort, knots=knots5,df=3), family=binomial, data = df)
+  
+  suppressWarnings({
+
+  #ME gender
+  dfs0 <- dfs1 <- df
+  dfs0$gender <- "men"
+  dfs1$gender <- "women"
+  dfs1$gender <- factor(dfs1$gender, levels=levels(df$gender))
+  dfs0$gender <- factor(dfs0$gender, levels=levels(df$gender))
+  
+  ME_gender <- mean(predict(M, dfs1, type="response") - predict(M, dfs0, type="response"))
+  
+  #ME ethnicity
+  dfs0 <- dfs1 <- df
+  dfs0$ethnicity2 <- "majority"
+  dfs1$ethnicity2 <- "minority"
+  dfs1$ethnicity2 <- factor(dfs1$ethnicity2, levels=levels(df$ethnicity2))
+  dfs0$ethnicity2 <- factor(dfs0$ethnicity2, levels=levels(df$ethnicity2))
+  
+  ME_ethnicity <- mean(predict(M, dfs1, type="response") - predict(M, dfs0, type="response"))
+  
+  })
+  
+  c(ME_gender, ME_ethnicity) #save results
+}
+
+b3 <- boot(df_starting, bootFunc, R = 999, parallel="snow", ncpus=10)
+fsave(b3, file="boot3.rda", location = "./results/starting/")
+
+```
+
+```{r, echo=FALSE}
+
+
+load("./results/starting/boot3.rda")
+b3 <- x
+rm(x)
+
+```
+
+```{r}
+
+original <- b3$t0
+bias <- colMeans(b3$t) - b3$t0
+se <- apply(b3$t, 2, sd)
+boot.df3 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df3) <- c("AME_gender","AME_ethnicity")
+
+boot.df3$t <- (boot.df3$original / boot.df3$se)
+
+round(boot.df3, 5)
+
+
+```
+
+
+
+
+# Model 4: Gender and ethnicity, controls and cohort interactions
+
+```{r}
+
+M4 <- glm(start_pub ~ gender + ethnicity2 + uni + bSpline(phd_cohort, knots=knots5,df=3) + gender*phd_cohort + ethnicity2*phd_cohort, data = df_starting, family = binomial)
+
+summary(M4)
+
+```
+
+
+## Average marginal effects (AMEs)
+
+```{r, eval=FALSE}
+
+bootFunc <- function(data, i) {
+  df <- data[i,] #bootstrap datasets
+  
+  knots5 <- quantile(df$phd_cohort, probs=seq(0,1,0.25))[2:4]
+  
+  M <- glm(start_pub ~ gender + ethnicity2 + uni + splines2::bSpline(phd_cohort, knots=knots5,df=3) + phd_cohort*gender + phd_cohort*ethnicity2, family=binomial, data = df)
+  
+  suppressWarnings({
+  
+  s <- 0.1
+  
+  # ME gender
+  dfs0 <- dfs1 <- df
+  dfs0$gender <- "men"
+  dfs1$gender <- "women"
+  dfs1$gender <- factor(dfs1$gender, levels=levels(df$gender))
+  dfs0$gender <- factor(dfs0$gender, levels=levels(df$gender))
+  
+  ME_gender <- mean(predict(M, dfs1, type="response") - predict(M, dfs0, type="response"))
+  
+  #ME ethnicity
+  dfs0 <- dfs1 <- df
+  dfs0$ethnicity2 <- "majority"
+  dfs1$ethnicity2 <- "minority"
+  dfs1$ethnicity2 <- factor(dfs1$ethnicity2, levels=levels(df$ethnicity2))
+  dfs0$ethnicity2 <- factor(dfs0$ethnicity2, levels=levels(df$ethnicity2))
+  
+  ME_ethnicity <- mean(predict(M, dfs1, type="response") - predict(M, dfs0, type="response"))
+  
+  # ME cohort
+  dfs0 <- dfs1 <- df
+  dfs0$phd_cohort <- df$phd_cohort - s
+  dfs1$phd_cohort <- df$phd_cohort + s
+  
+  ME_phd_cohort <- mean((predict(M, dfs1, type="response") - predict(M, dfs0, type="response"))/ (2*s))
+
+  # ME gender * cohort 
+  
+  dfwomencp <- dfwomencm <- dfmencp <- dfmencm <- df
+
+  dfwomencp$gender <- dfwomencm$gender <- "women"
+  dfmencp$gender <- dfmencm$gender <- "men"
+
+  dfwomencp$gender <- factor(dfwomencp$gender, levels=levels(df$gender))
+  dfwomencm$gender <- factor(dfwomencm$gender, levels=levels(df$gender))
+  dfmencp$gender <- factor(dfmencp$gender, levels=levels(df$gender))
+  dfmencm$gender <- factor(dfmencm$gender, levels=levels(df$gender))
+
+  dfwomencp$phd_cohort <- dfmencp$phd_cohort <- df$phd_cohort + s
+  dfwomencm$phd_cohort <- dfmencm$phd_cohort <- df$phd_cohort - s
+ 
+  #calculate the predicted probabilities
+  gp11 <- predict(M, type="response", newdata=dfwomencp)
+  gp10 <- predict(M, type="response", newdata=dfwomencm)
+  gp01 <- predict(M, type="response", newdata=dfmencp)
+  gp00 <- predict(M, type="response", newdata=dfmencm)
+  
+  #and the marginal effects. be aware of all the brackets. :-(
+  ME_gender_cohort <- mean(((gp11 - gp01) - (gp10 - gp00)) / (2*s))
+
+  
+  
+  # ME ethnicity * cohort
+  dfminoritycp <- dfminoritycm <- dfdutchcp <- dfdutchcm <- df
+
+  dfminoritycp$ethnicity2 <- dfminoritycm$ethnicity2 <- "minority"
+  dfdutchcp$ethnicity2 <- dfdutchcm$ethnicity2 <- "majority"
+
+  dfminoritycp$ethnicity2 <- factor(dfminoritycp$ethnicity2, levels=levels(df$ethnicity2))
+  dfminoritycm$ethnicity2 <- factor(dfminoritycm$ethnicity2, levels=levels(df$ethnicity2))
+  dfdutchcp$ethnicity2 <- factor(dfdutchcp$ethnicity2, levels=levels(df$ethnicity2))
+  dfdutchcm$ethnicity2 <- factor(dfdutchcm$ethnicity2, levels=levels(df$ethnicity2))
+
+  dfminoritycp$phd_cohort <- dfdutchcp$phd_cohort <- df$phd_cohort + s
+  dfminoritycm$phd_cohort <- dfdutchcm$phd_cohort <- df$phd_cohort - s
+  
+  #calculate the predicted probabilities
+  ep11 <- predict(M, type="response", newdata=dfminoritycp)
+  ep10 <- predict(M, type="response", newdata=dfminoritycm)
+  ep01 <- predict(M, type="response", newdata=dfdutchcp)
+  ep00 <- predict(M, type="response", newdata=dfdutchcm)
+  
+
+  #and the marginal effects. be aware of all the brackets. :-(
+  ME_ethnicity_cohort <- mean(((ep11 - ep01) - (ep10 - ep00)) / (2*s))
+
+  })
+  
+  c(ME_gender, ME_ethnicity, ME_phd_cohort, ME_gender_cohort, ME_ethnicity_cohort) #save results
+}
+
+b4 <- boot(df_starting, bootFunc, R = 999, parallel="snow", ncpus=10)
+fsave(b4, file="boot4.rda", location = "./results/starting/")
+
+
+```
+
+```{r, echo=FALSE}
+
+load("./results/starting/boot4.rda")
+b4 <- x
+rm(x)
+
+```
+
+```{r}
+
+original <- b4$t0
+bias <- colMeans(b4$t) - b4$t0
+se <- apply(b4$t, 2, sd)
+
+boot.df4 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df4) <- c("AME_gender", "AME_ethnicity", "AME_cohort", "AME_gender_cohort", "AME_ethnicity_cohort")
+
+boot.df4$t <- (boot.df4$original / boot.df4$se)
+
+round(boot.df4, 5)
+
+
+```
+
+
+
+
+
+# Figures 
+
+
+## Figure 2a: gender only
+
+
+```{r}
+
+# defining colors
+menc <- "#D1C166"
+womenc <- "#48a363"
+majc <- "#39839D"
+minc <- "#B85042"
+
+
+
+# Calculating predicted probabilities
+M1 %>% predict(df_starting, type="link", se.fit = TRUE) -> plot2a
+
+
+# calculate upper and lower bounds for the confidence intervals
+plot2a$upper <- plot2a$fit + (1.96 * plot2a$se.fit)
+plot2a$lower <- plot2a$fit - (1.96 * plot2a$se.fit)
+
+plot2a <- as.data.frame(plot2a)
+
+# excluding gender = missing from the plot
+plot2a$gender <- df_starting$gender
+plot2a <- plot2a[plot2a$gender!="missing",]
+
+
+plot2a %>%
+  group_by(gender) %>%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -> plot2a
+
+
+ggplot(plot2a,aes(gender,fit,  color=(gender)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + ylim(0, 0.3) +
+  labs(x = "Gender", y = "Probability of starting to publish") +
+  theme_bw() +
+  scale_color_manual(values=c(menc, womenc), name="Gender") +
+  geom_text(x=0.5, y=0.28, label="A", size=10, color="black")+
+  theme(axis.title=element_text(face="bold"),
+        legend.position = "none") -> plot2a
+
+
+# Exact gender differences in probability of starting to publish
+plot2a$data
+
+```
+
+
+## Figure 2b: ethnicity only
+
+
+```{r}
+
+# Calculating predicted probabilities
+M2 %>% predict(df_starting, type = "link", se.fit = TRUE) -> plot2b
+
+
+# Calculating confidence intervals
+plot2b$upper <- plot2b$fit + (1.96 * plot2b$se.fit)
+plot2b$lower <- plot2b$fit - (1.96 * plot2b$se.fit)
+
+plot2b <- as.data.frame(plot2b)
+plot2b$ethnicity2 <- df_starting$ethnicity2
+
+# Removing ethnicity 'other' from plot
+plot2b <- plot2b[plot2b$ethnicity2!="other",]
+
+
+plot2b %>%
+  group_by(ethnicity2) %>%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -> plot2b
+
+ggplot(plot2b,aes(as.factor(ethnicity2),fit,  color=(ethnicity2)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + ylim(0, 0.3) +
+  labs(x = "Ethnicity", y = "Probability of starting to publish") +
+  theme_bw() +
+  scale_color_manual(values=c(majc, minc), name="Ethnicity") +
+  geom_text(x=0.5, y=0.28, label="B", size=10, color="black") +
+  theme(axis.title=element_text(face="bold"),
+        legend.position = "none") -> plot2b
+
+
+# Exact ethnic differences in probability of starting to publish
+plot2b$data
+
+
+```
+
+
+## Figure 2: gender and ethnicity
+
+
+```{r, fig.width=8}
+
+plot2 <- ggarrange(plot2a, plot2b, ncol = 2, nrow=1)
+
+plot2
+
+```
+
+```{r, eval=FALSE, echo=FALSE}
+
+ggsave("./output/starting/plot2.jpg", height=4, width=8, dpi=1200)
+
+```
+
+
+
+
+## Figure 3: cohort trends by gender
+
+
+```{r}
+
+plot4 <- plot3 <- M4 %>% predict(df_starting, type="link", se.fit=TRUE)
+
+plot3 <- as.data.frame(plot3)
+
+plot3$gender <- df_starting$gender
+plot3$phd_cohort <- df_starting$phd_cohort
+
+plot3 <- plot3[plot3$gender!="missing",]
+
+plot3$upper <- plot3$fit + (1.96 * plot3$se.fit)
+plot3$lower <- plot3$fit - (1.96 * plot3$se.fit)
+
+
+plot3 %>%
+  group_by(gender, phd_cohort) %>%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -> plot3
+
+
+ggplot(plot3, aes(x=as.factor(phd_cohort), y=fit, color=gender)) +
+  geom_boxplot(lwd=.6, position="dodge") +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
+  ylim(0, 0.3) +
+  labs(x = "PhD cohort", y = "Probability of starting to publish") +
+  theme_bw() +
+  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)), "29")) +
+  scale_color_manual(values=c(men=menc,women=womenc), name="Gender") +
+  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
+
+```
+
+
+```{r, eval=FALSE, echo=FALSE}
+
+ggsave("./output/starting/plot3.jpg", height=5, width=8, dpi=1200)
+
+```
+
+
+
+## Figure 4: Ethnicity * cohort
+
+
+```{r}
+
+plot4 <- as.data.frame(plot4)
+
+plot4$ethnicity2 <- df_starting$ethnicity2
+plot4$phd_cohort <- df_starting$phd_cohort
+
+plot4 <- plot4[plot4$ethnicity2!="other",]
+
+plot4$upper <- plot4$fit + (1.96 * plot4$se.fit)
+plot4$lower <- plot4$fit - (1.96 * plot4$se.fit)
+
+
+plot4 %>%
+  group_by(ethnicity2, phd_cohort) %>%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -> plot4
+
+
+
+ggplot(plot4, aes(x=as.factor(phd_cohort), y=fit, color=ethnicity2)) +
+  geom_boxplot(lwd=.6, position="dodge") +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
+  ylim(0, 0.5) +
+  labs(x = "PhD cohort", y = "Probability of starting to publish") +
+  theme_bw() +
+  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 4)))) +
+  scale_color_manual(values=c(majority=majc, minority=minc), name="Ethnicity") +
+  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
+
+```
+
+```{r, eval=FALSE, echo=FALSE}
+
+ggsave("./output/starting/plot4.jpg", height=5, width=8, dpi=1200)
+
+```
+
+
+
+
+# Table 3
+
+
+```{r}
+
+columns <- c(rep(c("B", "SE"), 4))
+rows <- c("Intercept", "Gender: ref=men" ,"Women", "Missing gender", "Ethnicity: ref=majority","Minority", "Other", "University: ref=Erasmus University", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "PhD cohort","Knot #1", "Knot #2", "Knot #3", "Knot #4", "Knot #5", "Knot #6", "Cohort interactions","PhD cohort * woman", "PhD cohort * missing gender", "PhD cohort * ethnic minority", "PhD cohort * other ethnicity", "<strong>AIC</strong></p>", "<strong>N</strong></p>")
+
+t3 <- data.frame(matrix(nrow=length(rows), ncol=length(columns)))
+colnames(t3) <- columns
+rownames(t3) <- rows
+
+# names(M4$coefficients)
+
+# Model 1
+t3[c(1,3,4), 1] <- M1$coefficients # log odds
+t3[c(1,3,4), 2] <- summary(M1)$coefficients[,2] # SE log odds
+
+# Model 2
+t3[c(1,6,7),3] <- M2$coefficients
+t3[c(1,6,7),4] <- summary(M2)$coefficients[,2]
+
+# Model 3
+t3[c(1,3:4,6:7,9:20,22:27),5] <- M3$coefficients
+t3[c(1,3:4,6:7,9:20,22:27), 6] <- summary(M3)$coefficients[,2]
+
+# Model 4
+M4_ <- data.frame(summary(M4)$coefficients[,1])
+M4_[,2] <- summary(M4)$coefficients[,2]
+t3[c(1,3:4,6:7,9:20, 22:27, 29:32),7] <- M4_[,1]
+t3[c(1,3:4,6:7,9:20, 22:27, 29:32),8] <- M4_[,2]
+
+# AIC
+t3[33,1] <- round(M1$aic, 0)
+t3[33,3] <- round(M2$aic, 0)
+t3[33,5] <- round(M4$aic, 0)
+t3[33,7] <- round(M4$aic, 0)
+
+# rounding
+t3[c(1,3,4),c(1,2)] <- format(round(t3[c(1,3,4),c(1,2)],2), nsmall=2)
+t3[c(1,6,7),c(3,4)] <- format(round(t3[c(1,6,7),c(3,4)],2), nsmall=2)
+t3[c(1,3,4,6,7,9:20,22:27),c(5:6)] <- format(round(t3[c(1,3,4,6,7,9:20,22:27),c(5:6)],2), nsmall=2)
+t3[c(1,3,4,6,7,9:20, 22:27, 29:32),c(7,8)] <- format(round(t3[c(1,3,4,6,7,9:20, 22:27, 29:32),c(7,8)],2), nsmall=2)
+
+# sample size
+t3[34, c(1,3,5,7)] <- rep(nrow(df_starting), 4)
+
+# Adding significance codes
+t3[1,1] <- paste0(t3[1,1], "***") # intercept
+t3[1,3] <- paste0(t3[1,3], "***")
+t3[1,5] <- paste0(t3[1,5], "***") 
+t3[1,7] <- paste0(t3[1,7], "***")
+t3[1,1] <- paste0(t3[1,1], "*")   # gender
+t3[4,1] <- paste0(t3[4,1], "***") # gender missing
+t3[4,5] <- paste0(t3[4,5], "***")
+t3[4,7] <- paste0(t3[4,7], "***")
+t3[6,3] <- paste0(t3[6,3], "***") # ethnic minorities
+t3[6,5] <- paste0(t3[6,5], "***")
+t3[7,3] <- paste0(t3[7,3], "***") # other ethnicity
+t3[7,5] <- paste0(t3[7,5], "***")
+t3[7,7] <- paste0(t3[7,7], "***")
+t3[10,5] <- paste0(t3[10,5],"***")  # RU
+t3[10,7] <- paste0(t3[10,7],"***")
+t3[11,5] <- paste0(t3[11,5], "***") # RUG
+t3[11,7] <- paste0(t3[11,7], "***")
+t3[12,5] <- paste0(t3[12,5], "***") # TUD
+t3[12,7] <- paste0(t3[12,7], "***")
+t3[13,5] <- paste0(t3[13,5], "***") # TUE
+t3[13,7] <- paste0(t3[13,7], "***")
+t3[15,5] <- paste0(t3[15,5], "***") # UM
+t3[15,7] <- paste0(t3[15,7], "***")
+t3[16,5] <- paste0(t3[16,5], "***") #UT
+t3[16,7] <- paste0(t3[16,7], "***")
+t3[17,5] <- paste0(t3[17,5], "***") #UU
+t3[17,7] <- paste0(t3[17,7], "***")
+t3[18,5] <- paste0(t3[18,5], "***") #UvA
+t3[18,7] <- paste0(t3[18,7], "***")
+t3[19,5] <- paste0(t3[19,5], "***") #VU
+t3[19,7] <- paste0(t3[19,7], "***")
+t3[20,5] <- paste0(t3[20,5], "***") #WUR
+t3[20,7] <- paste0(t3[20,7], "***")
+t3[22,5] <- paste0(t3[22,5], "***") # coh 1
+t3[22,7] <- paste0(t3[22,7], "***") 
+t3[24,5] <- paste0(t3[24,5], "***") # coh 3
+t3[24,7] <- paste0(t3[24,7], "***") 
+t3[25,5] <- paste0(t3[25,5], "***") # coh 4
+t3[26,5] <- paste0(t3[26,5], "***") # coh 5
+t3[26,7] <- paste0(t3[26,7], "*") 
+t3[27,5] <- paste0(t3[27,5], "***") # coh 6
+t3[30,7] <- paste0(t3[30,7], "***") # coh * gender missing
+
+t3[is.na(t3)] <- ""
+
+
+```
+
+```{r}
+
+t3 %>%
+  kable(format = 'html', caption = '<b>Table 3.</b> Logistic regression on starting to publish', escape=FALSE) %>%
+  add_header_above(.,c(' '=1, 'Model 1'=2, 'Model 2'=2, 'Model 3'=2, 'Model 4'=2), escape = FALSE, bold = TRUE) %>%
+  row_spec(row=c(2,5,8,21,28), bold=T) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(font_size = 12) -> table3
+
+table3
+
+```
+
+
+
+
+# Robustness checks
+
+
+## Ethnicity missing and other separately
+
+
+```{r}
+
+M2b <- glm(start_pub ~ ethnicity3 , data = df_starting, family = binomial)
+summary(M2b)
+
+M3b <- glm(start_pub ~ gender + ethnicity3 + uni + bSpline(phd_cohort, knots=knots5,df=3), data = df_starting, family = binomial)
+summary(M3b)
+
+M4b <- glm(start_pub ~ gender + ethnicity3 + uni + bSpline(phd_cohort, knots=knots5,df=3) + gender*phd_cohort + ethnicity3*phd_cohort, data = df_starting, family = binomial)
+summary(M4b)
+
+
+```
+
+-----

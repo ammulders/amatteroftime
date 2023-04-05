@@ -1,0 +1,185 @@
+---
+title: "Appendix 1: splines'"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: false
+    code_folding: show
+    code_download: yes
+
+---
+
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE, eval=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+
+----
+
+This lab journal demonstrates how we treat the association between PhD cohort and 'starting to publish' flexibly. 
+  
+
+----
+
+```{r, echo=FALSE}
+
+rm(list = ls())
+
+```
+
+
+
+# Custom functions
+
+- `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+- `ddlogis`: double derivative function for calculating marginal interaction effects 
+([source](https://jochemtolsma.github.io/MarginalEffects/#5_Logistic_with_model_interactions)).
+
+
+```{r, results='hide'}
+
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+
+```
+
+
+---  
+
+# Packages
+
+```{r, results='hide'}
+
+packages = c("tidyverse","ggplot2", "ggpubr","RColorBrewer", "margins", "splines", "splines2", "boot", "kableExtra", "DescTools")
+
+fpackage.check(packages)
+
+```
+
+
+--- 
+
+# Input
+
+
+
+We use one processed dataset.
+
+* [df_starting.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
+    - For construction of this dataset see [(datapreparations.html)]  
+    - name of dataset: `df_starting` 
+    
+
+```{r data}
+
+load(file = "./data/processed/df_starting.rda")
+
+```
+
+
+----
+
+Given that the probability to start publishing appears to depend non-linearly on PhD cohort (see below), we attempt to deal with the effect of cohort a bit more flexibly. To do so, we uses splines. 
+
+![figure3](./output/starting/plot3.jpg)
+
+![figure4](./output/starting/plot4.jpg)
+
+
+# Model 3: Gender, ethnicity and controls
+
+## (Non-)linear effects of PhD cohort
+
+We use splines instead of polynomials, because cubic effects of cohort on 'starting to publish' do not capture the trend very accurately, but using higher order polynomials is not advisable. Therefore, we investigate the use of splines with several knots, determining the splines based on a spline-only model. 
+
+```{r}
+
+#no nodes
+test1 <- glm(start_pub ~ ns(phd_cohort, 3), family = binomial, data = df_starting)
+
+test2 <- glm(start_pub ~  bSpline(phd_cohort, df=3), family = binomial, data = df_starting)
+
+knots5 <- quantile(df_starting$phd_cohort, probs=seq(0,1,0.25))[2:4]
+test3 <- glm(start_pub ~ bSpline(phd_cohort, knots=knots5,df=3), family = binomial, data = df_starting)
+
+knots6 <- quantile(df_starting$phd_cohort, probs=seq(0,1,0.20))[2:5]
+test4 <- glm(start_pub ~ bSpline(phd_cohort, knots=knots6,df=3), family = binomial, data = df_starting)
+
+test5 <- glm(start_pub ~ ns(phd_cohort, knots=knots5,df=3), family = binomial, data = df_starting)
+
+test6 <- glm(start_pub ~ ns(phd_cohort, knots=knots6,df=3), family = binomial, data = df_starting)
+
+```
+
+
+```{r}
+res <- AIC(test1, test2, test3, test4, test5, test6)
+res[order(res$AIC),]
+```
+
+
+Let us visually inspect the top3. 
+```{r}
+
+df_starting %>% 
+  group_by(phd_cohort) %>% 
+  summarise(y = mean(as.numeric(start_pub))) -> df_starting2
+
+nd <- data.frame(phd_cohort=c(0:29))
+nd$y1 <- predict(test4, type="response", newdata = nd)
+nd$y2 <- predict(test3, type="response", newdata = nd)
+nd$y3 <- predict(test6, type="response", newdata = nd)
+
+ggplot() +
+  geom_line(data=df_starting2, aes(x=phd_cohort, y=y)) +
+  geom_point(data=df_starting2, aes(x=phd_cohort, y=y)) +
+  geom_line(data=nd, aes(x=phd_cohort, y=y1), col="red") +
+  geom_point(data=nd, aes(x=phd_cohort, y=y1), col="red") + 
+  geom_line(data=nd, aes(x=phd_cohort, y=y2), col="blue") +
+  geom_point(data=nd, aes(x=phd_cohort, y=y2), col="blue") +
+  geom_line(data=nd, aes(x=phd_cohort, y=y3), col="purple") +
+  geom_point(data=nd, aes(x=phd_cohort, y=y3), col="purple")
+  
+```
+
+They all more or less predict the trend. We go for the blue line, the following model
+
+```
+knots5 <- quantile(df_starting$phd_cohort, probs=seq(0,1,0.25))[2:4]
+test3 <- glm(start_pub ~ bSpline(phd_cohort, knots=knots5,df=3), family = binomial, data = df_starting)
+```
+
+
+This would imply we go for the following model 3:
+
+```
+glm(start_pub ~ gender + ethnicity2 + uni + bSpline(phd_cohort, knots=knots5,df=3), data = df_starting, family = binomial)
+
+```
+

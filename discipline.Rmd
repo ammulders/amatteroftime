@@ -1,0 +1,290 @@
+---
+title: "Academic fields"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: yes
+---
+
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+require(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE, eval = FALSE)
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE, eval=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+----
+
+This lab journal demonstrates how academic fields are assigned to researchers based on their publications.    
+  
+----
+
+
+```{r, echo=FALSE}
+
+rm(list = ls())
+
+```
+
+
+
+# Custom functions
+
+- `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+```{r customfunctions, results='hide'}
+
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+```
+
+---  
+
+# Packages
+
+- `tidyverse`: some tidy data crunching later on
+- `data.table`: the reduce computing time, especially using the `unique` function with big data
+
+```{r, results='hide'}
+
+packages = c("tidyverse", "data.table")
+
+fpackage.check(packages)
+
+```
+
+--- 
+
+# Input
+
+We use four datasets in this file:
+
+* [journals_wos](./data/journals_discipline/journals_wos.rda): Journals in WoS and associated disciplines (example)
+    - Name: journals_wos  
+  
+* [pubs_metadf](./data/pubs_metadf.rda): Publication metadata for three PhDs from the example dataset
+    - Name: pubs_metadf
+
+* [pubs_field](./data/journals_discipline/pubs_field.rda): Matched publication and field dataset for the three PhDs in [(pubs_metadf)]
+    - Name: pubs_metadf
+    
+* [phdgender](./data/processed/phdgender.rda): Processed PhD data including gender and ethnicity variables
+    - Name: phdgender  
+ 
+
+``` {r data loading, cache = TRUE}
+
+# example of WoS journal-field list
+load("data/journals_discipline/journals_wos.rda")
+
+# Load publication metadata 
+load("data/pubs_metadf.rda")
+
+# Publications with fields attached
+load("data/journals_discipline/pubs_field.rda")
+
+# Load PhD dataset
+load("data/processed/phdgender.rda")
+phd_df <- phdgender
+
+```
+
+---
+
+
+# Publications data
+
+In order to assign a field to individual researchers, we look at their publications, and specifically at the journal outlets in which people publish. For this, we use the publications listed on researchers' personal NARCIS profiles. 
+
+For three PhD's in our example data frame, we have compiled a (fictional) publication track record, to show what this publication data looks like.
+
+The `id` variable references the personal identifiers, which can also be found in the PhD dataset so that PhDs can be matched to their own publications. Furthermore, the data provide information on the `type` of publication and the date in which the publication was published (`date.issued`). Lastly, the journal name (`journame`) is used alongside ISSN codes (not pictured in this example dataframe) to match publications to academic disciplines. 
+
+
+```{r}
+
+knitr::kable(pubs_metadf, format="markdown")
+
+
+```
+
+
+
+# Matching journal names to fields
+
+To match publications with academic disciplines based on journal names, we use a list of Web of Science indexed journals with associated fields and subfields, according to the field classification by the U.S. National Research Council. 
+
+Each journal is associated with one or more specific academic disciplines (subfields), which fall under a broader disciplinary categorization (fields). In the example here, the entry for the "Journal of Ecclesiastical History" is associated with the subfields "history" and "religion", both of which fall under "humanities". Since we only look at the broader discipline, this does not matter for our field variable, and we can simply assign "humanities" as the field. 
+
+
+```{r}
+
+knitr::kable(journals_wos[journals_wos$ISSN=="0022-0469",], format="markdown")
+
+```
+
+
+In some cases, however, a journal is associated with multiple broader fields. We then assign the field which occurs most frequently within the journal. 
+
+In the case of the journal "ACS Photonics", this implies that we assign "engineering" as the broader field.
+
+In the case of the "International Labour Review", it is more tricky: the journal is split 50/50 between "social and behavioral sciences" and "humanities". In these cases, we randomly pick one of the fields. 
+
+```{r}
+
+
+knitr::kable(journals_wos[(journals_wos$ISSN=="2330-4022"|journals_wos$ISSN=="0020-7780"),], format="markdown")
+
+```
+
+
+Next, we match the journals in the Web of Science list to the publication outlet information in our own publication dataset. We first match on ISSN, which provides us information on the field of 70% of the unique journals in our data. Next, we match on journal names, which increases the recall on our field indicator to 75% of the unique journals. 
+
+In this example dataframe, we randomly picked journals from the Web of Science list, meaning all publications with a journal can be matched to a field. 
+
+```{r}
+
+knitr::kable(pubs_field, format="markdown")
+
+
+```
+
+
+# Creating a time-invariant field variable for each PhD
+
+We determine a researcher's field based on their publications during and right after their PhD. Thus, we first exclude publications from more than 5 years before, or more than three years after they received doctorate. Next, we tally up the fields across all these publications, and take the field which occurs most frequently. 
+
+```{r}
+
+# first, we add the publications data to our phd dataframe
+phdfield <- left_join(pubs_field, phd_df, by="id")
+
+
+# then we clean the date.issued variable
+phdfield$pubyear <- as.numeric(substr(phdfield$date.issued, 1, 4))
+
+# selecting publications from during and right after the PhD
+phdfield %>%
+  filter((pubyear < (phd_year + 3)) & (pubyear > (phd_year-5))) -> phdfield
+
+# field = field which the majority of one's publication fall under
+phdfield %>%
+  group_by(id) %>%
+  add_count(nrc_field) %>%
+  slice_max(n) %>%
+  ungroup() -> phdfield
+
+# maintain a single line per id/field combo
+phdfield %>%
+  group_by(id, nrc_field) %>%
+  slice_head() %>% ungroup() -> phdfield
+
+```
+
+As we see from the results below, one of the three researchers was assigned a single field. The other two (f and g) are split evenly between two fields. In this case, we take one of the fields at random.
+
+```{r}
+
+knitr::kable(phdfield[,c(1,5,16)], format="markdown")
+
+```
+
+Selecting a field at random for those who are split exactly evenly between multiple fields. 
+
+```{r}
+
+phdfield %>%
+  group_by(id) %>%
+  slice_sample(n = 1) -> phdfield
+
+
+```
+
+
+Finally, we omit the 'business' and 'law' fields because they are small and scientists in these fields tend to have atypical career paths. Furthermore, we combine 'social and behavioral sciences' and 'education' under a single category.  
+
+```{r}
+
+
+phdfield$field2 <- phdfield$field <- phdfield$nrc_field
+
+phdfield$field2 <- fct_collapse(phdfield$field2,
+                                  'Agricultural Sciences' = "Agricultural Sciences",
+                                  'Biological and Health Sciences' = "Biological and Health Sciences",
+                                  "other" = c("Business", "Law"),
+                                  Engineering = "Engineering",
+                                  Humanities = "Humanities",
+                                  'Social and Behavioral Sciences' = c("Social and Behavioral Sciences", "Education"),
+                                  'Physical and Mathematical Sciences' = "Physical and Mathematical Sciences")
+
+
+levels(phdfield$field2)[levels(phdfield$field2)=="other"] <- NA
+levels(phdfield$field2)
+
+
+# create and explicit 'missing' category
+phdfield <- phdfield %>% 
+  mutate(field = fct_explicit_na(field, na_level="missing"),
+         field2 = fct_explicit_na(field2, na_level="missing")) 
+
+
+phdfield$field <- factor(phdfield$field, levels = c("Biological and Health Sciences", "Physical and Mathematical Sciences", "Social and Behavioral Sciences", "Engineering", "Agricultural Sciences", "Humanities", "Business", "Education", "Law", "missing"))
+
+phdfield$field2 <- factor(phdfield$field2, levels = c("Biological and Health Sciences", "Physical and Mathematical Sciences", "Social and Behavioral Sciences", "Engineering", "Agricultural Sciences", "Humanities", "missing"))
+
+
+
+```
+
+
+
+# Output  
+
+After this, we are left with a dataset of PhDs + fields for each PhD with publications in the specified timeframe. 
+
+```{r, echo=FALSE}
+
+phdfield <- subset(phdfield, select=c(id, firstname, lastname_full, field, field2, gender, ethnicity, ethnicity2, uni, phd_year))
+
+```
+
+```{r}
+
+knitr::kable(phdfield, format='markdown')
+
+```
+
+
+
+```{r, echo=FALSE, eval=FALSE}
+
+save(phdfield, file="data/processed/phdfield.rda")
+
+```
+
+---  
+

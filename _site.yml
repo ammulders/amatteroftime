@@ -1,0 +1,49 @@
+name: "Academic publishing careers in NL"
+
+exclude: 
+  - "rawdata"
+ 
+navbar:
+  left:
+  - icon: fa-home
+    href: index.html
+  - text: "Independent variables"
+    menu:
+    - text: "Names"
+      href: names.html
+    - text: "Gender"
+      href: gender.html
+    - text: "Ethnicity"
+      href: ethnicity.html
+    - text: "Discipline"
+      href: discipline.html
+  - text: "Data preparation" 
+    menu:
+    - text: "Preparation 'starting / ceasing to publish'"
+      href: datapreparation.html
+  - text: "Descriptives"
+    menu:
+    - text: "Table 1"
+      href: table1.html
+    - text: "Table 2"
+      href: table2.html
+  - text: "Analyses"
+    menu:
+    - text: "Analyses 'starting to publish'"
+      href: starting_analyses.html
+  - text: "Appendices"
+    menu:
+    - text: "Splines"
+      href: splines.html
+
+  right:
+    - icon: fab fa-github
+      href: https://github.com/ammulders/amatteroftime
+      
+output:
+  html_document:
+    theme: flatly
+    highlight: default
+    include:
+      after_body: footer.html
+output_dir: "docs"

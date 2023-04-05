@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Appendix 1: splines’</title>
+
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Independent variables
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="names.html">Names</a>
+    </li>
+    <li>
+      <a href="gender.html">Gender</a>
+    </li>
+    <li>
+      <a href="ethnicity.html">Ethnicity</a>
+    </li>
+    <li>
+      <a href="discipline.html">Discipline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data preparation
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datapreparation.html">Preparation 'starting / ceasing to publish'</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Descriptives
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="table1.html">Table 1</a>
+    </li>
+    <li>
+      <a href="table2.html">Table 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="starting_analyses.html">Analyses 'starting to publish'</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Appendices
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="splines.html">Splines</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/ammulders/amatteroftime">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Appendix 1: splines’</h1>
+<h4 class="date">Last compiled on april, 2023</h4>
+
+</div>
+
+
+<pre><code>## NULL</code></pre>
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<hr />
+<p>This lab journal demonstrates how we treat the association between
+PhD cohort and ‘starting to publish’ flexibly.</p>
+<hr />
+<div id="custom-functions" class="section level1">
+<h1>Custom functions</h1>
+<ul>
+<li><p><code>fpackage.check</code>: Check if packages are installed (and
+install if not) in R (<a
+href="https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/">source</a>).</p></li>
+<li><p><code>ddlogis</code>: double derivative function for calculating
+marginal interaction effects (<a
+href="https://jochemtolsma.github.io/MarginalEffects/#5_Logistic_with_model_interactions">source</a>).</p></li>
+</ul>
+<pre class="r test"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}</code></pre>
+<hr />
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<pre class="r test"><code>packages = c(&quot;tidyverse&quot;, &quot;ggplot2&quot;, &quot;ggpubr&quot;, &quot;RColorBrewer&quot;, &quot;margins&quot;, &quot;splines&quot;, &quot;splines2&quot;, &quot;boot&quot;,
+    &quot;kableExtra&quot;, &quot;DescTools&quot;)
+
+fpackage.check(packages)</code></pre>
+<hr />
+</div>
+<div id="input" class="section level1">
+<h1>Input</h1>
+<p>We use one processed dataset.</p>
+<ul>
+<li><a href="">df_starting.rda</a>: dataset of PhDs with all relevant
+variables: gender + ethnicity + university + PhD year
+<ul>
+<li>For construction of this dataset see [(datapreparations.html)]<br />
+</li>
+<li>name of dataset: <code>df_starting</code></li>
+</ul></li>
+</ul>
+<pre class="r test"><code>load(file = &quot;./data/processed/df_starting.rda&quot;)</code></pre>
+<hr />
+<p>Given that the probability to start publishing appears to depend
+non-linearly on PhD cohort (see below), we attempt to deal with the
+effect of cohort a bit more flexibly. To do so, we uses splines.</p>
+<div class="figure">
+<img src="output/starting/plot3.jpg" alt="" />
+<p class="caption">figure3</p>
+</div>
+<div class="figure">
+<img src="output/starting/plot4.jpg" alt="" />
+<p class="caption">figure4</p>
+</div>
+</div>
+<div id="model-3-gender-ethnicity-and-controls" class="section level1">
+<h1>Model 3: Gender, ethnicity and controls</h1>
+<div id="non-linear-effects-of-phd-cohort" class="section level2">
+<h2>(Non-)linear effects of PhD cohort</h2>
+<p>We use splines instead of polynomials, because cubic effects of
+cohort on ‘starting to publish’ do not capture the trend very
+accurately, but using higher order polynomials is not advisable.
+Therefore, we investigate the use of splines with several knots,
+determining the splines based on a spline-only model.</p>
+<pre class="r test"><code># no nodes
+test1 &lt;- glm(start_pub ~ ns(phd_cohort, 3), family = binomial, data = df_starting)
+
+test2 &lt;- glm(start_pub ~ bSpline(phd_cohort, df = 3), family = binomial, data = df_starting)
+
+knots5 &lt;- quantile(df_starting$phd_cohort, probs = seq(0, 1, 0.25))[2:4]
+test3 &lt;- glm(start_pub ~ bSpline(phd_cohort, knots = knots5, df = 3), family = binomial, data = df_starting)
+
+knots6 &lt;- quantile(df_starting$phd_cohort, probs = seq(0, 1, 0.2))[2:5]
+test4 &lt;- glm(start_pub ~ bSpline(phd_cohort, knots = knots6, df = 3), family = binomial, data = df_starting)
+
+test5 &lt;- glm(start_pub ~ ns(phd_cohort, knots = knots5, df = 3), family = binomial, data = df_starting)
+
+test6 &lt;- glm(start_pub ~ ns(phd_cohort, knots = knots6, df = 3), family = binomial, data = df_starting)</code></pre>
+<pre class="r test"><code>res &lt;- AIC(test1, test2, test3, test4, test5, test6)
+res[order(res$AIC), ]</code></pre>
+<pre class="test2"><code>#&gt;       df      AIC
+#&gt; test4  8 81571.21
+#&gt; test3  7 81591.71
+#&gt; test6  6 81605.42
+#&gt; test5  5 81615.85
+#&gt; test1  4 81642.83
+#&gt; test2  4 81651.75</code></pre>
+<p>Let us visually inspect the top3.</p>
+<pre class="r test"><code>df_starting %&gt;%
+    group_by(phd_cohort) %&gt;%
+    summarise(y = mean(as.numeric(start_pub))) -&gt; df_starting2
+
+nd &lt;- data.frame(phd_cohort = c(0:29))
+nd$y1 &lt;- predict(test4, type = &quot;response&quot;, newdata = nd)
+nd$y2 &lt;- predict(test3, type = &quot;response&quot;, newdata = nd)
+nd$y3 &lt;- predict(test6, type = &quot;response&quot;, newdata = nd)
+
+ggplot() + geom_line(data = df_starting2, aes(x = phd_cohort, y = y)) + geom_point(data = df_starting2,
+    aes(x = phd_cohort, y = y)) + geom_line(data = nd, aes(x = phd_cohort, y = y1), col = &quot;red&quot;) + geom_point(data = nd,
+    aes(x = phd_cohort, y = y1), col = &quot;red&quot;) + geom_line(data = nd, aes(x = phd_cohort, y = y2), col = &quot;blue&quot;) +
+    geom_point(data = nd, aes(x = phd_cohort, y = y2), col = &quot;blue&quot;) + geom_line(data = nd, aes(x = phd_cohort,
+    y = y3), col = &quot;purple&quot;) + geom_point(data = nd, aes(x = phd_cohort, y = y3), col = &quot;purple&quot;)</code></pre>
+<p><img src="splines_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>They all more or less predict the trend. We go for the blue line, the
+following model</p>
+<pre><code>knots5 &lt;- quantile(df_starting$phd_cohort, probs=seq(0,1,0.25))[2:4]
+test3 &lt;- glm(start_pub ~ bSpline(phd_cohort, knots=knots5,df=3), family = binomial, data = df_starting)</code></pre>
+<p>This would imply we go for the following model 3:</p>
+<pre><code>glm(start_pub ~ gender + ethnicity2 + uni + bSpline(phd_cohort, knots=knots5,df=3), data = df_starting, family = binomial)
+</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkFwcGVuZGl4IDE6IHNwbGluZXMnIg0KZGF0ZTogIkxhc3QgY29tcGlsZWQgb24gYHIgZm9ybWF0KFN5cy50aW1lKCksICclQiwgJVknKWAiDQpvdXRwdXQ6IA0KICBodG1sX2RvY3VtZW50Og0KICAgIGNzczogdHdlYWtzLmNzcw0KICAgIHRvYzogIHRydWUNCiAgICB0b2NfZmxvYXQ6IHRydWUNCiAgICBudW1iZXJfc2VjdGlvbnM6IGZhbHNlDQogICAgY29kZV9mb2xkaW5nOiBzaG93DQogICAgY29kZV9kb3dubG9hZDogeWVzDQoNCi0tLQ0KDQoNCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KDQpsaWJyYXJ5KGtuaXRyKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIiksIGNhY2hlLmxhenkgPSBGQUxTRSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUUsIGV2YWw9VFJVRX0NCmtsaXBweTo6a2xpcHB5KHBvc2l0aW9uID0gYygndG9wJywgJ3JpZ2h0JykpDQoja2xpcHB5OjprbGlwcHkoY29sb3IgPSAnZGFya3JlZCcpDQoja2xpcHB5OjprbGlwcHkodG9vbHRpcF9tZXNzYWdlID0gJ0NsaWNrIHRvIGNvcHknLCB0b29sdGlwX3N1Y2Nlc3MgPSAnRG9uZScpDQpgYGANCg0KDQotLS0tDQoNClRoaXMgbGFiIGpvdXJuYWwgZGVtb25zdHJhdGVzIGhvdyB3ZSB0cmVhdCB0aGUgYXNzb2NpYXRpb24gYmV0d2VlbiBQaEQgY29ob3J0IGFuZCAnc3RhcnRpbmcgdG8gcHVibGlzaCcgZmxleGlibHkuIA0KICANCg0KLS0tLQ0KDQpgYGB7ciwgZWNobz1GQUxTRX0NCg0Kcm0obGlzdCA9IGxzKCkpDQoNCmBgYA0KDQoNCg0KIyBDdXN0b20gZnVuY3Rpb25zDQoNCi0gYGZwYWNrYWdlLmNoZWNrYDogQ2hlY2sgaWYgcGFja2FnZXMgYXJlIGluc3RhbGxlZCAoYW5kIGluc3RhbGwgaWYgbm90KSBpbiBSIChbc291cmNlXShodHRwczovL3ZiYWxpZ2EuZ2l0aHViLmlvL3ZlcmlmeS10aGF0LXItcGFja2FnZXMtYXJlLWluc3RhbGxlZC1hbmQtbG9hZGVkLykpLiAgDQoNCi0gYGRkbG9naXNgOiBkb3VibGUgZGVyaXZhdGl2ZSBmdW5jdGlvbiBmb3IgY2FsY3VsYXRpbmcgbWFyZ2luYWwgaW50ZXJhY3Rpb24gZWZmZWN0cyANCihbc291cmNlXShodHRwczovL2pvY2hlbXRvbHNtYS5naXRodWIuaW8vTWFyZ2luYWxFZmZlY3RzLyM1X0xvZ2lzdGljX3dpdGhfbW9kZWxfaW50ZXJhY3Rpb25zKSkuDQoNCg0KYGBge3IsIHJlc3VsdHM9J2hpZGUnfQ0KDQpmcGFja2FnZS5jaGVjayA8LSBmdW5jdGlvbihwYWNrYWdlcykgew0KICBsYXBwbHkocGFja2FnZXMsIEZVTiA9IGZ1bmN0aW9uKHgpIHsNCiAgICBpZiAoIXJlcXVpcmUoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKSkgew0KICAgICAgaW5zdGFsbC5wYWNrYWdlcyh4LCBkZXBlbmRlbmNpZXMgPSBUUlVFKQ0KICAgICAgbGlicmFyeSh4LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpDQogICAgfQ0KICB9KQ0KfQ0KDQoNCmBgYA0KDQoNCi0tLSAgDQoNCiMgUGFja2FnZXMNCg0KYGBge3IsIHJlc3VsdHM9J2hpZGUnfQ0KDQpwYWNrYWdlcyA9IGMoInRpZHl2ZXJzZSIsImdncGxvdDIiLCAiZ2dwdWJyIiwiUkNvbG9yQnJld2VyIiwgIm1hcmdpbnMiLCAic3BsaW5lcyIsICJzcGxpbmVzMiIsICJib290IiwgImthYmxlRXh0cmEiLCAiRGVzY1Rvb2xzIikNCg0KZnBhY2thZ2UuY2hlY2socGFja2FnZXMpDQoNCmBgYA0KDQoNCi0tLSANCg0KIyBJbnB1dA0KDQoNCg0KV2UgdXNlIG9uZSBwcm9jZXNzZWQgZGF0YXNldC4NCg0KKiBbZGZfc3RhcnRpbmcucmRhXSgpOiBkYXRhc2V0IG9mIFBoRHMgd2l0aCBhbGwgcmVsZXZhbnQgdmFyaWFibGVzOiBnZW5kZXIgKyBldGhuaWNpdHkgKyB1bml2ZXJzaXR5ICsgUGhEIHllYXIgIA0KICAgIC0gRm9yIGNvbnN0cnVjdGlvbiBvZiB0aGlzIGRhdGFzZXQgc2VlIFsoZGF0YXByZXBhcmF0aW9ucy5odG1sKV0gIA0KICAgIC0gbmFtZSBvZiBkYXRhc2V0OiBgZGZfc3RhcnRpbmdgIA0KICAgIA0KDQpgYGB7ciBkYXRhfQ0KDQpsb2FkKGZpbGUgPSAiLi9kYXRhL3Byb2Nlc3NlZC9kZl9zdGFydGluZy5yZGEiKQ0KDQpgYGANCg0KDQotLS0tDQoNCkdpdmVuIHRoYXQgdGhlIHByb2JhYmlsaXR5IHRvIHN0YXJ0IHB1Ymxpc2hpbmcgYXBwZWFycyB0byBkZXBlbmQgbm9uLWxpbmVhcmx5IG9uIFBoRCBjb2hvcnQgKHNlZSBiZWxvdyksIHdlIGF0dGVtcHQgdG8gZGVhbCB3aXRoIHRoZSBlZmZlY3Qgb2YgY29ob3J0IGEgYml0IG1vcmUgZmxleGlibHkuIFRvIGRvIHNvLCB3ZSB1c2VzIHNwbGluZXMuIA0KDQohW2ZpZ3VyZTNdKC4vb3V0cHV0L3N0YXJ0aW5nL3Bsb3QzLmpwZykNCg0KIVtmaWd1cmU0XSguL291dHB1dC9zdGFydGluZy9wbG90NC5qcGcpDQoNCg0KIyBNb2RlbCAzOiBHZW5kZXIsIGV0aG5pY2l0eSBhbmQgY29udHJvbHMNCg0KIyMgKE5vbi0pbGluZWFyIGVmZmVjdHMgb2YgUGhEIGNvaG9ydA0KDQpXZSB1c2Ugc3BsaW5lcyBpbnN0ZWFkIG9mIHBvbHlub21pYWxzLCBiZWNhdXNlIGN1YmljIGVmZmVjdHMgb2YgY29ob3J0IG9uICdzdGFydGluZyB0byBwdWJsaXNoJyBkbyBub3QgY2FwdHVyZSB0aGUgdHJlbmQgdmVyeSBhY2N1cmF0ZWx5LCBidXQgdXNpbmcgaGlnaGVyIG9yZGVyIHBvbHlub21pYWxzIGlzIG5vdCBhZHZpc2FibGUuIFRoZXJlZm9yZSwgd2UgaW52ZXN0aWdhdGUgdGhlIHVzZSBvZiBzcGxpbmVzIHdpdGggc2V2ZXJhbCBrbm90cywgZGV0ZXJtaW5pbmcgdGhlIHNwbGluZXMgYmFzZWQgb24gYSBzcGxpbmUtb25seSBtb2RlbC4gDQoNCmBgYHtyfQ0KDQojbm8gbm9kZXMNCnRlc3QxIDwtIGdsbShzdGFydF9wdWIgfiBucyhwaGRfY29ob3J0LCAzKSwgZmFtaWx5ID0gYmlub21pYWwsIGRhdGEgPSBkZl9zdGFydGluZykNCg0KdGVzdDIgPC0gZ2xtKHN0YXJ0X3B1YiB+ICBiU3BsaW5lKHBoZF9jb2hvcnQsIGRmPTMpLCBmYW1pbHkgPSBiaW5vbWlhbCwgZGF0YSA9IGRmX3N0YXJ0aW5nKQ0KDQprbm90czUgPC0gcXVhbnRpbGUoZGZfc3RhcnRpbmckcGhkX2NvaG9ydCwgcHJvYnM9c2VxKDAsMSwwLjI1KSlbMjo0XQ0KdGVzdDMgPC0gZ2xtKHN0YXJ0X3B1YiB+IGJTcGxpbmUocGhkX2NvaG9ydCwga25vdHM9a25vdHM1LGRmPTMpLCBmYW1pbHkgPSBiaW5vbWlhbCwgZGF0YSA9IGRmX3N0YXJ0aW5nKQ0KDQprbm90czYgPC0gcXVhbnRpbGUoZGZfc3RhcnRpbmckcGhkX2NvaG9ydCwgcHJvYnM9c2VxKDAsMSwwLjIwKSlbMjo1XQ0KdGVzdDQgPC0gZ2xtKHN0YXJ0X3B1YiB+IGJTcGxpbmUocGhkX2NvaG9ydCwga25vdHM9a25vdHM2LGRmPTMpLCBmYW1pbHkgPSBiaW5vbWlhbCwgZGF0YSA9IGRmX3N0YXJ0aW5nKQ0KDQp0ZXN0NSA8LSBnbG0oc3RhcnRfcHViIH4gbnMocGhkX2NvaG9ydCwga25vdHM9a25vdHM1LGRmPTMpLCBmYW1pbHkgPSBiaW5vbWlhbCwgZGF0YSA9IGRmX3N0YXJ0aW5nKQ0KDQp0ZXN0NiA8LSBnbG0oc3RhcnRfcHViIH4gbnMocGhkX2NvaG9ydCwga25vdHM9a25vdHM2LGRmPTMpLCBmYW1pbHkgPSBiaW5vbWlhbCwgZGF0YSA9IGRmX3N0YXJ0aW5nKQ0KDQpgYGANCg0KDQpgYGB7cn0NCnJlcyA8LSBBSUModGVzdDEsIHRlc3QyLCB0ZXN0MywgdGVzdDQsIHRlc3Q1LCB0ZXN0NikNCnJlc1tvcmRlcihyZXMkQUlDKSxdDQpgYGANCg0KDQpMZXQgdXMgdmlzdWFsbHkgaW5zcGVjdCB0aGUgdG9wMy4gDQpgYGB7cn0NCg0KZGZfc3RhcnRpbmcgJT4lIA0KICBncm91cF9ieShwaGRfY29ob3J0KSAlPiUgDQogIHN1bW1hcmlzZSh5ID0gbWVhbihhcy5udW1lcmljKHN0YXJ0X3B1YikpKSAtPiBkZl9zdGFydGluZzINCg0KbmQgPC0gZGF0YS5mcmFtZShwaGRfY29ob3J0PWMoMDoyOSkpDQpuZCR5MSA8LSBwcmVkaWN0KHRlc3Q0LCB0eXBlPSJyZXNwb25zZSIsIG5ld2RhdGEgPSBuZCkNCm5kJHkyIDwtIHByZWRpY3QodGVzdDMsIHR5cGU9InJlc3BvbnNlIiwgbmV3ZGF0YSA9IG5kKQ0KbmQkeTMgPC0gcHJlZGljdCh0ZXN0NiwgdHlwZT0icmVzcG9uc2UiLCBuZXdkYXRhID0gbmQpDQoNCmdncGxvdCgpICsNCiAgZ2VvbV9saW5lKGRhdGE9ZGZfc3RhcnRpbmcyLCBhZXMoeD1waGRfY29ob3J0LCB5PXkpKSArDQogIGdlb21fcG9pbnQoZGF0YT1kZl9zdGFydGluZzIsIGFlcyh4PXBoZF9jb2hvcnQsIHk9eSkpICsNCiAgZ2VvbV9saW5lKGRhdGE9bmQsIGFlcyh4PXBoZF9jb2hvcnQsIHk9eTEpLCBjb2w9InJlZCIpICsNCiAgZ2VvbV9wb2ludChkYXRhPW5kLCBhZXMoeD1waGRfY29ob3J0LCB5PXkxKSwgY29sPSJyZWQiKSArIA0KICBnZW9tX2xpbmUoZGF0YT1uZCwgYWVzKHg9cGhkX2NvaG9ydCwgeT15MiksIGNvbD0iYmx1ZSIpICsNCiAgZ2VvbV9wb2ludChkYXRhPW5kLCBhZXMoeD1waGRfY29ob3J0LCB5PXkyKSwgY29sPSJibHVlIikgKw0KICBnZW9tX2xpbmUoZGF0YT1uZCwgYWVzKHg9cGhkX2NvaG9ydCwgeT15MyksIGNvbD0icHVycGxlIikgKw0KICBnZW9tX3BvaW50KGRhdGE9bmQsIGFlcyh4PXBoZF9jb2hvcnQsIHk9eTMpLCBjb2w9InB1cnBsZSIpDQogIA0KYGBgDQoNClRoZXkgYWxsIG1vcmUgb3IgbGVzcyBwcmVkaWN0IHRoZSB0cmVuZC4gV2UgZ28gZm9yIHRoZSBibHVlIGxpbmUsIHRoZSBmb2xsb3dpbmcgbW9kZWwNCg0KYGBgDQprbm90czUgPC0gcXVhbnRpbGUoZGZfc3RhcnRpbmckcGhkX2NvaG9ydCwgcHJvYnM9c2VxKDAsMSwwLjI1KSlbMjo0XQ0KdGVzdDMgPC0gZ2xtKHN0YXJ0X3B1YiB+IGJTcGxpbmUocGhkX2NvaG9ydCwga25vdHM9a25vdHM1LGRmPTMpLCBmYW1pbHkgPSBiaW5vbWlhbCwgZGF0YSA9IGRmX3N0YXJ0aW5nKQ0KYGBgDQoNCg0KVGhpcyB3b3VsZCBpbXBseSB3ZSBnbyBmb3IgdGhlIGZvbGxvd2luZyBtb2RlbCAzOg0KDQpgYGANCmdsbShzdGFydF9wdWIgfiBnZW5kZXIgKyBldGhuaWNpdHkyICsgdW5pICsgYlNwbGluZShwaGRfY29ob3J0LCBrbm90cz1rbm90czUsZGY9MyksIGRhdGEgPSBkZl9zdGFydGluZywgZmFtaWx5ID0gYmlub21pYWwpDQoNCmBgYA0KDQo=</div>
+<style>
+  .center {
+    text-align: center;
+    color: red;
+  }
+</style>
+  
+  <hr>
+  <br>
+  <p class="center">Copyright &copy; 2023 </p>
+    
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("splines.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

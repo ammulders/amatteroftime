@@ -1,0 +1,407 @@
+---
+title: "Data preparation 'starting to publish'"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: false
+    code_folding: show
+    code_download: yes
+
+---
+
+
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+library(knitr)
+#library(rgl)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE, eval=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+----
+
+This lab journal shows the data preparation for analyses 'starting to publish' and 'stopping to publish'
+  
+
+----
+
+```{r, echo=FALSE}
+
+rm(list = ls())
+
+```
+
+
+
+# Custom functions
+
+- `package.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+
+```{r, results='hide'}
+
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+```
+
+
+---  
+
+# Packages
+
+- `tidyverse`: for tidy data manipulations
+- `dplyr`: for data manipulations
+- `zoo`: to calculate running averages and minimums for the 'stopping to publish' analyses
+
+
+```{r, results='hide'}
+
+packages = c("tidyverse", "dplyr", "zoo")
+
+fpackage.check(packages)
+
+```
+
+
+--- 
+
+# Input
+
+
+
+We use one processed dataset:
+
+* [phdfield]("./data/processed/phdfield.rda"): processed example dataset of PhDs with gender, ethnicity and field variables
+    - name of dataset: `phd_field` / `phd_df` 
+    
+Further, we use one raw dataset:
+* [pubs_metadf]("./data/pubs_metadf.rda"): publications dataset   
+    - name of dataset: `pubs_metadf` 
+
+
+```{r data}
+
+load(file = "./data/processed/phdfield.rda")
+phd_df <- phdfield
+
+load(file = "./data/pubs_metadf.rda")
+
+```
+
+
+
+
+# Creating a person-period file
+
+We start by cleaning up the publications data, and then summarize the publications per PhD per year (i.e. a person-period data format). 
+
+
+```{r}
+
+pubs_metadf$type <- as.factor(pubs_metadf$type)
+
+# selecting only articles, books and book chapters
+pubs_metadf <- pubs_metadf[(pubs_metadf$type=="Artikel") | (pubs_metadf$type=="Boek" | (pubs_metadf$type=="Boekdeel")), ]  
+
+# derive publication year from variable Data.issued
+pubs_metadf <- pubs_metadf[!is.na(pubs_metadf$date.issued),]
+
+
+pubs_metadf %>% 
+  mutate(pub_year = as.character(date.issued)) %>%
+  mutate(pub_year = substr(pub_year, 1,4)) %>%
+  mutate(pub_year = as.numeric(pub_year)) -> pubs_metadf
+
+# last complete year of publications data is 2022, so remove publications from the following years
+pubs_metadf <- pubs_metadf[pubs_metadf$pub_year<2023,]
+
+
+# now, we create a person-period file: one row per PhD per year
+pubs_metadf %>% 
+  group_by(id, pub_year) %>%
+  dplyr::summarize(npubs = n(),
+            id = first(id)) -> df_ppf
+
+
+```
+
+That looks something like this: 
+
+```{r}
+
+knitr::kable(df_ppf, format="markdown")
+
+```
+
+
+
+
+# Starting to publish
+
+We create a variable for whether a person has started publishing within 3 years after their PhD, by looking at the year of first publication and the PhD year.  
+
+```{r}
+
+# We add PhD year to the person-period file to select only publications from after the PhD year
+year <- subset(phd_df, select=c(id, phd_year))
+starting <- df_ppf %>% left_join(year, by = "id") 
+
+starting <- starting[starting$phd_year<starting$pub_year,] # only pubs after PhD
+
+
+# We add the year in which a person first published after obtaining their PhD
+starting %>%
+  group_by(id) %>%
+  dplyr::summarize(pub_min = min(pub_year)) %>%
+  ungroup() -> minpub
+
+starting %>%
+  left_join(minpub, by = "id") -> starting
+
+starting <- na.omit(starting) # remove missings 
+
+starting <- subset(starting, select=-c(phd_year)) # remove phd year variable again, because it will be added to the data when merging with phd_df
+
+
+# Now we combine combine the PhD data with the publications data
+starting %>% inner_join(phd_df, by="id") -> starting
+
+
+# Creating a variable for whether a person has published within three years after the PhD
+# in other words, the first publication should occur less than four years after the year in which their dissertation was published
+starting$start_pub <- ifelse(starting$pub_min < (starting$phd_year + 4), 1, 0)
+
+```
+
+
+Next, we add the "start_pub" variable to the PhD data. 
+
+``` {r}
+
+# select only the starting variable and ID to match
+starting %>%
+  select(id, start_pub) -> starting
+
+# keep a single row per individual
+starting <- starting[!duplicated(starting$id),]
+
+
+# merge onto the PhD dataset
+phd_df <- left_join(phd_df, starting, by = "id")     
+
+phd_df$start_pub <- ifelse(is.na(phd_df$start_pub), 0, phd_df$start_pub) # all those who do not have a profile automatically score a 0
+
+
+# because we look at in the 3 years following the PhD for start_pub, we exclude PhDs from cohorts after 2019
+# for cohorts 2020 and later, we have fewer than 3 years of publication data
+phd_df <- phd_df[phd_df$phd_year<2020,]
+
+
+# adding a cohort variable : phd_year centered on the minimum
+phd_df$phd_cohort <- as.numeric(phd_df$phd_year) - 1990
+
+
+```
+
+
+
+And save the data for use in the analyses for "starting to publish"
+```{r, echo=FALSE}
+
+df_starting <- subset(phd_df, select = c(id, start_pub, uni, phd_year, phd_cohort, field, field2, ethnicity, ethnicity2, gender))
+
+knitr::kable(df_starting, format="markdown")
+
+
+```
+
+
+
+# Stopping to publish 
+
+For the analyses under 'stopping to publish', we continue with the sample of PhDs who have 'started publishing' according to analysis #1. 
+
+
+```{r}
+
+df_stopping <- phd_df[phd_df$start_pub==1, ]
+
+df_stopping %>%
+  select(-c(start_pub)) -> df_stopping
+
+```
+
+
+We again need the person-period file in order to analyse publications for PhDs over multiple years, but this time, we want to include rows with 0 publications. This means we have to start with an empty person-period file. 
+
+```{r}
+
+pub_year <- c(1988:2022) # this is the time-window in which we scraped data. 
+
+npubs_zero <- rep(0, length(pub_year)) # default to 0 publications
+
+id <- unique(df_ppf$id) #identify the unique PHD ids
+
+nid <- length(id)
+
+#based on this info make the empty dataset
+pub_year <- rep(pub_year, nid)
+npubs_zero <- rep(npubs_zero, nid)
+id <- rep(id, each=length(c(1988:2022)))  
+empty_ppf <- data.frame(id, pub_year, npubs_zero)
+
+``` 
+
+
+Adding info to the empty person-period file 
+
+```{r}
+
+# adding time-invariant variables to the person-period file
+df_ppf %>% inner_join(df_stopping, by="id") -> df_ppf
+
+
+# filling up the empty person-period file with the actual publications data
+empty_ppf %>% 
+  full_join(df_ppf, by=c("id", "pub_year")) %>%
+  arrange(id, pub_year) %>%
+  select(id, pub_year, npubs, gender, ethnicity, ethnicity2, field, field2, uni, phd_year, phd_cohort) -> df_ppf
+
+
+# all time-constant vars are empty in rows with 0 pubs. Let's fix this. 
+df_ppf %>%
+  group_by(id) %>%
+  fill(gender, .direction = "downup") %>%
+  fill(ethnicity, .direction = "downup") %>%
+  fill(ethnicity2, .direction = "downup") %>%
+  fill(field, .direction = "downup") %>%
+  fill(field2, .direction = "downup") %>%
+  fill(uni, .direction = "downup") %>%
+  fill(phd_cohort, .direction = "downup") %>%
+  fill(phd_year, .direction = "downup") %>%
+  ungroup () -> df_ppf
+
+# replacing NA values in npubs with 0
+df_ppf %>% mutate(npubs = replace_na(npubs, 0)) -> df_ppf
+
+
+# next, we include a variable with the average number of publications in the previous years
+# rolling average here computes the average number of publications in the year t, t-1 and t-2
+# then we take the value of the rolling average for the preceding year in npubs_prev (when it is present)
+# for the first year (1988), we take the value of the year itself
+df_ppf %>%
+  group_by(id) %>%
+  mutate(npubs_rollavg = rollapply(npubs, 3, mean, align = "right", fill = 0), 
+         npubs_prev = lag(npubs_rollavg, n=1, order_by = pub_year),
+         npubs_prev = ifelse(is.na(npubs_prev), lead(npubs_prev, n=1, order_by = pub_year), npubs_prev)) %>%
+  ungroup() -> df_ppf
+
+
+# we log-transform the number of publications to account for outliers 
+df_ppf$npubs_prev_s <- log10(df_ppf$npubs_prev + 1) # +1 to avoid negative infinity
+
+
+```
+
+
+
+Creating the variable 'stopping to publish'. 
+
+```{r}
+
+# creating a time variable (= how many years since obtaining doctorate); removing years before doctorate 
+df_ppf %>%
+  mutate(time = as.numeric(pub_year - phd_year)) -> df_ppf
+
+# We look at cohorts 1990-2018
+# because we selected publishing scholars from the analyses for "starting to publish", PhDs from cohort 2019 cannot become inactive by design
+df_ppf3 <- df_ppf[df_ppf$phd_year<2019, ]
+
+
+# we compute rolling maximum across 3 time periods
+# align = left ensures that it looks forward in time: no publication at t, but 1+ pub at t+1 or t+2 ensures non-zero pubs at t. 
+df_ppf3 %>%
+  group_by(id) %>%
+  mutate(npubs3 = rollapply(npubs, 3, sum, align = "left", fill = "extend")) %>%
+  ungroup() -> df_ppf3
+
+# if a person did not have any publications in the three year period (i.e. the max is 0), we assume career exit
+df_ppf3 %>%
+  mutate(inactive = ifelse((npubs3>0), 0, 1)) -> df_ppf3
+
+
+# we only look at publications after the PhD
+df_ppf3 <- df_ppf3[(df_ppf3$pub_year > df_ppf3$phd_year), ]
+
+
+
+# currently, a person can become inactive, and then active again. We only look at the first transition to inactivity. 
+df_ppf3 %>% 
+	group_by(id) %>% 
+  dplyr::arrange(time, .by_group=TRUE) %>%
+	mutate(inactive_cs = cumsum(inactive)) %>%
+  filter(inactive_cs < 2) -> df_ppf3
+
+
+```
+
+
+
+Alternative time window: 5 years
+
+```{r}
+
+# Alternative publication window: 5 year
+df_ppf5 <- df_ppf[df_ppf$phd_year<2017, ]
+df_ppf5 <- df_ppf5 %>% mutate(npubs = replace_na(npubs, 0))
+
+# Rolling maximum across 5 years
+df_ppf5 %>%
+  group_by(id) %>%
+  mutate(npubs5 = rollapply(npubs, 5, sum, align = "left", fill = "extend")) %>%
+  ungroup() -> df_ppf5
+
+df_ppf5 %>%
+  mutate(inactive = ifelse((npubs5>0), 0, 1)) -> df_ppf5
+
+
+df_ppf5 <- df_ppf5[(df_ppf5$pub_year > df_ppf5$phd_year), ]
+
+
+# Max. 1 time inactive
+df_ppf5 %>% 
+	group_by(id) %>% 
+  arrange(time, .by_group=TRUE) %>%
+	mutate(inactive_cs = cumsum(inactive)) %>%
+  filter(inactive_cs < 2) -> df_ppf5
+
+
+df_ppf5 <- na.omit(df_ppf5)
+
+```
+
+
+
+

@@ -1,0 +1,158 @@
+---
+
+title: "Table 2"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: yes
+    
+---
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE, eval=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+
+----
+
+This lab journal replicates table 2. 
+  
+
+----
+
+# Custom functions
+
+- `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+
+```{r, results='hide'}
+
+rm(list = ls())
+
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+
+```
+
+
+---  
+
+# Packages
+
+- `tidyverse`: tidy data manipulations
+- `kableExtra`: creating tables in consistent formatting
+
+
+```{r, results='hide'}
+
+packages = c("tidyverse", "kableExtra")
+
+fpackage.check(packages)
+
+```
+
+
+--- 
+
+# Input
+
+
+
+We use one processed dataset.
+
+* [df_stopping.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + field + university + PhD year  
+    - For construction of this dataset see [(datapreparations.html)]  
+    - name of dataset: `df_ppf3` 
+    
+
+```{r data}
+
+load(file = "./data/processed/df_stopping.rda")
+
+```
+
+
+
+
+# Table 2
+
+```{r}
+
+columns <- c("Min", "Max", "Mean", "SD")
+
+rows <- c("Gender", "Man", "Woman", "Missing", "Ethnicity", "Ethnic majority", "Ethnic minority", "Other", "University", "Erasmus University", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "Field", "Biological and health sciences", "Physical and mathematical sciences", "Social and behavioural sciences", "Engineering", "Agricultural sciences", "Humanities", "Missing ", "<strong>PhD Cohort</strong></p>", "<strong>Previous publications</strong></p> <sup>a</sup></var>",  "<strong>Stopping to publish</strong></p>", "Source: Dutch Doctoral Recipients (D-cubed) data 1990-2018")
+
+
+t2 <- data.frame(matrix(nrow=length(rows), ncol=length(columns)))
+colnames(t2) <- columns
+rownames(t2) <- rows
+
+df_ppf3[!duplicated(df_ppf3$id),] -> sample
+
+t2[c(2:4),3] <- prop.table(table(sample$gender))[1:3]
+t2[c(6:8),3] <- prop.table(table(sample$ethnicity2))[1:3]
+t2[c(10:22),3] <- prop.table(table(sample$uni))[1:13]
+t2[c(24:30),3] <- prop.table(table(sample$field2))[1:7]
+t2[31,c(1:3)] <- summary(sample$phd_cohort)[c(1,6,4)]
+t2[31,4] <- sd(sample$phd_cohort)
+t2[32,c(1:3)] <- summary(df_ppf3$npubs_prev_s)[c(1,6,4)]
+t2[32,4] <- sd(df_ppf3$npubs_prev_s)
+t2[33,3] <- prop.table(table(df_ppf3$inactive))[2]
+
+
+t2[c(2:4,6:8,10:22,24:30,33),c(1,2)] <- c(rep(0, times=27), rep(1, times=27)) # binary variables min/max
+
+t2[c(2:4,6:8,10:22,24:33),3] <- format(round(t2[c(2:4,6:8,10:22,24:33),3],2), nsmall=2) # rounding to 2 decimals
+
+t2[c(31,32),c(1,2,4)] <- format(round(t2[c(31,32),c(1,2,4)],2), nsmall=2) # rounding
+
+t2[is.na(t2)] <- ""
+
+
+# N
+nrow(sample)
+
+```
+
+
+```{r}
+
+t2 %>%
+  kable(format = 'html', caption = '<b>Table 2.</b> Descriptive statistics for analyses `stopping to publish` (N=15,021)', escape=FALSE) %>%
+  row_spec(row=34, italic=T) %>%
+  row_spec(row=c(1,5,9,23), bold=T) %>%
+    kable_classic(full_width = F, html_font = "Cambria") %>%
+  footnote(alphabet = "Summary statistics for 'previous publications' are calculated at the level of person-periods, instead of at the level of individuals") %>%
+  kable_styling(font_size = 14) -> table2
+
+table2
+
+```
+
+---

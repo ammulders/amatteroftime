@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data preparation ‘starting to publish’</title>
+
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Independent variables
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="names.html">Names</a>
+    </li>
+    <li>
+      <a href="gender.html">Gender</a>
+    </li>
+    <li>
+      <a href="ethnicity.html">Ethnicity</a>
+    </li>
+    <li>
+      <a href="discipline.html">Discipline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data preparation
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datapreparation.html">Preparation 'starting / ceasing to publish'</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Descriptives
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="table1.html">Table 1</a>
+    </li>
+    <li>
+      <a href="table2.html">Table 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="starting_analyses.html">Analyses 'starting to publish'</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Appendices
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="splines.html">Splines</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/ammulders/amatteroftime">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data preparation ‘starting to publish’</h1>
+<h4 class="date">Last compiled on april, 2023</h4>
+
+</div>
+
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<hr />
+<p>This lab journal shows the data preparation for analyses ‘starting to
+publish’ and ‘stopping to publish’</p>
+<hr />
+<div id="custom-functions" class="section level1">
+<h1>Custom functions</h1>
+<ul>
+<li><code>package.check</code>: Check if packages are installed (and
+install if not) in R (<a
+href="https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/">source</a>).</li>
+</ul>
+<pre class="r test"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}</code></pre>
+<hr />
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<ul>
+<li><code>tidyverse</code>: for tidy data manipulations</li>
+<li><code>dplyr</code>: for data manipulations</li>
+<li><code>zoo</code>: to calculate running averages and minimums for the
+‘stopping to publish’ analyses</li>
+</ul>
+<pre class="r test"><code>packages = c(&quot;tidyverse&quot;, &quot;dplyr&quot;, &quot;zoo&quot;)
+
+fpackage.check(packages)</code></pre>
+<hr />
+</div>
+<div id="input" class="section level1">
+<h1>Input</h1>
+<p>We use one processed dataset:</p>
+<ul>
+<li><a href="%22./data/processed/phdfield.rda%22">phdfield</a>:
+processed example dataset of PhDs with gender, ethnicity and field
+variables
+<ul>
+<li>name of dataset: <code>phd_field</code> / <code>phd_df</code></li>
+</ul></li>
+</ul>
+<p>Further, we use one raw dataset: * <a
+href="%22./data/pubs_metadf.rda%22">pubs_metadf</a>: publications
+dataset<br />
+- name of dataset: <code>pubs_metadf</code></p>
+<pre class="r test"><code>load(file = &quot;./data/processed/phdfield.rda&quot;)
+phd_df &lt;- phdfield
+
+load(file = &quot;./data/pubs_metadf.rda&quot;)</code></pre>
+</div>
+<div id="creating-a-person-period-file" class="section level1">
+<h1>Creating a person-period file</h1>
+<p>We start by cleaning up the publications data, and then summarize the
+publications per PhD per year (i.e. a person-period data format).</p>
+<pre class="r test"><code>pubs_metadf$type &lt;- as.factor(pubs_metadf$type)
+
+# selecting only articles, books and book chapters
+pubs_metadf &lt;- pubs_metadf[(pubs_metadf$type == &quot;Artikel&quot;) | (pubs_metadf$type == &quot;Boek&quot; | (pubs_metadf$type ==
+    &quot;Boekdeel&quot;)), ]
+
+# derive publication year from variable Data.issued
+pubs_metadf &lt;- pubs_metadf[!is.na(pubs_metadf$date.issued), ]
+
+
+pubs_metadf %&gt;%
+    mutate(pub_year = as.character(date.issued)) %&gt;%
+    mutate(pub_year = substr(pub_year, 1, 4)) %&gt;%
+    mutate(pub_year = as.numeric(pub_year)) -&gt; pubs_metadf
+
+# last complete year of publications data is 2022, so remove publications from the following years
+pubs_metadf &lt;- pubs_metadf[pubs_metadf$pub_year &lt; 2023, ]
+
+
+# now, we create a person-period file: one row per PhD per year
+pubs_metadf %&gt;%
+    group_by(id, pub_year) %&gt;%
+    dplyr::summarize(npubs = n(), id = first(id)) -&gt; df_ppf</code></pre>
+<p>That looks something like this:</p>
+<pre class="r test"><code>knitr::kable(df_ppf, format = &quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">id</th>
+<th align="right">pub_year</th>
+<th align="right">npubs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">f</td>
+<td align="right">2009</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">2011</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">f</td>
+<td align="right">2012</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">2013</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">f</td>
+<td align="right">2014</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">2019</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">g</td>
+<td align="right">2016</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">g</td>
+<td align="right">2017</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">g</td>
+<td align="right">2018</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">g</td>
+<td align="right">2020</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">g</td>
+<td align="right">2021</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">g</td>
+<td align="right">2022</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">h</td>
+<td align="right">1998</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">h</td>
+<td align="right">1999</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">h</td>
+<td align="right">2000</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">h</td>
+<td align="right">2001</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">h</td>
+<td align="right">2005</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">h</td>
+<td align="right">2006</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">h</td>
+<td align="right">2009</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">h</td>
+<td align="right">2010</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">h</td>
+<td align="right">2012</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">h</td>
+<td align="right">2015</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="starting-to-publish" class="section level1">
+<h1>Starting to publish</h1>
+<p>We create a variable for whether a person has started publishing
+within 3 years after their PhD, by looking at the year of first
+publication and the PhD year.</p>
+<pre class="r test"><code># We add PhD year to the person-period file to select only publications from after the PhD year
+year &lt;- subset(phd_df, select = c(id, phd_year))
+starting &lt;- df_ppf %&gt;%
+    left_join(year, by = &quot;id&quot;)
+
+starting &lt;- starting[starting$phd_year &lt; starting$pub_year, ]  # only pubs after PhD
+
+
+# We add the year in which a person first published after obtaining their PhD
+starting %&gt;%
+    group_by(id) %&gt;%
+    dplyr::summarize(pub_min = min(pub_year)) %&gt;%
+    ungroup() -&gt; minpub
+
+starting %&gt;%
+    left_join(minpub, by = &quot;id&quot;) -&gt; starting
+
+starting &lt;- na.omit(starting)  # remove missings 
+
+starting &lt;- subset(starting, select = -c(phd_year))  # remove phd year variable again, because it will be added to the data when merging with phd_df
+
+
+# Now we combine combine the PhD data with the publications data
+starting %&gt;%
+    inner_join(phd_df, by = &quot;id&quot;) -&gt; starting
+
+
+# Creating a variable for whether a person has published within three years after the PhD in other
+# words, the first publication should occur less than four years after the year in which their
+# dissertation was published
+starting$start_pub &lt;- ifelse(starting$pub_min &lt; (starting$phd_year + 4), 1, 0)</code></pre>
+<p>Next, we add the “start_pub” variable to the PhD data.</p>
+<pre class="r test"><code># select only the starting variable and ID to match
+starting %&gt;%
+    select(id, start_pub) -&gt; starting
+
+# keep a single row per individual
+starting &lt;- starting[!duplicated(starting$id), ]
+
+
+# merge onto the PhD dataset
+phd_df &lt;- left_join(phd_df, starting, by = &quot;id&quot;)
+
+phd_df$start_pub &lt;- ifelse(is.na(phd_df$start_pub), 0, phd_df$start_pub)  # all those who do not have a profile automatically score a 0
+
+
+# because we look at in the 3 years following the PhD for start_pub, we exclude PhDs from cohorts
+# after 2019 for cohorts 2020 and later, we have fewer than 3 years of publication data
+phd_df &lt;- phd_df[phd_df$phd_year &lt; 2020, ]
+
+
+# adding a cohort variable : phd_year centered on the minimum
+phd_df$phd_cohort &lt;- as.numeric(phd_df$phd_year) - 1990</code></pre>
+<p>And save the data for use in the analyses for “starting to
+publish”</p>
+<table style="width:100%;">
+<colgroup>
+<col width="2%" />
+<col width="7%" />
+<col width="2%" />
+<col width="6%" />
+<col width="8%" />
+<col width="25%" />
+<col width="25%" />
+<col width="7%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">id</th>
+<th align="right">start_pub</th>
+<th align="left">uni</th>
+<th align="right">phd_year</th>
+<th align="right">phd_cohort</th>
+<th align="left">field</th>
+<th align="left">field2</th>
+<th align="left">ethnicity</th>
+<th align="left">ethnicity2</th>
+<th align="left">gender</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">f</td>
+<td align="right">1</td>
+<td align="left">LU</td>
+<td align="right">2012</td>
+<td align="right">22</td>
+<td align="left">Physical and Mathematical Sciences</td>
+<td align="left">Physical and Mathematical Sciences</td>
+<td align="left">moroccan</td>
+<td align="left">minority</td>
+<td align="left">women</td>
+</tr>
+<tr class="even">
+<td align="left">g</td>
+<td align="right">1</td>
+<td align="left">UU</td>
+<td align="right">2019</td>
+<td align="right">29</td>
+<td align="left">Biological and Health Sciences</td>
+<td align="left">Biological and Health Sciences</td>
+<td align="left">other</td>
+<td align="left">other</td>
+<td align="left">men</td>
+</tr>
+<tr class="odd">
+<td align="left">h</td>
+<td align="right">1</td>
+<td align="left">WUR</td>
+<td align="right">2000</td>
+<td align="right">10</td>
+<td align="left">Social and Behavioral Sciences</td>
+<td align="left">Social and Behavioral Sciences</td>
+<td align="left">other</td>
+<td align="left">other</td>
+<td align="left">women</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="stopping-to-publish" class="section level1">
+<h1>Stopping to publish</h1>
+<p>For the analyses under ‘stopping to publish’, we continue with the
+sample of PhDs who have ‘started publishing’ according to analysis
+#1.</p>
+<pre class="r test"><code>df_stopping &lt;- phd_df[phd_df$start_pub == 1, ]
+
+df_stopping %&gt;%
+    select(-c(start_pub)) -&gt; df_stopping</code></pre>
+<p>We again need the person-period file in order to analyse publications
+for PhDs over multiple years, but this time, we want to include rows
+with 0 publications. This means we have to start with an empty
+person-period file.</p>
+<pre class="r test"><code>pub_year &lt;- c(1988:2022)  # this is the time-window in which we scraped data. 
+
+npubs_zero &lt;- rep(0, length(pub_year))  # default to 0 publications
+
+id &lt;- unique(df_ppf$id)  #identify the unique PHD ids
+
+nid &lt;- length(id)
+
+# based on this info make the empty dataset
+pub_year &lt;- rep(pub_year, nid)
+npubs_zero &lt;- rep(npubs_zero, nid)
+id &lt;- rep(id, each = length(c(1988:2022)))
+empty_ppf &lt;- data.frame(id, pub_year, npubs_zero)</code></pre>
+<p>Adding info to the empty person-period file</p>
+<pre class="r test"><code># adding time-invariant variables to the person-period file
+df_ppf %&gt;%
+    inner_join(df_stopping, by = &quot;id&quot;) -&gt; df_ppf
+
+
+# filling up the empty person-period file with the actual publications data
+empty_ppf %&gt;%
+    full_join(df_ppf, by = c(&quot;id&quot;, &quot;pub_year&quot;)) %&gt;%
+    arrange(id, pub_year) %&gt;%
+    select(id, pub_year, npubs, gender, ethnicity, ethnicity2, field, field2, uni, phd_year, phd_cohort) -&gt;
+    df_ppf
+
+
+# all time-constant vars are empty in rows with 0 pubs. Let&#39;s fix this.
+df_ppf %&gt;%
+    group_by(id) %&gt;%
+    fill(gender, .direction = &quot;downup&quot;) %&gt;%
+    fill(ethnicity, .direction = &quot;downup&quot;) %&gt;%
+    fill(ethnicity2, .direction = &quot;downup&quot;) %&gt;%
+    fill(field, .direction = &quot;downup&quot;) %&gt;%
+    fill(field2, .direction = &quot;downup&quot;) %&gt;%
+    fill(uni, .direction = &quot;downup&quot;) %&gt;%
+    fill(phd_cohort, .direction = &quot;downup&quot;) %&gt;%
+    fill(phd_year, .direction = &quot;downup&quot;) %&gt;%
+    ungroup() -&gt; df_ppf
+
+# replacing NA values in npubs with 0
+df_ppf %&gt;%
+    mutate(npubs = replace_na(npubs, 0)) -&gt; df_ppf
+
+
+# next, we include a variable with the average number of publications in the previous years rolling
+# average here computes the average number of publications in the year t, t-1 and t-2 then we take
+# the value of the rolling average for the preceding year in npubs_prev (when it is present) for
+# the first year (1988), we take the value of the year itself
+df_ppf %&gt;%
+    group_by(id) %&gt;%
+    mutate(npubs_rollavg = rollapply(npubs, 3, mean, align = &quot;right&quot;, fill = 0), npubs_prev = lag(npubs_rollavg,
+        n = 1, order_by = pub_year), npubs_prev = ifelse(is.na(npubs_prev), lead(npubs_prev, n = 1, order_by = pub_year),
+        npubs_prev)) %&gt;%
+    ungroup() -&gt; df_ppf
+
+
+# we log-transform the number of publications to account for outliers
+df_ppf$npubs_prev_s &lt;- log10(df_ppf$npubs_prev + 1)  # +1 to avoid negative infinity</code></pre>
+<p>Creating the variable ‘stopping to publish’.</p>
+<pre class="r test"><code># creating a time variable (= how many years since obtaining doctorate); removing years before
+# doctorate
+df_ppf %&gt;%
+    mutate(time = as.numeric(pub_year - phd_year)) -&gt; df_ppf
+
+# We look at cohorts 1990-2018 because we selected publishing scholars from the analyses for
+# &#39;starting to publish&#39;, PhDs from cohort 2019 cannot become inactive by design
+df_ppf3 &lt;- df_ppf[df_ppf$phd_year &lt; 2019, ]
+
+
+# we compute rolling maximum across 3 time periods align = left ensures that it looks forward in
+# time: no publication at t, but 1+ pub at t+1 or t+2 ensures non-zero pubs at t.
+df_ppf3 %&gt;%
+    group_by(id) %&gt;%
+    mutate(npubs3 = rollapply(npubs, 3, sum, align = &quot;left&quot;, fill = &quot;extend&quot;)) %&gt;%
+    ungroup() -&gt; df_ppf3
+
+# if a person did not have any publications in the three year period (i.e. the max is 0), we assume
+# career exit
+df_ppf3 %&gt;%
+    mutate(inactive = ifelse((npubs3 &gt; 0), 0, 1)) -&gt; df_ppf3
+
+
+# we only look at publications after the PhD
+df_ppf3 &lt;- df_ppf3[(df_ppf3$pub_year &gt; df_ppf3$phd_year), ]
+
+
+
+# currently, a person can become inactive, and then active again. We only look at the first
+# transition to inactivity.
+df_ppf3 %&gt;%
+    group_by(id) %&gt;%
+    dplyr::arrange(time, .by_group = TRUE) %&gt;%
+    mutate(inactive_cs = cumsum(inactive)) %&gt;%
+    filter(inactive_cs &lt; 2) -&gt; df_ppf3</code></pre>
+<p>Alternative time window: 5 years</p>
+<pre class="r test"><code># Alternative publication window: 5 year
+df_ppf5 &lt;- df_ppf[df_ppf$phd_year &lt; 2017, ]
+df_ppf5 &lt;- df_ppf5 %&gt;%
+    mutate(npubs = replace_na(npubs, 0))
+
+# Rolling maximum across 5 years
+df_ppf5 %&gt;%
+    group_by(id) %&gt;%
+    mutate(npubs5 = rollapply(npubs, 5, sum, align = &quot;left&quot;, fill = &quot;extend&quot;)) %&gt;%
+    ungroup() -&gt; df_ppf5
+
+df_ppf5 %&gt;%
+    mutate(inactive = ifelse((npubs5 &gt; 0), 0, 1)) -&gt; df_ppf5
+
+
+df_ppf5 &lt;- df_ppf5[(df_ppf5$pub_year &gt; df_ppf5$phd_year), ]
+
+
+# Max. 1 time inactive
+df_ppf5 %&gt;%
+    group_by(id) %&gt;%
+    arrange(time, .by_group = TRUE) %&gt;%
+    mutate(inactive_cs = cumsum(inactive)) %&gt;%
+    filter(inactive_cs &lt; 2) -&gt; df_ppf5
+
+
+df_ppf5 &lt;- na.omit(df_ppf5)</code></pre>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgcHJlcGFyYXRpb24gJ3N0YXJ0aW5nIHRvIHB1Ymxpc2gnIg0KZGF0ZTogIkxhc3QgY29tcGlsZWQgb24gYHIgZm9ybWF0KFN5cy50aW1lKCksICclQiwgJVknKWAiDQpvdXRwdXQ6IA0KICBodG1sX2RvY3VtZW50Og0KICAgIGNzczogdHdlYWtzLmNzcw0KICAgIHRvYzogIHRydWUNCiAgICB0b2NfZmxvYXQ6IHRydWUNCiAgICBudW1iZXJfc2VjdGlvbnM6IGZhbHNlDQogICAgY29kZV9mb2xkaW5nOiBzaG93DQogICAgY29kZV9kb3dubG9hZDogeWVzDQoNCi0tLQ0KDQoNCg0KDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQoNCmxpYnJhcnkoa25pdHIpDQojbGlicmFyeShyZ2wpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSwgY2FjaGUubGF6eSA9IEZBTFNFKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9VFJVRSwgZXZhbD1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQotLS0tDQoNClRoaXMgbGFiIGpvdXJuYWwgc2hvd3MgdGhlIGRhdGEgcHJlcGFyYXRpb24gZm9yIGFuYWx5c2VzICdzdGFydGluZyB0byBwdWJsaXNoJyBhbmQgJ3N0b3BwaW5nIHRvIHB1Ymxpc2gnDQogIA0KDQotLS0tDQoNCmBgYHtyLCBlY2hvPUZBTFNFfQ0KDQpybShsaXN0ID0gbHMoKSkNCg0KYGBgDQoNCg0KDQojIEN1c3RvbSBmdW5jdGlvbnMNCg0KLSBgcGFja2FnZS5jaGVja2A6IENoZWNrIGlmIHBhY2thZ2VzIGFyZSBpbnN0YWxsZWQgKGFuZCBpbnN0YWxsIGlmIG5vdCkgaW4gUiAoW3NvdXJjZV0oaHR0cHM6Ly92YmFsaWdhLmdpdGh1Yi5pby92ZXJpZnktdGhhdC1yLXBhY2thZ2VzLWFyZS1pbnN0YWxsZWQtYW5kLWxvYWRlZC8pKS4gIA0KDQoNCmBgYHtyLCByZXN1bHRzPSdoaWRlJ30NCg0KZnBhY2thZ2UuY2hlY2sgPC0gZnVuY3Rpb24ocGFja2FnZXMpIHsNCiAgbGFwcGx5KHBhY2thZ2VzLCBGVU4gPSBmdW5jdGlvbih4KSB7DQogICAgaWYgKCFyZXF1aXJlKHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkpIHsNCiAgICAgIGluc3RhbGwucGFja2FnZXMoeCwgZGVwZW5kZW5jaWVzID0gVFJVRSkNCiAgICAgIGxpYnJhcnkoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKQ0KICAgIH0NCiAgfSkNCn0NCg0KYGBgDQoNCg0KLS0tICANCg0KIyBQYWNrYWdlcw0KDQotIGB0aWR5dmVyc2VgOiBmb3IgdGlkeSBkYXRhIG1hbmlwdWxhdGlvbnMNCi0gYGRwbHlyYDogZm9yIGRhdGEgbWFuaXB1bGF0aW9ucw0KLSBgem9vYDogdG8gY2FsY3VsYXRlIHJ1bm5pbmcgYXZlcmFnZXMgYW5kIG1pbmltdW1zIGZvciB0aGUgJ3N0b3BwaW5nIHRvIHB1Ymxpc2gnIGFuYWx5c2VzDQoNCg0KYGBge3IsIHJlc3VsdHM9J2hpZGUnfQ0KDQpwYWNrYWdlcyA9IGMoInRpZHl2ZXJzZSIsICJkcGx5ciIsICJ6b28iKQ0KDQpmcGFja2FnZS5jaGVjayhwYWNrYWdlcykNCg0KYGBgDQoNCg0KLS0tIA0KDQojIElucHV0DQoNCg0KDQpXZSB1c2Ugb25lIHByb2Nlc3NlZCBkYXRhc2V0Og0KDQoqIFtwaGRmaWVsZF0oIi4vZGF0YS9wcm9jZXNzZWQvcGhkZmllbGQucmRhIik6IHByb2Nlc3NlZCBleGFtcGxlIGRhdGFzZXQgb2YgUGhEcyB3aXRoIGdlbmRlciwgZXRobmljaXR5IGFuZCBmaWVsZCB2YXJpYWJsZXMNCiAgICAtIG5hbWUgb2YgZGF0YXNldDogYHBoZF9maWVsZGAgLyBgcGhkX2RmYCANCiAgICANCkZ1cnRoZXIsIHdlIHVzZSBvbmUgcmF3IGRhdGFzZXQ6DQoqIFtwdWJzX21ldGFkZl0oIi4vZGF0YS9wdWJzX21ldGFkZi5yZGEiKTogcHVibGljYXRpb25zIGRhdGFzZXQgICANCiAgICAtIG5hbWUgb2YgZGF0YXNldDogYHB1YnNfbWV0YWRmYCANCg0KDQpgYGB7ciBkYXRhfQ0KDQpsb2FkKGZpbGUgPSAiLi9kYXRhL3Byb2Nlc3NlZC9waGRmaWVsZC5yZGEiKQ0KcGhkX2RmIDwtIHBoZGZpZWxkDQoNCmxvYWQoZmlsZSA9ICIuL2RhdGEvcHVic19tZXRhZGYucmRhIikNCg0KYGBgDQoNCg0KDQoNCiMgQ3JlYXRpbmcgYSBwZXJzb24tcGVyaW9kIGZpbGUNCg0KV2Ugc3RhcnQgYnkgY2xlYW5pbmcgdXAgdGhlIHB1YmxpY2F0aW9ucyBkYXRhLCBhbmQgdGhlbiBzdW1tYXJpemUgdGhlIHB1YmxpY2F0aW9ucyBwZXIgUGhEIHBlciB5ZWFyIChpLmUuIGEgcGVyc29uLXBlcmlvZCBkYXRhIGZvcm1hdCkuIA0KDQoNCmBgYHtyfQ0KDQpwdWJzX21ldGFkZiR0eXBlIDwtIGFzLmZhY3RvcihwdWJzX21ldGFkZiR0eXBlKQ0KDQojIHNlbGVjdGluZyBvbmx5IGFydGljbGVzLCBib29rcyBhbmQgYm9vayBjaGFwdGVycw0KcHVic19tZXRhZGYgPC0gcHVic19tZXRhZGZbKHB1YnNfbWV0YWRmJHR5cGU9PSJBcnRpa2VsIikgfCAocHVic19tZXRhZGYkdHlwZT09IkJvZWsiIHwgKHB1YnNfbWV0YWRmJHR5cGU9PSJCb2VrZGVlbCIpKSwgXSAgDQoNCiMgZGVyaXZlIHB1YmxpY2F0aW9uIHllYXIgZnJvbSB2YXJpYWJsZSBEYXRhLmlzc3VlZA0KcHVic19tZXRhZGYgPC0gcHVic19tZXRhZGZbIWlzLm5hKHB1YnNfbWV0YWRmJGRhdGUuaXNzdWVkKSxdDQoNCg0KcHVic19tZXRhZGYgJT4lIA0KICBtdXRhdGUocHViX3llYXIgPSBhcy5jaGFyYWN0ZXIoZGF0ZS5pc3N1ZWQpKSAlPiUNCiAgbXV0YXRlKHB1Yl95ZWFyID0gc3Vic3RyKHB1Yl95ZWFyLCAxLDQpKSAlPiUNCiAgbXV0YXRlKHB1Yl95ZWFyID0gYXMubnVtZXJpYyhwdWJfeWVhcikpIC0+IHB1YnNfbWV0YWRmDQoNCiMgbGFzdCBjb21wbGV0ZSB5ZWFyIG9mIHB1YmxpY2F0aW9ucyBkYXRhIGlzIDIwMjIsIHNvIHJlbW92ZSBwdWJsaWNhdGlvbnMgZnJvbSB0aGUgZm9sbG93aW5nIHllYXJzDQpwdWJzX21ldGFkZiA8LSBwdWJzX21ldGFkZltwdWJzX21ldGFkZiRwdWJfeWVhcjwyMDIzLF0NCg0KDQojIG5vdywgd2UgY3JlYXRlIGEgcGVyc29uLXBlcmlvZCBmaWxlOiBvbmUgcm93IHBlciBQaEQgcGVyIHllYXINCnB1YnNfbWV0YWRmICU+JSANCiAgZ3JvdXBfYnkoaWQsIHB1Yl95ZWFyKSAlPiUNCiAgZHBseXI6OnN1bW1hcml6ZShucHVicyA9IG4oKSwNCiAgICAgICAgICAgIGlkID0gZmlyc3QoaWQpKSAtPiBkZl9wcGYNCg0KDQpgYGANCg0KVGhhdCBsb29rcyBzb21ldGhpbmcgbGlrZSB0aGlzOiANCg0KYGBge3J9DQoNCmtuaXRyOjprYWJsZShkZl9wcGYsIGZvcm1hdD0ibWFya2Rvd24iKQ0KDQpgYGANCg0KDQoNCg0KIyBTdGFydGluZyB0byBwdWJsaXNoDQoNCldlIGNyZWF0ZSBhIHZhcmlhYmxlIGZvciB3aGV0aGVyIGEgcGVyc29uIGhhcyBzdGFydGVkIHB1Ymxpc2hpbmcgd2l0aGluIDMgeWVhcnMgYWZ0ZXIgdGhlaXIgUGhELCBieSBsb29raW5nIGF0IHRoZSB5ZWFyIG9mIGZpcnN0IHB1YmxpY2F0aW9uIGFuZCB0aGUgUGhEIHllYXIuICANCg0KYGBge3J9DQoNCiMgV2UgYWRkIFBoRCB5ZWFyIHRvIHRoZSBwZXJzb24tcGVyaW9kIGZpbGUgdG8gc2VsZWN0IG9ubHkgcHVibGljYXRpb25zIGZyb20gYWZ0ZXIgdGhlIFBoRCB5ZWFyDQp5ZWFyIDwtIHN1YnNldChwaGRfZGYsIHNlbGVjdD1jKGlkLCBwaGRfeWVhcikpDQpzdGFydGluZyA8LSBkZl9wcGYgJT4lIGxlZnRfam9pbih5ZWFyLCBieSA9ICJpZCIpIA0KDQpzdGFydGluZyA8LSBzdGFydGluZ1tzdGFydGluZyRwaGRfeWVhcjxzdGFydGluZyRwdWJfeWVhcixdICMgb25seSBwdWJzIGFmdGVyIFBoRA0KDQoNCiMgV2UgYWRkIHRoZSB5ZWFyIGluIHdoaWNoIGEgcGVyc29uIGZpcnN0IHB1Ymxpc2hlZCBhZnRlciBvYnRhaW5pbmcgdGhlaXIgUGhEDQpzdGFydGluZyAlPiUNCiAgZ3JvdXBfYnkoaWQpICU+JQ0KICBkcGx5cjo6c3VtbWFyaXplKHB1Yl9taW4gPSBtaW4ocHViX3llYXIpKSAlPiUNCiAgdW5ncm91cCgpIC0+IG1pbnB1Yg0KDQpzdGFydGluZyAlPiUNCiAgbGVmdF9qb2luKG1pbnB1YiwgYnkgPSAiaWQiKSAtPiBzdGFydGluZw0KDQpzdGFydGluZyA8LSBuYS5vbWl0KHN0YXJ0aW5nKSAjIHJlbW92ZSBtaXNzaW5ncyANCg0Kc3RhcnRpbmcgPC0gc3Vic2V0KHN0YXJ0aW5nLCBzZWxlY3Q9LWMocGhkX3llYXIpKSAjIHJlbW92ZSBwaGQgeWVhciB2YXJpYWJsZSBhZ2FpbiwgYmVjYXVzZSBpdCB3aWxsIGJlIGFkZGVkIHRvIHRoZSBkYXRhIHdoZW4gbWVyZ2luZyB3aXRoIHBoZF9kZg0KDQoNCiMgTm93IHdlIGNvbWJpbmUgY29tYmluZSB0aGUgUGhEIGRhdGEgd2l0aCB0aGUgcHVibGljYXRpb25zIGRhdGENCnN0YXJ0aW5nICU+JSBpbm5lcl9qb2luKHBoZF9kZiwgYnk9ImlkIikgLT4gc3RhcnRpbmcNCg0KDQojIENyZWF0aW5nIGEgdmFyaWFibGUgZm9yIHdoZXRoZXIgYSBwZXJzb24gaGFzIHB1Ymxpc2hlZCB3aXRoaW4gdGhyZWUgeWVhcnMgYWZ0ZXIgdGhlIFBoRA0KIyBpbiBvdGhlciB3b3JkcywgdGhlIGZpcnN0IHB1YmxpY2F0aW9uIHNob3VsZCBvY2N1ciBsZXNzIHRoYW4gZm91ciB5ZWFycyBhZnRlciB0aGUgeWVhciBpbiB3aGljaCB0aGVpciBkaXNzZXJ0YXRpb24gd2FzIHB1Ymxpc2hlZA0Kc3RhcnRpbmckc3RhcnRfcHViIDwtIGlmZWxzZShzdGFydGluZyRwdWJfbWluIDwgKHN0YXJ0aW5nJHBoZF95ZWFyICsgNCksIDEsIDApDQoNCmBgYA0KDQoNCk5leHQsIHdlIGFkZCB0aGUgInN0YXJ0X3B1YiIgdmFyaWFibGUgdG8gdGhlIFBoRCBkYXRhLiANCg0KYGBgIHtyfQ0KDQojIHNlbGVjdCBvbmx5IHRoZSBzdGFydGluZyB2YXJpYWJsZSBhbmQgSUQgdG8gbWF0Y2gNCnN0YXJ0aW5nICU+JQ0KICBzZWxlY3QoaWQsIHN0YXJ0X3B1YikgLT4gc3RhcnRpbmcNCg0KIyBrZWVwIGEgc2luZ2xlIHJvdyBwZXIgaW5kaXZpZHVhbA0Kc3RhcnRpbmcgPC0gc3RhcnRpbmdbIWR1cGxpY2F0ZWQoc3RhcnRpbmckaWQpLF0NCg0KDQojIG1lcmdlIG9udG8gdGhlIFBoRCBkYXRhc2V0DQpwaGRfZGYgPC0gbGVmdF9qb2luKHBoZF9kZiwgc3RhcnRpbmcsIGJ5ID0gImlkIikgICAgIA0KDQpwaGRfZGYkc3RhcnRfcHViIDwtIGlmZWxzZShpcy5uYShwaGRfZGYkc3RhcnRfcHViKSwgMCwgcGhkX2RmJHN0YXJ0X3B1YikgIyBhbGwgdGhvc2Ugd2hvIGRvIG5vdCBoYXZlIGEgcHJvZmlsZSBhdXRvbWF0aWNhbGx5IHNjb3JlIGEgMA0KDQoNCiMgYmVjYXVzZSB3ZSBsb29rIGF0IGluIHRoZSAzIHllYXJzIGZvbGxvd2luZyB0aGUgUGhEIGZvciBzdGFydF9wdWIsIHdlIGV4Y2x1ZGUgUGhEcyBmcm9tIGNvaG9ydHMgYWZ0ZXIgMjAxOQ0KIyBmb3IgY29ob3J0cyAyMDIwIGFuZCBsYXRlciwgd2UgaGF2ZSBmZXdlciB0aGFuIDMgeWVhcnMgb2YgcHVibGljYXRpb24gZGF0YQ0KcGhkX2RmIDwtIHBoZF9kZltwaGRfZGYkcGhkX3llYXI8MjAyMCxdDQoNCg0KIyBhZGRpbmcgYSBjb2hvcnQgdmFyaWFibGUgOiBwaGRfeWVhciBjZW50ZXJlZCBvbiB0aGUgbWluaW11bQ0KcGhkX2RmJHBoZF9jb2hvcnQgPC0gYXMubnVtZXJpYyhwaGRfZGYkcGhkX3llYXIpIC0gMTk5MA0KDQoNCmBgYA0KDQoNCg0KQW5kIHNhdmUgdGhlIGRhdGEgZm9yIHVzZSBpbiB0aGUgYW5hbHlzZXMgZm9yICJzdGFydGluZyB0byBwdWJsaXNoIg0KYGBge3IsIGVjaG89RkFMU0V9DQoNCmRmX3N0YXJ0aW5nIDwtIHN1YnNldChwaGRfZGYsIHNlbGVjdCA9IGMoaWQsIHN0YXJ0X3B1YiwgdW5pLCBwaGRfeWVhciwgcGhkX2NvaG9ydCwgZmllbGQsIGZpZWxkMiwgZXRobmljaXR5LCBldGhuaWNpdHkyLCBnZW5kZXIpKQ0KDQprbml0cjo6a2FibGUoZGZfc3RhcnRpbmcsIGZvcm1hdD0ibWFya2Rvd24iKQ0KDQoNCmBgYA0KDQoNCg0KIyBTdG9wcGluZyB0byBwdWJsaXNoIA0KDQpGb3IgdGhlIGFuYWx5c2VzIHVuZGVyICdzdG9wcGluZyB0byBwdWJsaXNoJywgd2UgY29udGludWUgd2l0aCB0aGUgc2FtcGxlIG9mIFBoRHMgd2hvIGhhdmUgJ3N0YXJ0ZWQgcHVibGlzaGluZycgYWNjb3JkaW5nIHRvIGFuYWx5c2lzICMxLiANCg0KDQpgYGB7cn0NCg0KZGZfc3RvcHBpbmcgPC0gcGhkX2RmW3BoZF9kZiRzdGFydF9wdWI9PTEsIF0NCg0KZGZfc3RvcHBpbmcgJT4lDQogIHNlbGVjdCgtYyhzdGFydF9wdWIpKSAtPiBkZl9zdG9wcGluZw0KDQpgYGANCg0KDQpXZSBhZ2FpbiBuZWVkIHRoZSBwZXJzb24tcGVyaW9kIGZpbGUgaW4gb3JkZXIgdG8gYW5hbHlzZSBwdWJsaWNhdGlvbnMgZm9yIFBoRHMgb3ZlciBtdWx0aXBsZSB5ZWFycywgYnV0IHRoaXMgdGltZSwgd2Ugd2FudCB0byBpbmNsdWRlIHJvd3Mgd2l0aCAwIHB1YmxpY2F0aW9ucy4gVGhpcyBtZWFucyB3ZSBoYXZlIHRvIHN0YXJ0IHdpdGggYW4gZW1wdHkgcGVyc29uLXBlcmlvZCBmaWxlLiANCg0KYGBge3J9DQoNCnB1Yl95ZWFyIDwtIGMoMTk4ODoyMDIyKSAjIHRoaXMgaXMgdGhlIHRpbWUtd2luZG93IGluIHdoaWNoIHdlIHNjcmFwZWQgZGF0YS4gDQoNCm5wdWJzX3plcm8gPC0gcmVwKDAsIGxlbmd0aChwdWJfeWVhcikpICMgZGVmYXVsdCB0byAwIHB1YmxpY2F0aW9ucw0KDQppZCA8LSB1bmlxdWUoZGZfcHBmJGlkKSAjaWRlbnRpZnkgdGhlIHVuaXF1ZSBQSEQgaWRzDQoNCm5pZCA8LSBsZW5ndGgoaWQpDQoNCiNiYXNlZCBvbiB0aGlzIGluZm8gbWFrZSB0aGUgZW1wdHkgZGF0YXNldA0KcHViX3llYXIgPC0gcmVwKHB1Yl95ZWFyLCBuaWQpDQpucHVic196ZXJvIDwtIHJlcChucHVic196ZXJvLCBuaWQpDQppZCA8LSByZXAoaWQsIGVhY2g9bGVuZ3RoKGMoMTk4ODoyMDIyKSkpICANCmVtcHR5X3BwZiA8LSBkYXRhLmZyYW1lKGlkLCBwdWJfeWVhciwgbnB1YnNfemVybykNCg0KYGBgIA0KDQoNCkFkZGluZyBpbmZvIHRvIHRoZSBlbXB0eSBwZXJzb24tcGVyaW9kIGZpbGUgDQoNCmBgYHtyfQ0KDQojIGFkZGluZyB0aW1lLWludmFyaWFudCB2YXJpYWJsZXMgdG8gdGhlIHBlcnNvbi1wZXJpb2QgZmlsZQ0KZGZfcHBmICU+JSBpbm5lcl9qb2luKGRmX3N0b3BwaW5nLCBieT0iaWQiKSAtPiBkZl9wcGYNCg0KDQojIGZpbGxpbmcgdXAgdGhlIGVtcHR5IHBlcnNvbi1wZXJpb2QgZmlsZSB3aXRoIHRoZSBhY3R1YWwgcHVibGljYXRpb25zIGRhdGENCmVtcHR5X3BwZiAlPiUgDQogIGZ1bGxfam9pbihkZl9wcGYsIGJ5PWMoImlkIiwgInB1Yl95ZWFyIikpICU+JQ0KICBhcnJhbmdlKGlkLCBwdWJfeWVhcikgJT4lDQogIHNlbGVjdChpZCwgcHViX3llYXIsIG5wdWJzLCBnZW5kZXIsIGV0aG5pY2l0eSwgZXRobmljaXR5MiwgZmllbGQsIGZpZWxkMiwgdW5pLCBwaGRfeWVhciwgcGhkX2NvaG9ydCkgLT4gZGZfcHBmDQoNCg0KIyBhbGwgdGltZS1jb25zdGFudCB2YXJzIGFyZSBlbXB0eSBpbiByb3dzIHdpdGggMCBwdWJzLiBMZXQncyBmaXggdGhpcy4gDQpkZl9wcGYgJT4lDQogIGdyb3VwX2J5KGlkKSAlPiUNCiAgZmlsbChnZW5kZXIsIC5kaXJlY3Rpb24gPSAiZG93bnVwIikgJT4lDQogIGZpbGwoZXRobmljaXR5LCAuZGlyZWN0aW9uID0gImRvd251cCIpICU+JQ0KICBmaWxsKGV0aG5pY2l0eTIsIC5kaXJlY3Rpb24gPSAiZG93bnVwIikgJT4lDQogIGZpbGwoZmllbGQsIC5kaXJlY3Rpb24gPSAiZG93bnVwIikgJT4lDQogIGZpbGwoZmllbGQyLCAuZGlyZWN0aW9uID0gImRvd251cCIpICU+JQ0KICBmaWxsKHVuaSwgLmRpcmVjdGlvbiA9ICJkb3dudXAiKSAlPiUNCiAgZmlsbChwaGRfY29ob3J0LCAuZGlyZWN0aW9uID0gImRvd251cCIpICU+JQ0KICBmaWxsKHBoZF95ZWFyLCAuZGlyZWN0aW9uID0gImRvd251cCIpICU+JQ0KICB1bmdyb3VwICgpIC0+IGRmX3BwZg0KDQojIHJlcGxhY2luZyBOQSB2YWx1ZXMgaW4gbnB1YnMgd2l0aCAwDQpkZl9wcGYgJT4lIG11dGF0ZShucHVicyA9IHJlcGxhY2VfbmEobnB1YnMsIDApKSAtPiBkZl9wcGYNCg0KDQojIG5leHQsIHdlIGluY2x1ZGUgYSB2YXJpYWJsZSB3aXRoIHRoZSBhdmVyYWdlIG51bWJlciBvZiBwdWJsaWNhdGlvbnMgaW4gdGhlIHByZXZpb3VzIHllYXJzDQojIHJvbGxpbmcgYXZlcmFnZSBoZXJlIGNvbXB1dGVzIHRoZSBhdmVyYWdlIG51bWJlciBvZiBwdWJsaWNhdGlvbnMgaW4gdGhlIHllYXIgdCwgdC0xIGFuZCB0LTINCiMgdGhlbiB3ZSB0YWtlIHRoZSB2YWx1ZSBvZiB0aGUgcm9sbGluZyBhdmVyYWdlIGZvciB0aGUgcHJlY2VkaW5nIHllYXIgaW4gbnB1YnNfcHJldiAod2hlbiBpdCBpcyBwcmVzZW50KQ0KIyBmb3IgdGhlIGZpcnN0IHllYXIgKDE5ODgpLCB3ZSB0YWtlIHRoZSB2YWx1ZSBvZiB0aGUgeWVhciBpdHNlbGYNCmRmX3BwZiAlPiUNCiAgZ3JvdXBfYnkoaWQpICU+JQ0KICBtdXRhdGUobnB1YnNfcm9sbGF2ZyA9IHJvbGxhcHBseShucHVicywgMywgbWVhbiwgYWxpZ24gPSAicmlnaHQiLCBmaWxsID0gMCksIA0KICAgICAgICAgbnB1YnNfcHJldiA9IGxhZyhucHVic19yb2xsYXZnLCBuPTEsIG9yZGVyX2J5ID0gcHViX3llYXIpLA0KICAgICAgICAgbnB1YnNfcHJldiA9IGlmZWxzZShpcy5uYShucHVic19wcmV2KSwgbGVhZChucHVic19wcmV2LCBuPTEsIG9yZGVyX2J5ID0gcHViX3llYXIpLCBucHVic19wcmV2KSkgJT4lDQogIHVuZ3JvdXAoKSAtPiBkZl9wcGYNCg0KDQojIHdlIGxvZy10cmFuc2Zvcm0gdGhlIG51bWJlciBvZiBwdWJsaWNhdGlvbnMgdG8gYWNjb3VudCBmb3Igb3V0bGllcnMgDQpkZl9wcGYkbnB1YnNfcHJldl9zIDwtIGxvZzEwKGRmX3BwZiRucHVic19wcmV2ICsgMSkgIyArMSB0byBhdm9pZCBuZWdhdGl2ZSBpbmZpbml0eQ0KDQoNCmBgYA0KDQoNCg0KQ3JlYXRpbmcgdGhlIHZhcmlhYmxlICdzdG9wcGluZyB0byBwdWJsaXNoJy4gDQoNCmBgYHtyfQ0KDQojIGNyZWF0aW5nIGEgdGltZSB2YXJpYWJsZSAoPSBob3cgbWFueSB5ZWFycyBzaW5jZSBvYnRhaW5pbmcgZG9jdG9yYXRlKTsgcmVtb3ZpbmcgeWVhcnMgYmVmb3JlIGRvY3RvcmF0ZSANCmRmX3BwZiAlPiUNCiAgbXV0YXRlKHRpbWUgPSBhcy5udW1lcmljKHB1Yl95ZWFyIC0gcGhkX3llYXIpKSAtPiBkZl9wcGYNCg0KIyBXZSBsb29rIGF0IGNvaG9ydHMgMTk5MC0yMDE4DQojIGJlY2F1c2Ugd2Ugc2VsZWN0ZWQgcHVibGlzaGluZyBzY2hvbGFycyBmcm9tIHRoZSBhbmFseXNlcyBmb3IgInN0YXJ0aW5nIHRvIHB1Ymxpc2giLCBQaERzIGZyb20gY29ob3J0IDIwMTkgY2Fubm90IGJlY29tZSBpbmFjdGl2ZSBieSBkZXNpZ24NCmRmX3BwZjMgPC0gZGZfcHBmW2RmX3BwZiRwaGRfeWVhcjwyMDE5LCBdDQoNCg0KIyB3ZSBjb21wdXRlIHJvbGxpbmcgbWF4aW11bSBhY3Jvc3MgMyB0aW1lIHBlcmlvZHMNCiMgYWxpZ24gPSBsZWZ0IGVuc3VyZXMgdGhhdCBpdCBsb29rcyBmb3J3YXJkIGluIHRpbWU6IG5vIHB1YmxpY2F0aW9uIGF0IHQsIGJ1dCAxKyBwdWIgYXQgdCsxIG9yIHQrMiBlbnN1cmVzIG5vbi16ZXJvIHB1YnMgYXQgdC4gDQpkZl9wcGYzICU+JQ0KICBncm91cF9ieShpZCkgJT4lDQogIG11dGF0ZShucHViczMgPSByb2xsYXBwbHkobnB1YnMsIDMsIHN1bSwgYWxpZ24gPSAibGVmdCIsIGZpbGwgPSAiZXh0ZW5kIikpICU+JQ0KICB1bmdyb3VwKCkgLT4gZGZfcHBmMw0KDQojIGlmIGEgcGVyc29uIGRpZCBub3QgaGF2ZSBhbnkgcHVibGljYXRpb25zIGluIHRoZSB0aHJlZSB5ZWFyIHBlcmlvZCAoaS5lLiB0aGUgbWF4IGlzIDApLCB3ZSBhc3N1bWUgY2FyZWVyIGV4aXQNCmRmX3BwZjMgJT4lDQogIG11dGF0ZShpbmFjdGl2ZSA9IGlmZWxzZSgobnB1YnMzPjApLCAwLCAxKSkgLT4gZGZfcHBmMw0KDQoNCiMgd2Ugb25seSBsb29rIGF0IHB1YmxpY2F0aW9ucyBhZnRlciB0aGUgUGhEDQpkZl9wcGYzIDwtIGRmX3BwZjNbKGRmX3BwZjMkcHViX3llYXIgPiBkZl9wcGYzJHBoZF95ZWFyKSwgXQ0KDQoNCg0KIyBjdXJyZW50bHksIGEgcGVyc29uIGNhbiBiZWNvbWUgaW5hY3RpdmUsIGFuZCB0aGVuIGFjdGl2ZSBhZ2Fpbi4gV2Ugb25seSBsb29rIGF0IHRoZSBmaXJzdCB0cmFuc2l0aW9uIHRvIGluYWN0aXZpdHkuIA0KZGZfcHBmMyAlPiUgDQoJZ3JvdXBfYnkoaWQpICU+JSANCiAgZHBseXI6OmFycmFuZ2UodGltZSwgLmJ5X2dyb3VwPVRSVUUpICU+JQ0KCW11dGF0ZShpbmFjdGl2ZV9jcyA9IGN1bXN1bShpbmFjdGl2ZSkpICU+JQ0KICBmaWx0ZXIoaW5hY3RpdmVfY3MgPCAyKSAtPiBkZl9wcGYzDQoNCg0KYGBgDQoNCg0KDQpBbHRlcm5hdGl2ZSB0aW1lIHdpbmRvdzogNSB5ZWFycw0KDQpgYGB7cn0NCg0KIyBBbHRlcm5hdGl2ZSBwdWJsaWNhdGlvbiB3aW5kb3c6IDUgeWVhcg0KZGZfcHBmNSA8LSBkZl9wcGZbZGZfcHBmJHBoZF95ZWFyPDIwMTcsIF0NCmRmX3BwZjUgPC0gZGZfcHBmNSAlPiUgbXV0YXRlKG5wdWJzID0gcmVwbGFjZV9uYShucHVicywgMCkpDQoNCiMgUm9sbGluZyBtYXhpbXVtIGFjcm9zcyA1IHllYXJzDQpkZl9wcGY1ICU+JQ0KICBncm91cF9ieShpZCkgJT4lDQogIG11dGF0ZShucHViczUgPSByb2xsYXBwbHkobnB1YnMsIDUsIHN1bSwgYWxpZ24gPSAibGVmdCIsIGZpbGwgPSAiZXh0ZW5kIikpICU+JQ0KICB1bmdyb3VwKCkgLT4gZGZfcHBmNQ0KDQpkZl9wcGY1ICU+JQ0KICBtdXRhdGUoaW5hY3RpdmUgPSBpZmVsc2UoKG5wdWJzNT4wKSwgMCwgMSkpIC0+IGRmX3BwZjUNCg0KDQpkZl9wcGY1IDwtIGRmX3BwZjVbKGRmX3BwZjUkcHViX3llYXIgPiBkZl9wcGY1JHBoZF95ZWFyKSwgXQ0KDQoNCiMgTWF4LiAxIHRpbWUgaW5hY3RpdmUNCmRmX3BwZjUgJT4lIA0KCWdyb3VwX2J5KGlkKSAlPiUgDQogIGFycmFuZ2UodGltZSwgLmJ5X2dyb3VwPVRSVUUpICU+JQ0KCW11dGF0ZShpbmFjdGl2ZV9jcyA9IGN1bXN1bShpbmFjdGl2ZSkpICU+JQ0KICBmaWx0ZXIoaW5hY3RpdmVfY3MgPCAyKSAtPiBkZl9wcGY1DQoNCg0KZGZfcHBmNSA8LSBuYS5vbWl0KGRmX3BwZjUpDQoNCmBgYA0KDQoNCg0KDQo=</div>
+<style>
+  .center {
+    text-align: center;
+    color: red;
+  }
+</style>
+  
+  <hr>
+  <br>
+  <p class="center">Copyright &copy; 2023 </p>
+    
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("datapreparation.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

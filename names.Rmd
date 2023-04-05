@@ -1,0 +1,721 @@
+---
+title: "Academic publishing careers in NL: gathering names"
+date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
+output: 
+  html_document:
+    css: tweaks.css
+    toc:  true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: yes
+    
+---
+
+```{r, globalsettings, echo=FALSE, warning=FALSE}
+
+library(knitr)
+library(formatR)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=FALSE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+
+klippy::klippy(position = c('top', 'right'))
+
+```
+
+
+
+
+----
+
+
+This lab journal shows the extraction and cleaning of first and last names of doctoral recipients on a mock data set. 
+
+
+----
+
+Starting with an empty environment.
+
+```{r}
+
+rm(list = ls())
+
+```
+
+
+
+
+# Custom functions
+
+- `pacage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+
+
+```{r, results='hide'}
+fpackage.check <- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+```
+
+---  
+
+# Packages
+
+
+- `stringr`: to execute various string manipulations
+- `stringi`: to remove diacritics
+
+```{r, results='hide'}
+packages = c("tidyverse", "stringr", "stringi", "formatR")
+
+fpackage.check(packages)
+
+```
+
+--- 
+
+
+# Input
+
+
+```{r datasets, cache=FALSE}
+
+load(file = "./data/phd_metadf.rda")
+
+```
+
+
+This lab journal is used to demonstrate how we extract first and last names from PhDs. 
+
+For this, we use an example dataframe containing 8 observations (4 ethnic majority names, 2 ethnic minority names, 2 other names - all split equally between male- and female-typed first names). This mock dataframe mirrors the set-up of our web-scraped data, which consists of name information which are web scraped from different sources. 
+
+* 1 auteur: the 'author' column on NARCIS dissertation pages
+* 2 narcisname: full name that is mentioned at the top of personal NARCIS pages
+* 3 pdfname and pdfnamep1: full names mentioned in the running text of dissertation PDF, and on cover pages of the dissertation provided by a subset of universities, respectively.
+
+
+Below you can see the example data, 
+
+
+```{r}
+
+phd_metadf
+
+```
+
+
+
+---  
+
+
+
+# 1: Gathering first names from 'auteur'(Author) on NARCIS dissertation pages
+
+
+Some dissertations appear to have multiple authors. We only want the first author, so remove everything after ";"
+```{r multiple-authors}
+
+phd_metadf$auteur <- gsub(";.*", "", phd_metadf$auteur)
+
+```
+
+
+## First names in brackets
+```{r bracketnames}
+phd_metadf$firstname <- str_extract(phd_metadf$auteur, "(?<=\\().*(?=\\))")
+
+phd_metadf$firstname <- ifelse(phd_metadf$firstname == "", NA, phd_metadf$firstname)
+
+```
+
+
+## First names after a comma
+
+```{r commanames}
+
+phd_metadf$com <- str_detect(phd_metadf$auteur, ",") # detect comma
+
+# Keep everything after a comma if there is one
+phd_metadf <- phd_metadf %>%
+  mutate(firstname = ifelse((is.na(firstname) & com==TRUE), str_remove(auteur, ".*,"), firstname)) %>% select(-com)
+
+```
+
+```{r trimws}
+phd_metadf$firstname <- trimws(phd_metadf$firstname, which = c("both"), whitespace = "[ \t\r\n]")
+```
+
+
+## Cleaning the first names
+
+Many last names include so-called 'nobiliary particles'. These are additions to the last name (e.g. "van de" in Dutch, "de la" in French or "zu" in German). In order to extract the first names we detect and remove these. Nobiliary particles have crept into first name when gathering everything after a comma, for example when names are in the format of "Vries, Jan de". The nobiliary particles are also important to separate from the rest of the last name to create matchable last names later. 
+
+
+
+```{r cleaning-vande}
+
+# Removing all nobiliary particles that consist of multiple words
+vande0 <- c("(V|v)an (D|d)er", "(V|v)an (D|d)en", "(V|v)an (D|d)e", "(V|v)ande(n)?", "(V|v)an '(T|t)", "(V|v)an'(T|t)", "(V|v)an (T|t)", "(V|v)an (H|h)et", "(V|v)on (D|d)er", "(O|o)p den", "(O|o)p 't", "(O|o)f ten", "(A|a)an de(n)?", "(D|d)e (L|l)a", "(I|i)n (H|h)et", "(I|i)n '(T|t)", "(I|i)n'(T|t)","(I|i)n (T|t)", "(I|i)n (D|d)er", "(B|b)ij (D|d)e") 
+
+
+# Some of the nobiliary particles can actually be part of the first name, e.g. "Al" in the name "Alice". These require some more care to remove: only remove these when surrounded by whitespaces or when they take up the entire name.  
+
+# Whitespaces around van/de
+vande1 <- c("\\s(L|l)a\\s", "\\s(O|o)p\\s" ,"\\s(V|v)an\\s", "\\s(V|v)on\\s", "\\s(D|d)en\\s", "\\s(D|d)er\\s", "\\s(D|d)el\\s", "\\s(D|d)(e|a|u|i)\\s", "\\s(D|d)os?\\s", "\\s(T|t)er\\s", "\\s(T|t)en\\s", "\\s(T|t)e\\s", "\\s'(T|t)\\s", "\\s(L|l)e\\s", "\\s(E|A)l-", "\\s[(A|a)(E|e)](L|l)'?\\s", "\\s(D|d)'", "\\szu\\s", "\\s(Z|z)ur\\s", "\\s(Y|y)\\s", "\\s(E|e)\\s") 
+
+
+# Entire string consists of van/de
+vande2 <- c("^(L|l)a$", "^(O|o)p$" , "^(V|v)an$", "^(V|v)on$", "^(D|d)en$", "^(D|d)er$", "^(D|d)el$", "^(D|d)(e|a|u|i)$", "^(D|d)os?$", "^Vande[$//s]", "^(T|t)er$",  "^(T|t)en$", "^(T|t)e$", "^'(T|t)$", "^(L|l)e$", "^[(A|a)(E|e)](L|l)'?$", "^(D|d)'$", "^zu$", "^(Z|z)ur$")
+
+
+# String starts with van/de followed by a whitespace
+vande3 <- c("^(L|l)a\\s", "^(O|o)p\\s" ,"^(V|v)an\\s", "^(V|v)on\\s", "^(D|d)en\\s", "^(D|d)er\\s", "^(D|d)el\\s", "^(D|d)(e|a|u|i)\\s", "^(D|d)os?\\s", "^(T|t)er\\s" , "^(T|t)en\\s", "^(T|t)e\\s", "^'(T|t)\\s", "^(L|l)e\\s", "^El-", "^[(A|a)(E|e)](L|l)'?\\s", "^(D|d)'", "^zu\\s", "^(Z|z)ur\\s", "^e\\s")
+
+
+# String ends with van/de
+vande4 <- c("\\s(L|l)a$", "\\s(O|o)p$" ,"\\s(V|v)an$", "\\s(V|v)on$", "\\s(D|d)en$", "\\s(D|d)er$", "\\s(D|d)el$", "\\s(D|d)(e|a|u|i)$", "\\s(D|d)os?$", "\\s(T|t)er$", "\\s(T|t)en$", "\\s(T|t)e$", "\\s'(T|t)$", "\\s(L|l)e$", "\\s[(A|a)(E|e)](L|l)'?$", "\\s(D|d)'$", "\\szu$", "\\s(Z|z)ur$")
+
+
+
+# remove the nobiliary particles in different forms
+phd_metadf$firstname <- str_remove(phd_metadf$firstname, paste0(vande0, collapse="|"))
+phd_metadf$firstname <- str_replace_all(phd_metadf$firstname, paste(vande1, collapse = "|"), "")
+phd_metadf$firstname <- str_remove_all(phd_metadf$firstname, paste(vande2, collapse = "|"))
+phd_metadf$firstname <- str_replace_all(phd_metadf$firstname, paste(vande3, collapse = "|"), "")
+phd_metadf$firstname <- str_remove(phd_metadf$firstname, paste(vande4, collapse = "|"))
+
+
+```
+
+
+
+### Removing initials after the comma in auteur  
+
+Since we extracted everything after the comma, some of the first names contain initials, e.g.: "Smith, A.B.C.". We remove these. 
+
+
+```{r extract-initials-after-comma}
+
+phd_metadf$firstname <- trimws(phd_metadf$firstname, which = "both")
+
+
+# There are multiple patterns, and we want to extract all possible forms of initials into our object
+
+initialpattern <- paste(c("^\\s?([:upper:]\\.)+[:upper:]\\s?$",   # A.A.A (last initial does not contain a period at the end)
+                          "([:upper:]\\.?\\-\\.?)+",                  # A- or A-. or A.-
+                          "([:upper:]\\.+)+", "([:lower:]\\.){2,}",   # A.  or a.
+                          "(T|t|C|c|P|p)h\\.\\s?",                    # Th. Ph. Ch. 
+                          "^\\s?([:alpha:]\\s)+",                     # A or a surrounded by whitespace
+                          "^\\s?[:alpha:]\\.?\\s?$",                  # entire string consists of a single letter
+                          "^\\s?[:upper:]{2,4}\\s?$"),                # entire string consists of 2-4 capital letters
+                        collapse = "|")
+
+
+phd_metadf$initials2 <- as.character((str_extract_all(phd_metadf$firstname, initialpattern)))
+
+
+# If there were multiple different patterns present in the initials, they were combined in a c() object. Remove the unnecessary text here. 
+phd_metadf$initials2 <- gsub("c\\(\"", "", phd_metadf$initials2)
+phd_metadf$initials2 <- gsub("\", \"", "", phd_metadf$initials2)
+phd_metadf$initials2 <- gsub("\"\\)", "", phd_metadf$initials2)
+
+
+```
+
+
+In order to extract first names, we remove the initials gathered in the chunk above.
+
+
+```{r extract-first-names}
+
+phd_metadf$firstname <- str_remove(phd_metadf$firstname, phd_metadf$initials2)
+
+phd_metadf$firstname <- trimws(phd_metadf$firstname, which = "both")
+
+phd_metadf <- subset(phd_metadf, select=-initials2)
+
+```
+
+Final cleaning steps
+
+```{r}
+
+phd_metadf$firstname <- gsub("/.*", "", phd_metadf$firstname) # Some names in the form "Floor/Floris". Remove everything after "/"
+
+# make the names lowercase
+phd_metadf$firstname <- tolower(phd_metadf$firstname)
+
+# remove diacritics
+phd_metadf$firstname <- stri_trans_general(phd_metadf$firstname, id = "latin-ascii")
+
+# remove non-letter characters, taking the first mentioned name
+phd_metadf$firstname <- str_extract(phd_metadf$firstname, "[a-z]+\\-*[a-z]*")
+
+# removing white spaces at the beginning and at the end of the name first name string
+phd_metadf$firstname <- trimws(phd_metadf$firstname, which = "both")
+
+# removing nobiliary particles which slipped through
+phd_metadf$firstname <- str_remove_all(phd_metadf$firstname, paste(vande2, collapse = "|"))
+
+phd_metadf <- phd_metadf %>%
+  mutate(firstname = ifelse((firstname == "^\\s$" | firstname == "") ,NA, firstname)) # empty string to NA
+
+phd_metadf$firstname <- ifelse(nchar(phd_metadf$firstname)==1, NA, phd_metadf$firstname) # single-character string (i.e. initial) to NA
+
+
+```
+
+
+# 2: Last names from 'auteur' on NARCIS dissertation page
+
+
+First, we extract last names in the format "lastname comma firstname"
+
+```{r last-names1}
+
+# remove everything after a comma
+phd_metadf$lastname <- gsub(",.*$", "", phd_metadf$auteur) 
+
+# remove diacritics
+phd_metadf$lastname <- stri_trans_general(phd_metadf$lastname, id = "latin-ascii")
+
+# we assume that V/D, v/d and v.d. indicate the popular Dutch nobiliary particle "van de"
+phd_metadf$lastname <- str_replace(phd_metadf$lastname, "(v\\.d\\.)|((V|v)/(D|d))", "van de")
+
+
+# remove initials
+phd_metadf$lastname <- str_remove_all(phd_metadf$lastname, initialpattern) # object initialpattern defined in section 1
+phd_metadf$lastname <- trimws(phd_metadf$lastname, which = "both") # removing whitespace
+
+
+# remove titles
+phd_metadf$lastname <- trimws(phd_metadf$lastname, which = "both")
+phd_metadf$lastname <- str_remove_all(phd_metadf$lastname, "(^(M|m)r\\.?\\s)|(^(D|d)rs?\\.?\\s)|(^St\\.\\s)|(^(M|M)r?s\\.?\\s)|(^ext\\.\\s)|(^(M|m)d\\.?\\s)")
+
+
+# remove first names between brackets from the last name
+phd_metadf$lastname <- str_remove_all(phd_metadf$lastname, "\\s\\(.*\\)$")
+
+
+# Next, we extract the nobiliary particles and save these in a separate object. These can be used when matching names to other databases later. 
+
+phd_metadf$lastname <- trimws(phd_metadf$lastname, which = "both") # first, we trim whitespaces
+
+# extract nobiliary particles at the beginning of the last name string (vande3)
+phd_metadf$np <- str_extract(phd_metadf$lastname, paste(vande3, collapse = "|")) # extract into new variable np
+phd_metadf$lastname <- str_remove(phd_metadf$lastname, paste(vande3, collapse = "|")) # remove from lastname variable
+
+# extract nobiliary particles at the end of the auteur string (vande4)
+# first detect, or else it overwrites the np with NA if not applicable
+phd_metadf$end <- as.numeric(str_detect(phd_metadf$auteur, paste(vande4, collapse = "|")))
+phd_metadf$np <- ifelse(phd_metadf$end==1, str_extract(phd_metadf$auteur, paste(vande4, collapse = "|")), phd_metadf$np) #only extract if np is detected at the end
+phd_metadf <- subset(phd_metadf, select = -end)
+
+# also extract nobiliary particles at the end of the lastname string (vande4)
+phd_metadf$end <- as.numeric(str_detect(phd_metadf$lastname, paste(vande4, collapse = "|")))
+phd_metadf$np <- ifelse(phd_metadf$end==1, str_extract(phd_metadf$lastname, paste(vande4, collapse = "|")), phd_metadf$np)
+phd_metadf$lastname <- str_remove(phd_metadf$lastname, paste(vande4, collapse = "|"))
+phd_metadf <- subset(phd_metadf, select = -end) #remove intermediate object
+
+# trim white spaces in the noviliary particle
+phd_metadf$np <- trimws(phd_metadf$np, which = "both")
+
+# removing multiple spaces
+phd_metadf$lastname <- sub("\\s{2,}", "\\s", phd_metadf$lastname)
+phd_metadf$lastname <- trimws(phd_metadf$lastname, which = "both")
+
+# removing "-" from nobiliary particle El- or Al- and "'" for 't 
+phd_metadf$np <- str_remove(phd_metadf$np, "-")
+phd_metadf$np <- str_remove(phd_metadf$np, "\'")
+
+# remove Jr.
+phd_metadf$lastname <- str_remove(phd_metadf$lastname, "\\sJr\\.$")
+phd_metadf$lastname <- str_remove(phd_metadf$lastname, "\\sJunior$")
+
+# remove interpunction
+phd_metadf$lastname <- str_remove_all(phd_metadf$lastname, "(\\?)|(\\`)|(\\^)|(^\\')|(\\´)|(\\·)")
+
+# names and nobiliary particles to lowercase
+phd_metadf$lastname <- tolower(phd_metadf$lastname)
+phd_metadf$np <- tolower(phd_metadf$np)
+
+# we only want the first last name if there are multiple
+phd_metadf$lastname <- str_extract(phd_metadf$lastname, "[:lower:]+")
+
+
+# combining nobiliary particle and last name into a separate objecr
+phd_metadf %>%
+  mutate(lastname_full = ifelse(!is.na(np), paste(np, lastname), lastname)) -> phd_metadf
+
+
+```
+
+
+
+# 3: Extracting first names from personal NARCIS profiles
+
+In the following part of the script, first names from personal NARCIS profiles will be cleaned. The method here is roughly the same as the method used to clean the first names from the 'Author' section of dissertation NARCIS pages. 
+
+The cleaned first names are stored in an intermediate object, "int", to ensure that the original scraped name is preserved in "narcisname". 
+
+
+## Extract first names in brackets
+
+E.g. "A.B.C. (Andrea) Smith"
+
+```{r narcisname-brackets}
+
+phd_metadf$int <- str_extract(phd_metadf$narcisname, "(?<=\\().*(?=\\))")
+
+phd_metadf$int <- ifelse(phd_metadf$int == "", NA, phd_metadf$int)
+
+```
+
+
+## Extract everything after a comma
+
+
+E.g. "Smith, Andrea"
+
+```{r narcisname-comma}
+
+phd_metadf$comma <- str_detect(phd_metadf$narcisname, ",") # only when narcisname contains a comma
+
+phd_metadf <- phd_metadf %>% 
+  mutate(int = ifelse((is.na(int) & comma==TRUE), str_remove(narcisname, ".*,"), int))
+
+phd_metadf$int <- trimws(phd_metadf$int, which = c("both"))
+
+phd_metadf <- subset(phd_metadf, select = -comma)
+
+```
+
+
+## Cleaning Narcis names
+
+Similar approach to extraction of first names from 'Auteur', meaning we remove non-name strings from the name object (nobiliary particles, initials, titles, punctuation) 
+
+```{r narcis-cleaning}
+
+# nobiliary particles at different places in the string
+phd_metadf$int <- str_remove(phd_metadf$int, paste0(vande0, collapse="|"))
+phd_metadf$int <- str_remove(phd_metadf$int, paste(vande1, collapse = "|"))
+phd_metadf$int <- str_remove(phd_metadf$int, paste(vande2, collapse = "|"))
+phd_metadf$int <- str_remove(phd_metadf$int, paste(vande3, collapse = "|"))
+phd_metadf$int <- str_remove(phd_metadf$int, paste(vande4, collapse = "|"))
+
+# removing initials 
+phd_metadf$int <- str_remove_all(phd_metadf$int, initialpattern) # object initialpattern defined in section 1
+
+# next, we remove a number of different titles that can be found in the name object
+phd_metadf$int <- str_remove_all(phd_metadf$int, "(MSc)|(MA)|(MPhil)|(PhD)|(Mr\\.)|(^Mr)|((D|d)rs?\\.)|(Md\\.)|(Mr?s\\.)")
+
+
+phd_metadf$int <- gsub("/.*", "", phd_metadf$int) # some names in the form "Floor/Floris". Remove everything after "/"
+
+
+# finally, we do some general cleaning of the names
+phd_metadf$int <- trimws(phd_metadf$int, which = "both")
+
+phd_metadf$int <- tolower(phd_metadf$int) # set names to lowercase
+
+# remove diacritics from the name
+phd_metadf$int <- stri_trans_general(phd_metadf$int, id = "latin-ascii")
+
+# keep only the first-mentioned name
+phd_metadf$int <- str_extract(phd_metadf$int, "[a-z]+\\-*[a-z]*")
+
+
+phd_metadf <- phd_metadf %>%
+  mutate(int = ifelse((int == "^//s$" | int == "") ,NA, int)) # empty to NA
+
+phd_metadf$int <- trimws(phd_metadf$int, which = "both")
+phd_metadf$int <- ifelse(nchar(phd_metadf$int)==1, NA, phd_metadf$int) # remove erroneous one-character names
+
+
+
+```
+
+
+
+# 4: Combining first name information from dissertation & personal NARCIS pages
+
+We give priority to names from the dissertation pages, because these appear to be the formal first names, while personal NARCIS page names correspond to the given first name. 
+Given that we match individuals based on the name which is formally registered, it seems appropriate to take the 'auteur' name as the basis and replace with 'narcisname' when the name based on 'auteur' is unknown. 
+
+
+```{r harmonizing-NARCIS}
+
+phd_metadf <- phd_metadf %>%
+  mutate(firstname = ifelse(is.na(firstname), int, firstname))
+
+# set empty to NA
+phd_metadf <- phd_metadf %>%
+  mutate(firstname = ifelse(firstname=="", NA, firstname))
+
+phd_metadf$narcis_fn <- phd_metadf$int # longer but more informative name
+
+phd_metadf <- subset(phd_metadf, select = -int)
+
+
+```
+
+
+
+# 5: First names from dissertation PDFs
+
+There are two name objects gathered from the pdfs: pdfname (consisting of names that were extracted from running text in the dissertation, often from dissertation front pages) and pdfnamep1 (names on standardized dissertation frontpages that are provided by a subset of universities, which contain a specific header for the PhD name)
+
+
+
+## Cleaning the pdfname object
+
+In comparison to the names from the 2 NARCIS page sources, the name object from the dissertation PDF can sometimes be a bit messy. Especially the 'pdfname' object, due to the fact that these names are extracted from natural text, meaning sometimes non-name information enters the name object. Furthermore, some of the older PDFs are scanned versions of a printed dissertation, meaning there may be errors when these images are converted to text. 
+
+In the provided dataframe, we only included more straightforward name examples. So, the code below is not directly applicable to our example case, but still shows how we cleaned some of the messier names.
+
+```{r cleaning-pdfname}
+
+# remove diacritics
+phd_metadf$pdfname <- stri_trans_general(phd_metadf$pdfname, 'latin-ascii')
+
+# remove punctuation
+phd_metadf$pdfname <- str_remove_all(phd_metadf$pdfname, "[~!@#\\$%\\^\\&\\*\\(\\)\\{\\}\\_\\+:<>\\?\\/;\\'\\[\\]\\=\\,\\•\\.]")
+
+# remove digits
+phd_metadf$pdfname <- str_remove_all(phd_metadf$pdfname,  "[:digit:]")
+
+# remove copyright indications
+phd_metadf$pdfname <- str_remove_all(phd_metadf$pdfname,  "copyright")
+phd_metadf$pdfname <- str_remove_all(phd_metadf$pdfname,  "(C)")
+phd_metadf$pdfname <- gsub("\\sall rights.*", "", phd_metadf$pdfname)
+
+phd_metadf$pdfname <- trimws(phd_metadf$pdfname, which = "both")
+
+# removing titles from the name
+phd_metadf$pdfname <- gsub("master.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\smsc.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\smd.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\smagister.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\smagistri.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sbachelor.*", "",phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\slaurea.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\smestre.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sdottore.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\supm.*", "", phd_metadf$pdfname) # specific UM press thing
+phd_metadf$pdfname <- gsub("\\sp\\su\\sm.*", "", phd_metadf$pdfname) # specific UM press thing
+phd_metadf$pdfname <- gsub("\\sdipl.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sdiplom.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sdiploma.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\slicen.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\shbo.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\shts.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sdoctorandus.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\scandidat.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\ssarjana.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sspecialist.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\suniver.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\sengineer.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singeniero.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singiner.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singeniera.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singenieria.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singegnere.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singegneria.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\singenieur.*", "", phd_metadf$pdfname)
+phd_metadf$pdfname <- gsub("\\s[[:alpha:]\\-]*ingenieur.*", "", phd_metadf$pdfname) # ingenieur and everything that is attached before
+
+# specific types of engineering titles
+engineeringtitles <- c("ele(c|k)trotechnisch.*", "civiel.*", "(land)?(werktuig)?(scheeps)?(mijn)?bouwkundig.*", "(wis)?(natuur)?(schei)?(werktuig)?(materiaal)?(bestuurs)?kundig.*", "informatica.*", "geodetisch.*", "lucht- en ruimtevaart technisch.*", "chemisch.*", "maritiem.*", "bioinformatica.*", "raadgevend.*", "architect.*", "geologisch.*", "geofysisch.*", "meet- en regeltechnisch")
+
+phd_metadf$pdfname <- str_remove(phd_metadf$pdfname, paste0(engineeringtitles, collapse = "|"))
+
+phd_metadf$pdfname <- trimws(phd_metadf$pdfname, which = "both")
+
+```
+
+
+Some dissertations have multiple authors. We only want the first author, so remove everything after ";"
+```{r multiple-authors2}
+
+phd_metadf$pdfnamep1 <- gsub(";.*", "", phd_metadf$pdfnamep1)
+
+```
+
+
+
+## First names from `pdfnamep1`
+
+The object `pdfnamep1` contains all names in a standardized format. The format is: "last name, first name(s)". To extract first names, we look at everything that follows the comma. 
+
+```{r commanames2}
+
+phd_metadf$com <- str_detect(phd_metadf$pdfnamep1, ",") # detect comma
+
+# Keep everything after a comma if there is one
+phd_metadf <- phd_metadf %>%
+  mutate(firstnamepdf = ifelse((com==TRUE), str_remove(pdfnamep1, ".*,"), pdfnamep1)) %>%
+  select(-com)
+
+```
+
+
+## Cleaning the first names
+
+Removing nobiliary particles, initials amd punctuation. 
+
+
+```{r cleaning-pdfnamep1}
+
+# removing all nobiliary particles
+phd_metadf$firstnamepdf <- str_remove(phd_metadf$firstnamepdf, paste0(vande0, collapse="|"))
+phd_metadf$firstnamepdf <- str_replace_all(phd_metadf$firstnamepdf, paste(vande1, collapse = "|"), "")
+phd_metadf$firstnamepdf <- str_remove_all(phd_metadf$firstnamepdf, paste(vande2, collapse = "|"))
+phd_metadf$firstnamepdf <- str_replace_all(phd_metadf$firstnamepdf, paste(vande3, collapse = "|"), "")
+phd_metadf$firstnamepdf <- str_remove(phd_metadf$firstnamepdf, paste(vande4, collapse = "|"))
+
+phd_metadf$firstnamepdf <- trimws(phd_metadf$firstnamepdf, which = "both") # trimming whitespace
+
+phd_metadf$firstnamepdf <- str_remove_all(phd_metadf$firstnamepdf, initialpattern) # object initialpattern defined in section 1
+
+# extracting only the first-mentioned first name and removing punctuation marks
+phd_metadf$firstnamepdf <- str_extract(phd_metadf$firstnamepdf, "[a-z]+\\-*[a-z]*")
+
+
+phd_metadf <- phd_metadf %>%
+  mutate(firstnamepdf = ifelse((firstnamepdf == "^\\s$" | firstnamepdf == "") ,NA, firstnamepdf)) # empty to NA
+
+phd_metadf$firstnamepdf <- ifelse(nchar(phd_metadf$firstnamepdf)==1, NA, phd_metadf$firstnamepdf) # remove erroneous one-character names
+
+```
+
+
+## Adding first names from `pdfname`
+
+Because names from the `pdfname` object are not as neat as names from `pdfnamep1`, we give priority to the latter. 
+
+
+The format of the `pdfname` object is "first name(s) last name". So, we extract the first word from this object to gather the first name. 
+Some names contain a large number of whitespaces (e.g. "m a t t h e w j o h n s o n" or "m atthew j ohnson"). The former case, we currently do not extract. 
+
+
+```{r firstnames-pdf}
+
+# A few names have a couple of added spaces, often following the first letter of a name. Remove this space after the first letter
+
+phd_metadf$spaces <- as.numeric(str_detect(phd_metadf$pdfname, "^\\s?[:alpha:]\\s[:alpha:]{2,}")) # detect a single letter, followed by a space, followed by more than 1 letter
+
+phd_metadf$spaces <- ifelse(is.na(phd_metadf$spaces), 0, phd_metadf$spaces) # replace NA with 0
+
+phd_metadf$pdfname <- ifelse(phd_metadf$spaces==1, str_remove(phd_metadf$pdfname, "\\s"), phd_metadf$pdfname) # remove the first space if a name follows the pattern described above
+
+phd_metadf$firstnamepdf2 <- str_extract(phd_metadf$pdfname, "[a-z]+\\-*[a-z]*")
+
+
+
+# Now, we fill the firstname object with the first word in 'pdfname', but only if firstname based on 'pdfnamep1' is missing
+phd_metadf$firstnamepdf <- ifelse(is.na(phd_metadf$firstnamepdf), phd_metadf$firstnamepdf2, phd_metadf$firstnamepdf)
+
+
+# Again, we remove spaces and one-character names
+phd_metadf$firstnamepdf <- str_remove_all(phd_metadf$firstnamepdf, "\\s") # remove spaces
+phd_metadf$firstnamepdf <- ifelse(nchar(phd_metadf$firstnamepdf)==1, NA, phd_metadf$firstnamepdf) # remove erroneous one-character names
+
+
+# Remove unknown characters
+phd_metadf$firstnamepdf <- str_extract(phd_metadf$firstnamepdf, "[a-z]+\\-*[a-z]*")
+
+
+phd_metadf <- subset(phd_metadf, select = -firstnamepdf2) # remove intermediate object
+
+
+```
+
+
+
+# 6: Gathering last names from the dissertation PDFs
+
+There is a *very* small number of individuals for whom the last name is unknown. To fill this, we use the name object from the dissertation data. Given the formatting of names in this object as "first name(s) last name(s)", we just take the last word of the string, and then add potential nobiliary particles that are mentioned in the middle of the string. 
+
+```{r lastnames-pdf}
+
+phd_metadf$lastnamepdf <- word(phd_metadf$pdfname, -1)
+
+# extracting nobiliary particles
+phd_metadf$np2 <- str_extract(phd_metadf$pdfname, paste0(vande0, collapse="|")) # nobiliary particles that cannot be part of the name
+phd_metadf$np2 <- ifelse(is.na(phd_metadf$np2), str_extract(phd_metadf$pdfname, paste0(vande1, collapse="|")), phd_metadf$np2) # nobiliary particles surrounded with whitespaces
+
+# Combining nobiliary particle and last name
+phd_metadf %>%
+  mutate(lastname_full_pdf = ifelse(!is.na(np2), paste(np2, lastnamepdf), lastnamepdf)) -> phd_metadf
+
+phd_metadf$lastnamepdf <- ifelse(nchar(phd_metadf$lastnamepdf)==1, NA, phd_metadf$lastnamepdf) # remove erroneous one-character names
+
+
+```
+
+
+
+# 7: Harmonizing names from NARCIS pages and dissertation text
+
+Next, we harmonize the names we now have based on NARCIS pages (personal and dissertation page), with names gathered from dissertation PDF text. We give priority to names from NARCIS pages, because they contain less noise than names from the dissertation text. 
+
+```{r NARCIS-pdf-combined}
+
+phd_metadf$firstname <- ifelse(is.na(phd_metadf$firstname), phd_metadf$firstnamepdf, phd_metadf$firstname)
+
+
+phd_metadf$lastname <- ifelse(is.na(phd_metadf$lastname), phd_metadf$lastnamepdf, phd_metadf$lastname)
+
+
+```
+
+
+# View of the dataframe with cleaned last names
+
+After all of this cleaning, we now have a dataframe that contains a cleaned first name and last name (with nobiliary particles if present). This dataframe is used as input for our gender and ethnicity variables. 
+
+```{r datapreview}
+
+
+phd_metadf[,c(8,1,2,3,4,9,11,10,12,5,6,7)]
+
+
+```
+
+
+
+
+
+--- 
+
+# Output
+
+We save the dataset phd_metadf including the cleaned first and last names, with the duplicate observations removed. 
+
+```{r save, eval=FALSE}
+
+phd_metadf %>%
+  select(id, firstname, np, lastname, lastname_full, diss_birthplace, uni, phd_year) -> phdnames
+
+save(phdnames, file = "data/processed/phdnames.rda")
+
+
+```
+
+
+---  
+
+# References
+
