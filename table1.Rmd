@@ -111,7 +111,7 @@ Descriptives
 
 columns <- c("Min", "Max", "Mean", "SD")
 
-rows <- c("Gender (ref=men)", "Women", "Missing","Ethnicity (ref=majority)", "Minority", "Caribbean", "Turkish", "Moroccan", "Other", "<strong>PhD Cohort</strong></p>", "University (ref=Erasmus University)", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "<strong>Starting to publish</strong></p>", "Source: Dutch Doctoral Recipients (D-cubed) data 1990-2020")
+rows <- c("Gender (ref=men)", "Women", "Missing","Ethnicity (ref=majority)", "Minority", "Caribbean", "Turkish", "Moroccan", "Other", "<strong>PhD Cohort</strong></p>", "University (ref=Erasmus University)", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "<strong>Starting to publish</strong></p>", "Source: Dutch Doctoral Database 1990-2018")
 
 t1 <- data.frame(matrix(nrow=length(rows), ncol=length(columns)))
 
@@ -140,7 +140,7 @@ t1[is.na(t1)] <- ""
 ```{r}
 
 t1 %>%
-  kable(format = 'html', caption = '<b>Table 1.</b> Descriptive statistics for analyses `starting to publish` (N=90,475)', escape=FALSE) %>%
+  kable(format = 'html', caption = '<b>Table 1.</b> Descriptive statistics for analyses `starting to publish` (N=85,788)', escape=FALSE) %>%
   row_spec(row=25, italic=T) %>%
   row_spec(row=c(1,4,11), bold=T) %>%
   kable_classic(full_width = F, html_font = "Cambria") %>%
