@@ -67,6 +67,12 @@ fpackage.check <- function(packages) {
 }
 
 
+fsave <- function(x, file, location="./data/processed/") {
+  datename <- substr(gsub("[:-]", "", Sys.time()), 1,8)  
+  totalname <- paste(location, datename, file, sep="")
+  save(x, file = totalname)  
+}
+
 ddlogis <- function(X) {
     -(exp(-X)/(1 + exp(-X))^2 - exp(-X) * (2 * (exp(-X) * (1 + exp(-X))))/((1 + exp(-X))^2)^2)
 }
@@ -112,6 +118,7 @@ We use one processed dataset.
 ```{r data}
 
 load(file = "./data/processed/df_starting.rda")
+
 
 ```
 
@@ -485,218 +492,6 @@ round(boot.df4, 5)
 
 
 ```
-
-
-
-
-
-# Figures 
-
-
-## Figure 2a: gender only
-
-
-```{r}
-
-# defining colors
-menc <- "#D1C166"
-womenc <- "#48a363"
-majc <- "#39839D"
-minc <- "#B85042"
-
-
-
-# Calculating predicted probabilities
-M1 %>% predict(df_starting, type="link", se.fit = TRUE) -> plot2a
-
-
-# calculate upper and lower bounds for the confidence intervals
-plot2a$upper <- plot2a$fit + (1.96 * plot2a$se.fit)
-plot2a$lower <- plot2a$fit - (1.96 * plot2a$se.fit)
-
-plot2a <- as.data.frame(plot2a)
-
-# excluding gender = missing from the plot
-plot2a$gender <- df_starting$gender
-plot2a <- plot2a[plot2a$gender!="missing",]
-
-
-plot2a %>%
-  group_by(gender) %>%
-  summarise(fit = plogis(mean(fit)), 
-            upper = plogis(mean(upper)), 
-            lower = plogis(mean(lower))) -> plot2a
-
-
-ggplot(plot2a,aes(gender,fit,  color=(gender)))+
-  geom_boxplot(width = .1) +
-  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + ylim(0, 0.3) +
-  labs(x = "Gender", y = "Probability of starting to publish") +
-  theme_bw() +
-  scale_color_manual(values=c(menc, womenc), name="Gender") +
-  geom_text(x=0.5, y=0.28, label="A", size=10, color="black")+
-  theme(axis.title=element_text(face="bold"),
-        legend.position = "none") -> plot2a
-
-
-# Exact gender differences in probability of starting to publish
-plot2a$data
-
-```
-
-
-## Figure 2b: ethnicity only
-
-
-```{r}
-
-# Calculating predicted probabilities
-M2 %>% predict(df_starting, type = "link", se.fit = TRUE) -> plot2b
-
-
-# Calculating confidence intervals
-plot2b$upper <- plot2b$fit + (1.96 * plot2b$se.fit)
-plot2b$lower <- plot2b$fit - (1.96 * plot2b$se.fit)
-
-plot2b <- as.data.frame(plot2b)
-plot2b$ethnicity2 <- df_starting$ethnicity2
-
-# Removing ethnicity 'other' from plot
-plot2b <- plot2b[plot2b$ethnicity2!="other",]
-
-
-plot2b %>%
-  group_by(ethnicity2) %>%
-  summarise(fit = plogis(mean(fit)), 
-            upper = plogis(mean(upper)), 
-            lower = plogis(mean(lower))) -> plot2b
-
-ggplot(plot2b,aes(as.factor(ethnicity2),fit,  color=(ethnicity2)))+
-  geom_boxplot(width = .1) +
-  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + ylim(0, 0.3) +
-  labs(x = "Ethnicity", y = "Probability of starting to publish") +
-  theme_bw() +
-  scale_color_manual(values=c(majc, minc), name="Ethnicity") +
-  geom_text(x=0.5, y=0.28, label="B", size=10, color="black") +
-  theme(axis.title=element_text(face="bold"),
-        legend.position = "none") -> plot2b
-
-
-# Exact ethnic differences in probability of starting to publish
-plot2b$data
-
-
-```
-
-
-## Figure 2: gender and ethnicity
-
-
-```{r, fig.width=8}
-
-plot2 <- ggarrange(plot2a, plot2b, ncol = 2, nrow=1)
-
-plot2
-
-```
-
-```{r, eval=FALSE, echo=FALSE}
-
-ggsave("./output/starting/plot2.jpg", height=4, width=8, dpi=1200)
-
-```
-
-
-
-
-## Figure 3: cohort trends by gender
-
-
-```{r}
-
-plot4 <- plot3 <- M4 %>% predict(df_starting, type="link", se.fit=TRUE)
-
-plot3 <- as.data.frame(plot3)
-
-plot3$gender <- df_starting$gender
-plot3$phd_cohort <- df_starting$phd_cohort
-
-plot3 <- plot3[plot3$gender!="missing",]
-
-plot3$upper <- plot3$fit + (1.96 * plot3$se.fit)
-plot3$lower <- plot3$fit - (1.96 * plot3$se.fit)
-
-
-plot3 %>%
-  group_by(gender, phd_cohort) %>%
-  summarise(fit = plogis(mean(fit)), 
-            upper = plogis(mean(upper)), 
-            lower = plogis(mean(lower))) -> plot3
-
-
-ggplot(plot3, aes(x=as.factor(phd_cohort), y=fit, color=gender)) +
-  geom_boxplot(lwd=.6, position="dodge") +
-  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
-  ylim(0, 0.3) +
-  labs(x = "PhD cohort", y = "Probability of starting to publish") +
-  theme_bw() +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)), "29")) +
-  scale_color_manual(values=c(men=menc,women=womenc), name="Gender") +
-  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
-
-```
-
-
-```{r, eval=FALSE, echo=FALSE}
-
-ggsave("./output/starting/plot3.jpg", height=5, width=8, dpi=1200)
-
-```
-
-
-
-## Figure 4: Ethnicity * cohort
-
-
-```{r}
-
-plot4 <- as.data.frame(plot4)
-
-plot4$ethnicity2 <- df_starting$ethnicity2
-plot4$phd_cohort <- df_starting$phd_cohort
-
-plot4 <- plot4[plot4$ethnicity2!="other",]
-
-plot4$upper <- plot4$fit + (1.96 * plot4$se.fit)
-plot4$lower <- plot4$fit - (1.96 * plot4$se.fit)
-
-
-plot4 %>%
-  group_by(ethnicity2, phd_cohort) %>%
-  summarise(fit = plogis(mean(fit)), 
-            upper = plogis(mean(upper)), 
-            lower = plogis(mean(lower))) -> plot4
-
-
-
-ggplot(plot4, aes(x=as.factor(phd_cohort), y=fit, color=ethnicity2)) +
-  geom_boxplot(lwd=.6, position="dodge") +
-  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
-  ylim(0, 0.5) +
-  labs(x = "PhD cohort", y = "Probability of starting to publish") +
-  theme_bw() +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 4)))) +
-  scale_color_manual(values=c(majority=majc, minority=minc), name="Ethnicity") +
-  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
-
-```
-
-```{r, eval=FALSE, echo=FALSE}
-
-ggsave("./output/starting/plot4.jpg", height=5, width=8, dpi=1200)
-
-```
-
 
 
 

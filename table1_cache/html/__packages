@@ -10,3 +10,12 @@ dplyr
 stringr
 forcats
 kableExtra
+ggpubr
+splines2
+RColorBrewer
+margins
+boot
+DescTools
+zoo
+survival
+flexsurv

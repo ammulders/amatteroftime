@@ -111,7 +111,9 @@ Descriptives
 
 columns <- c("Min", "Max", "Mean", "SD")
 
-rows <- c("Gender (ref=men)", "Women", "Missing","Ethnicity (ref=majority)", "Minority", "Caribbean", "Turkish", "Moroccan", "Other", "<strong>PhD Cohort</strong></p>", "University (ref=Erasmus University)", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "<strong>Starting to publish</strong></p>", "Source: Dutch Doctoral Database 1990-2018")
+
+rows <- c("Gender", "Man", "Woman", "Missing", "Ethnicity", "Ethnic majority", "Ethnic minority", "Caribbean", "Turkish", "Moroccan", "Other", "University", "Erasmus University", "Leiden University", "Radboud University", "University of Groningen", "Delft University of Technology", "Eindhoven University of Technology", "Tilburg University", "Maastricht University", "University of Twente", "Utrecht University", "University of Amsterdam", "Vrije Universiteit Amsterdam", "Wageningen University and Research Centre", "<strong>PhD Cohort</strong></p>", "<strong>Starting to publish</strong></p>", "Source: Dutch Doctoral Recipients (D-cubed) data 1990-2019")
+
 
 t1 <- data.frame(matrix(nrow=length(rows), ncol=length(columns)))
 
@@ -119,18 +121,19 @@ colnames(t1) <- columns
 rownames(t1) <- rows
 
 
-t1[c(2:3),3] <- prop.table(table(df_starting$gender))[2:3] # gender
-t1[c(5,9),3] <- prop.table(table(df_starting$ethnicity2))[2:3] # ethnicity
-t1[c(6:8),3] <- prop.table(table(df_starting$ethnicity))[2:4] # specific ethnic groups
-t1[10,c(1:3)] <- as.numeric(summary(df_starting$phd_cohort)[c(1,6,4)]) # phd cohort
-t1[10,4] <- sd(df_starting$phd_cohort) # se phd cohort
-t1[c(12:23),3] <- prop.table(table(df_starting$uni))[2:13] # university of doctorate
-t1[24,3] <- prop.table(table(df_starting$start_pub))[2] # starting to publish
+t1[c(2:4),3] <- prop.table(table(df_starting$gender))[1:3] # gender
+t1[c(6,7,11),3] <- prop.table(table(df_starting$ethnicity2))[1:3] # ethnicity
+t1[c(8:10),3] <- prop.table(table(df_starting$ethnicity))[2:4] # specific ethnic groups
+t1[c(13:25),3] <- prop.table(table(df_starting$uni))[1:13] # university of doctorate
+t1[26,c(1:3)] <- as.numeric(summary(df_starting$phd_cohort)[c(1,6,4)]) # phd cohort
+t1[26,4] <- sd(df_starting$phd_cohort) # se phd cohort
+t1[27,3] <- prop.table(table(df_starting$start_pub))[2] # starting to publish
 
-t1[c(2,3,5:9,12:24),c(1,2)] <- c(rep(0, times=20), rep(1, times=20)) # binary variables min/max
+t1[c(2:4,6:11,13:25,27),c(1,2)] <- c(rep(0, times=23), rep(1, times=23)) # binary variables min/max
 
 
-t1[c(1:24),] <- round(t1[c(1:24),],2)
+t1[c(2:4,6:11,13:27),3] <- format(round(t1[c(2:4,6:11,13:27),3],2), nsmall=2) # rounding to 2 decimals
+t1[26,c(1,2,4)] <- format(round(t1[26,c(1,2,4)],2), nsmall=2) # rounding
 
 t1[is.na(t1)] <- ""
 
@@ -141,10 +144,11 @@ t1[is.na(t1)] <- ""
 
 t1 %>%
   kable(format = 'html', caption = '<b>Table 1.</b> Descriptive statistics for analyses `starting to publish` (N=85,788)', escape=FALSE) %>%
-  row_spec(row=25, italic=T) %>%
-  row_spec(row=c(1,4,11), bold=T) %>%
+  row_spec(row=28, italic=T) %>%
+  row_spec(row=c(1,5,12), bold=T) %>%
   kable_classic(full_width = F, html_font = "Cambria") %>%
-  add_indent(c(6:8), level_of_indent=1) %>%
+  add_indent(c(6,7,11), level_of_indent=1) %>%
+  add_indent(c(8,9,10), level_of_indent=2) %>%
   kable_styling(font_size = 14) -> table1
 
 table1
@@ -152,6 +156,18 @@ table1
 
 ```
 
+
+
+
+```{r}
+
+t1 <- data.frame(lapply(t1, function(x){
+  gsub("\\.", ",", x)
+}))
+
+write.csv(t1, file = "C://DDR/tab1.csv")
+
+```
 
 
 

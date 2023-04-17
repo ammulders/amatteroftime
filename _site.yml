@@ -17,9 +17,9 @@ navbar:
       href: ethnicity.html
     - text: "Discipline"
       href: discipline.html
-  - text: "Data preparation" 
+  - text: "Dependent variables" 
     menu:
-    - text: "Preparation 'starting / ceasing to publish'"
+    - text: "Starting and stopping to publish"
       href: datapreparation.html
   - text: "Descriptives"
     menu:
@@ -31,8 +31,10 @@ navbar:
     menu:
     - text: "Analyses 'starting to publish'"
       href: starting_analyses.html
-    - text: "Analyses 'ceasing to publish'"
+    - text: "Analyses 'stopping to publish'"
       href: stopping_analyses.html
+  - text: "Figures"
+    href: figures.html
   - text: "Appendices"
     menu:
     - text: "Splines"

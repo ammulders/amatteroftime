@@ -1,5 +1,5 @@
 ---
-title: "Academic publishing careers in NL"
+title: "Academic publishing careers in the Netherlands"
 biliography: references.bib
 output: 
   html_document:
@@ -30,7 +30,7 @@ klippy::klippy(position = c('top', 'right'))
 ```
 
 
-# **Replication package "A matter of time"**
+# **Replication package for "A matter of time"**
 
 
 ----
@@ -38,14 +38,13 @@ klippy::klippy(position = c('top', 'right'))
 
 This website contains supplementary information for the paper "A Matter of Time? Gender and Ethnic Inequality in the Academic Publishing Careers of Dutch PhDs". 
 
+Navigate through the menu at the top of this page to find information on the creation of our independent and dependent variables and to replicate our analyses, figures and tables. Supplementary information can be found under 'appendices'. All code is written in R.
+
 
 ----
 
 ## Contact  
 
-Questions can be addressed to the first author of the corresponding article (omitted for now). 
-  
-----
+Questions can be addressed to the first author of the corresponding article [omitted]. 
 
-## References
 

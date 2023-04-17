@@ -45,6 +45,13 @@ fpackage.check <- function(packages) {
   })
 }
 
+fsave <- function(x, file, location="./data/processed/") {
+  datename <- substr(gsub("[:-]", "", Sys.time()), 1,8)  
+  totalname <- paste(location, datename, file, sep="")
+  save(x, file = totalname)  
+}
+
+
 ```
 
 
@@ -161,6 +168,9 @@ M1
 ```
 
 
+P-values
+
+
 ```{r, echo=FALSE}
 
 # p-values
@@ -198,6 +208,9 @@ rm(x)
 M2 
 
 ```
+
+
+P-values
 
 
 ```{r, echo=FALSE}
@@ -238,6 +251,9 @@ rm(x)
 M3
 
 ```
+
+
+P-values
 
 
 ```{r, echo=FALSE}
@@ -356,6 +372,9 @@ rm(x)
 M4
 
 ```
+
+
+P-values
 
 
 ```{r, echo=FALSE}
@@ -500,190 +519,6 @@ round(boot.df4, 5)
 
 
 
-
-
-# Plotting survival times
-
-Defining colors for each group
-
-```{r}
-
-# defining colors
-menc <- "#D1C166"
-womenc <- "#48a363"
-majc <- "#39839D"
-minc <- "#B85042"
-
-
-```
-
-
-## Figure 5: Survival times by gender and ethnicity
-
-Based on M1: gender only.
-
-```{r}
-
-# Calculating predicted probabilities
-M1 %>% predict(type="response", conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -> plot5a
-
-class(plot5a)  
-plot5a <- as.data.frame(plot5a)
-
-# excluding gender = missing from the plot
-plot5a$gender <- df_ppf3$gender
-plot5a <- plot5a[plot5a$gender!="missing",]
-
-
-
-plot5a %>%
-  group_by(gender) %>%
-  summarise(fit = mean(.pred_time), 
-            upper = mean(.pred_upper), 
-            lower = mean(.pred_lower)) -> plot5a
-
-
-ggplot(plot5a,aes(gender, fit,  color=(gender)))+
-  geom_boxplot(width = .1) +
-  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
-  ylim(0, 20) +
-  labs(x = "Gender", y = "Average predicted survival time") +
-  theme_bw() +
-  scale_color_manual(values=c(menc, womenc), name="Gender") +
-  geom_text(x=0.7, y=19, label="A", size=10, color="black") +
-  theme(axis.title=element_text(face="bold"),
-        legend.position = "none") -> plot5a
-
-plot5a
-
-
-```
-
-Based on M2: ethnicity only.
-
-```{r}
-
-# Calculating predicted probabilities
-M2 %>% predict(type="response", conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -> plot5b
-  
-plot5b <- as.data.frame(plot5b)
-
-# excluding gender = missing from the plot
-plot5b$ethnicity <- df_ppf3$ethnicity2
-plot5b <- plot5b[plot5b$ethnicity!="other",]
-
-plot5b %>%
-  group_by(ethnicity) %>%
-  summarise(fit = mean(.pred_time), 
-            upper = mean(.pred_upper), 
-            lower = mean(.pred_lower)) -> plot5b
-
-
-ggplot(plot5b,aes(ethnicity, fit,  color=(ethnicity)))+
-  geom_boxplot(width = .1) +
-  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
-  ylim(0, 20) +
-  labs(x = "Ethnicity", y = "Average predicted survival time") +
-  theme_bw() +
-  scale_color_manual(values=c(majc, minc), name="Ethnicity") +
-  geom_text(x=0.7, y=19, label="B", size=10, color="black") +
-  theme(axis.title=element_text(face="bold"),
-        legend.position = "none") -> plot5b
-
-
-=
-
-```
-
-Combined: plot 4
-```{r}
-
-plot5 <- ggarrange(plot5a, plot5b, ncol = 2, nrow=1, widths=c(1,1))
-
-plot5
-
-ggsave("./output/stopping/plot5_logn.jpg", height=4, width=8, dpi=1200)
-
-plot5a$data # predicted survival time by gender
-plot5b$data # predicted survival time by ethnicity
-
-```
-
-
-
-
-## Figure 6: Gender * cohort
-
-Here, I check the predicted values based on model 3. I found that the predicted values based on the full model were extreme in some cases. By adding the variables in model 3 one by one, I check which variables lead to large deviations from normal predicted values. Inclusion of university, field, cohort and veni leads to a small percentage of unrealistic predicted values, while previous publications seems to add quite a few. 
-
-```{r}
-
-M4 %>% predict(type="response", conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -> p6
-
-
-plot7 <- plot6 <- as.data.frame(p6) # same data for plot 5 and 6
-
-# excluding gender = missing from the plot
-plot6$gender <- df_ppf3$gender
-plot6$cohort <- df_ppf3$phd_cohort
-plot6 <- plot6[plot6$gender!="missing",]
-
-plot6 %>%
-  group_by(gender, cohort) %>%
-  summarise(fit = mean(.pred_time),
-            upper = mean(.pred_upper), 
-            lower = mean(.pred_lower)) -> plot6
-
-
-ggplot(plot6, aes(x=as.factor(cohort), y=fit, color=gender)) +
-  geom_boxplot(lwd=.6, position="dodge") +
-  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
-  labs(x = "PhD cohort", y = "Average predicted survival time") +
-  theme_bw() +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)))) +
-  scale_color_manual(values=c(men=menc,women=womenc), name="Gender") +
-  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
-
-ggsave("./output/stopping/plot6_logn.jpg", height=5, width=8, dpi=1200)
-
-
-```
-
-
-## Figure 7: Ethnicity * cohort
-
-```{r}
-
-# excluding ethnicity = other from the plot
-plot7$ethnicity <- df_ppf3$ethnicity2
-plot7$cohort <- df_ppf3$phd_cohort
-plot7 <- plot7[plot7$ethnicity!="other",]
-
-plot7 %>%
-  group_by(ethnicity, cohort) %>%
-  summarise(fit = mean(.pred_time),
-            upper = mean(.pred_upper), 
-            lower = mean(.pred_lower)) -> plot7
-
-
-ggplot(plot7, aes(x=as.factor(cohort), y=fit, color=ethnicity)) +
-  geom_boxplot(lwd=.6, position="dodge") +
-  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
-  labs(x = "PhD cohort", y = "Average predicted survival time") +
-  theme_bw() +
-  scale_color_manual(values=c(majority=majc, minority=minc), name="Ethnicity") +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)))) +
-  theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
-
-
-ggsave("./output/stopping/plot7_logn.jpg", height=5, width=8, dpi=1200)
-
-
-```
-
-
-
-
 # Table 4
 
 
@@ -755,7 +590,7 @@ table4
 
 # Robustness checks
 
-## R1: 5-year publica
+## R1: 5-year publication window
 
 
 ```{r, eval=FALSE}
@@ -830,10 +665,10 @@ R11 <- glm(formula = inactive ~ time + gender + ethnicity2 + uni + field + phd_c
           family = binomial(link="cloglog"),
           data = df_ppf3)
 
-summ(R8, exp = T)
-summ(R9, exp = T)
-summ(R10, exp = T)
-summ(R11, exp = T)
+summary(R8, exp = T)
+summary(R9, exp = T)
+summary(R10, exp = T)
+summary(R11, exp = T)
 
 
 ```

@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Figures</title>
+
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="tweaks.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Independent variables
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="names.html">Names</a>
+    </li>
+    <li>
+      <a href="gender.html">Gender</a>
+    </li>
+    <li>
+      <a href="ethnicity.html">Ethnicity</a>
+    </li>
+    <li>
+      <a href="discipline.html">Discipline</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dependent variables
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datapreparation.html">Starting and stopping to publish</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Descriptives
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="table1.html">Table 1</a>
+    </li>
+    <li>
+      <a href="table2.html">Table 2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="starting_analyses.html">Analyses 'starting to publish'</a>
+    </li>
+    <li>
+      <a href="stopping_analyses.html">Analyses 'stopping to publish'</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="figures.html">Figures</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Appendices
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="splines.html">Splines</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/ammulders/amatteroftime">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Figures</h1>
+<h4 class="date">Last compiled on april, 2023</h4>
+
+</div>
+
+
+<p>This lab journal replicates the analyses for ‘starting to
+publish’.</p>
+<hr />
+<div id="custom-functions" class="section level1">
+<h1>Custom functions</h1>
+<ul>
+<li><code>fpackage.check</code>: Check if packages are installed (and
+install if not) in R (<a
+href="https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/">source</a>).</li>
+</ul>
+<pre class="r"><code>fpackage.check &lt;- function(packages) {
+  lapply(packages, FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  })
+}
+
+fsave &lt;- function(x, file, location=&quot;./data/processed/&quot;) {
+  datename &lt;- substr(gsub(&quot;[:-]&quot;, &quot;&quot;, Sys.time()), 1,8)  
+  totalname &lt;- paste(location, datename, file, sep=&quot;&quot;)
+  save(x, file = totalname)  
+}</code></pre>
+<hr />
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<ul>
+<li><code>tidyverse</code>: for data manipulation</li>
+<li><code>ggplot2</code>: for creating figures 2-4</li>
+<li><code>ggpubr</code>: for combining two figures in one (plot 2)</li>
+<li><code>splines</code> <code>splines2</code>: for modelling non-linear
+cohort relations</li>
+</ul>
+<pre class="r"><code>packages = c(&quot;tidyverse&quot;, &quot;ggplot2&quot;, &quot;ggpubr&quot;, &quot;splines&quot;, &quot;splines2&quot;)
+
+fpackage.check(packages)</code></pre>
+<pre><code>## Loading required package: tidyverse</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## -- Attaching packages -------------------------------- tidyverse 1.3.2 --</code></pre>
+<pre><code>## v ggplot2 3.4.0      v purrr   0.3.4 
+## v tibble  3.1.8      v dplyr   1.0.10
+## v tidyr   1.2.1      v stringr 1.5.0 
+## v readr   2.1.3      v forcats 0.5.2</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;stringr&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## -- Conflicts ----------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## Loading required package: ggpubr</code></pre>
+<pre><code>## Warning: package &#39;ggpubr&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Loading required package: splines
+## Loading required package: splines2</code></pre>
+<pre><code>## Warning: package &#39;splines2&#39; was built under R version 4.1.3</code></pre>
+</div>
+<div id="input" class="section level1">
+<h1>Input</h1>
+<p>We use two processed datasets:</p>
+<ul>
+<li><a
+href="%22./data/processed/df_starting.rda%22">df_starting.rda</a>:
+dataset of PhDs with all relevant variables: gender + ethnicity +
+university + PhD year
+<ul>
+<li>For construction of this dataset see [(datapreparations.html)]<br />
+</li>
+<li>name of dataset: <code>df_starting</code></li>
+</ul></li>
+<li><a
+href="%22./data/processed/df_stopping.rda%22">df_stopping.rda</a>:
+person-period file containing publications and all relevant variables
+for the survival models, time window for inactivity is 3 years
+<ul>
+<li>For construction of this dataset see [(datapreparation.html)]<br />
+</li>
+<li>name of dataset: <code>df_ppf3</code></li>
+</ul></li>
+</ul>
+<p>Furthermore, we load in the results from our analyses to create
+figures 2-7.</p>
+<pre class="r"><code>load(file = &quot;./data/processed/df_starting.rda&quot;)
+
+load(file = &quot;./data/processed/df_stopping.rda&quot;)</code></pre>
+<hr />
+<p>Defining color parameters up front</p>
+<pre class="r"><code>tot &lt;- &quot;#414141&quot;
+menc &lt;- &quot;#D1C166&quot;
+womenc &lt;- &quot;#48a363&quot;
+majc &lt;- &quot;#39839D&quot;
+minc &lt;- &quot;#B85042&quot;</code></pre>
+</div>
+<div id="figure-1" class="section level1">
+<h1>Figure 1</h1>
+<p>Number of PhDs entering the sample per cohort, split out by gender
+and ethnicity</p>
+<pre class="r"><code>df_starting %&gt;%
+  group_by(phd_year) %&gt;%
+  count() -&gt; totalentry
+
+df_starting %&gt;%
+  group_by(phd_year) %&gt;%
+  count(gender) -&gt; genderentry
+
+df_starting %&gt;%
+  group_by(phd_year) %&gt;%
+  count(ethnicity2) -&gt; ethnientry
+
+genderentry &lt;- genderentry[genderentry$gender!=&quot;missing&quot;,]
+
+ethnientry &lt;- ethnientry[ethnientry$ethnicity2!=&quot;other&quot;,]
+
+
+genderentry$type &lt;- as.character(genderentry$gender)
+genderentry &lt;- genderentry[,-2]
+
+
+ethnientry$type &lt;- as.character(ethnientry$ethnicity2)
+ethnientry &lt;- ethnientry[,-2]
+
+totalentry$type &lt;- rep(&quot;total&quot;, times=nrow(totalentry))
+
+entry_df &lt;- rbind.data.frame(totalentry, genderentry, ethnientry)
+
+entry_df$type &lt;- ifelse(entry_df$type==&quot;minority&quot;, &quot;ethnic minority&quot;, entry_df$type)
+entry_df$type &lt;- ifelse(entry_df$type==&quot;majority&quot;, &quot;ethnic majority&quot;, entry_df$type)
+
+
+ggplot(entry_df, aes(y=n, x=phd_year, color=factor(type, levels=c(&quot;total&quot;, &quot;men&quot;, &quot;women&quot;, &quot;ethnic majority&quot;, &quot;ethnic minority&quot;)))) +
+  geom_line(lwd = 0.8)+
+  theme_bw() +
+  scale_x_continuous(breaks=c(1990,1995,2000,2005,2010,2015,2019))+
+  labs(x = &quot;Year of doctorate receipt&quot;, y = &quot;Frequency&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;)) +
+  scale_color_manual(values=c(tot, menc, womenc, majc, minc), name=&quot;Group&quot;)</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/starting/plot1.jpg&quot;, height=4, width=8, dpi=1200)</code></pre>
+</div>
+<div id="figure-2" class="section level1">
+<h1>Figure 2</h1>
+<div id="loading-in-results-for-starting-to-publish"
+class="section level2">
+<h2>Loading in results for ‘starting to publish’</h2>
+<pre class="r"><code>load(file = &quot;results/starting/20230405M1.rda&quot;)
+M1 &lt;- x
+rm(x)
+
+load(file = &quot;results/starting/20230405M2.rda&quot;)
+M2 &lt;- x
+rm(x)
+
+load(file = &quot;results/starting/20230405M3.rda&quot;)
+M3 &lt;- x
+rm(x)
+
+load(file = &quot;results/starting/20230405M4.rda&quot;)
+M4 &lt;- x
+rm(x)</code></pre>
+</div>
+<div id="figure-2a-gender-only" class="section level2">
+<h2>Figure 2a: gender only</h2>
+<pre class="r"><code># Calculating predicted probabilities
+M1 %&gt;% predict(df_starting, type=&quot;link&quot;, se.fit = TRUE) -&gt; plot2a
+
+
+# calculate upper and lower bounds for the confidence intervals
+plot2a$upper &lt;- plot2a$fit + (1.96 * plot2a$se.fit)
+plot2a$lower &lt;- plot2a$fit - (1.96 * plot2a$se.fit)
+
+plot2a &lt;- as.data.frame(plot2a)
+
+# excluding gender = missing from the plot
+plot2a$gender &lt;- df_starting$gender
+plot2a &lt;- plot2a[plot2a$gender!=&quot;missing&quot;,]
+
+
+plot2a %&gt;%
+  group_by(gender) %&gt;%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -&gt; plot2a
+
+
+ggplot(plot2a,aes(gender,fit,  color=(gender)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + ylim(0, 0.3) +
+  labs(x = &quot;Gender&quot;, y = &quot;Probability of starting to publish&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(menc, womenc), name=&quot;Gender&quot;) +
+  geom_text(x=0.5, y=0.28, label=&quot;A&quot;, size=10, color=&quot;black&quot;)+
+  theme(axis.title=element_text(face=&quot;bold&quot;),
+        legend.position = &quot;none&quot;) -&gt; plot2a
+
+
+# Exact gender differences in probability of starting to publish
+plot2a$data</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   gender   fit upper lower
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 men    0.212 0.216 0.208
+## 2 women  0.220 0.225 0.215</code></pre>
+</div>
+<div id="figure-2b-ethnicity-only" class="section level2">
+<h2>Figure 2b: ethnicity only</h2>
+<pre class="r"><code># Calculating predicted probabilities
+M2 %&gt;% predict(df_starting, type = &quot;link&quot;, se.fit = TRUE) -&gt; plot2b
+
+
+# Calculating confidence intervals
+plot2b$upper &lt;- plot2b$fit + (1.96 * plot2b$se.fit)
+plot2b$lower &lt;- plot2b$fit - (1.96 * plot2b$se.fit)
+
+plot2b &lt;- as.data.frame(plot2b)
+plot2b$ethnicity2 &lt;- df_starting$ethnicity2
+
+# Removing ethnicity &#39;other&#39; from plot
+plot2b &lt;- plot2b[plot2b$ethnicity2!=&quot;other&quot;,]
+
+
+plot2b %&gt;%
+  group_by(ethnicity2) %&gt;%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -&gt; plot2b
+
+ggplot(plot2b,aes(as.factor(ethnicity2),fit,  color=(ethnicity2)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + ylim(0, 0.3) +
+  labs(x = &quot;Ethnicity&quot;, y = &quot;Probability of starting to publish&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(majc, minc), name=&quot;Ethnicity&quot;) +
+  geom_text(x=0.5, y=0.28, label=&quot;B&quot;, size=10, color=&quot;black&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;),
+        legend.position = &quot;none&quot;) -&gt; plot2b
+
+
+# Exact ethnic differences in probability of starting to publish
+plot2b$data</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   ethnicity2   fit upper lower
+##   &lt;fct&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 majority   0.197 0.201 0.194
+## 2 minority   0.144 0.160 0.129</code></pre>
+</div>
+<div id="figure-2-combining-a-and-b" class="section level2">
+<h2>Figure 2: combining A and B</h2>
+<pre class="r"><code>plot2 &lt;- ggarrange(plot2a, plot2b, ncol = 2, nrow=1)
+
+plot2</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+</div>
+</div>
+<div id="figure-3" class="section level1">
+<h1>Figure 3</h1>
+<p>Predicted probability to start by gender and cohort</p>
+<pre class="r"><code>plot4 &lt;- plot3 &lt;- M4 %&gt;% predict(df_starting, type=&quot;link&quot;, se.fit=TRUE)</code></pre>
+<pre><code>## Warning in predict.lm(object, newdata, se.fit, scale = residual.scale, type = if (type == :
+## prediction from a rank-deficient fit may be misleading</code></pre>
+<pre class="r"><code>plot3 &lt;- as.data.frame(plot3)
+
+plot3$gender &lt;- df_starting$gender
+plot3$phd_cohort &lt;- df_starting$phd_cohort
+
+plot3 &lt;- plot3[plot3$gender!=&quot;missing&quot;,]
+
+plot3$upper &lt;- plot3$fit + (1.96 * plot3$se.fit)
+plot3$lower &lt;- plot3$fit - (1.96 * plot3$se.fit)
+
+
+plot3 %&gt;%
+  group_by(gender, phd_cohort) %&gt;%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -&gt; plot3</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(plot3, aes(x=as.factor(phd_cohort), y=fit, color=gender)) +
+  geom_boxplot(lwd=.6, position=&quot;dodge&quot;) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position=&quot;dodge&quot;) +
+  ylim(0, 0.3) +
+  labs(x = &quot;PhD cohort&quot;, y = &quot;Probability of starting to publish&quot;) +
+  theme_bw() +
+  scale_x_discrete(labels = c(&quot;0&quot;, c(rep(&quot; &quot;, 4)), &quot;5&quot;, c(rep(&quot; &quot;, 4)), &quot;10&quot;, c(rep(&quot; &quot;, 4)), &quot;15&quot;, c(rep(&quot; &quot;, 4)), &quot;20&quot;, c(rep(&quot; &quot;, 4)), &quot;25&quot;, c(rep(&quot;&quot;, 3)), &quot;29&quot;)) +
+  scale_color_manual(values=c(men=menc,women=womenc), name=&quot;Gender&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;), legend.title=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="figure-4" class="section level1">
+<h1>Figure 4</h1>
+<p>Predicted probability to start by ethnicity and cohort</p>
+<pre class="r"><code>plot4 &lt;- as.data.frame(plot4)
+
+plot4$ethnicity2 &lt;- df_starting$ethnicity2
+plot4$phd_cohort &lt;- df_starting$phd_cohort
+
+plot4 &lt;- plot4[plot4$ethnicity2!=&quot;other&quot;,]
+
+plot4$upper &lt;- plot4$fit + (1.96 * plot4$se.fit)
+plot4$lower &lt;- plot4$fit - (1.96 * plot4$se.fit)
+
+
+plot4 %&gt;%
+  group_by(ethnicity2, phd_cohort) %&gt;%
+  summarise(fit = plogis(mean(fit)), 
+            upper = plogis(mean(upper)), 
+            lower = plogis(mean(lower))) -&gt; plot4</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;ethnicity2&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(plot4, aes(x=as.factor(phd_cohort), y=fit, color=ethnicity2)) +
+  geom_boxplot(lwd=.6, position=&quot;dodge&quot;) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position=&quot;dodge&quot;) +
+  ylim(0, 0.5) +
+  labs(x = &quot;PhD cohort&quot;, y = &quot;Probability of starting to publish&quot;) +
+  theme_bw() +
+  scale_x_discrete(labels = c(&quot;0&quot;, c(rep(&quot; &quot;, 4)), &quot;5&quot;, c(rep(&quot; &quot;, 4)), &quot;10&quot;, c(rep(&quot; &quot;, 4)), &quot;15&quot;, c(rep(&quot; &quot;, 4)), &quot;20&quot;, c(rep(&quot; &quot;, 4)), &quot;25&quot;, c(rep(&quot;&quot;, 4)))) +
+  scale_color_manual(values=c(majority=majc, minority=minc), name=&quot;Ethnicity&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;), legend.title=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="figure-5" class="section level1">
+<h1>Figure 5</h1>
+<div id="loading-in-results-for-stopping-to-publish"
+class="section level2">
+<h2>Loading in results for ‘stopping to publish’</h2>
+<pre class="r"><code>load(file = &quot;results/stopping/20230405M1.rda&quot;)
+M1 &lt;- x
+rm(x)
+
+load(file = &quot;results/stopping/20230405M2.rda&quot;)
+M2 &lt;- x
+rm(x)
+
+load(file = &quot;results/stopping/20230405M3.rda&quot;)
+M3 &lt;- x
+rm(x)
+
+load(file = &quot;results/stopping/20230405M4.rda&quot;)
+M4 &lt;- x
+rm(x)</code></pre>
+<p>Survival times by gender and ethnicity. Based on M1: gender only.</p>
+<pre class="r"><code># Calculating predicted probabilities
+M1 %&gt;% predict(type=&quot;response&quot;, conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -&gt; plot5a
+
+class(plot5a)  </code></pre>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>plot5a &lt;- as.data.frame(plot5a)
+
+# excluding gender = missing from the plot
+plot5a$gender &lt;- df_ppf3$gender
+plot5a &lt;- plot5a[plot5a$gender!=&quot;missing&quot;,]
+
+
+
+plot5a %&gt;%
+  group_by(gender) %&gt;%
+  summarise(fit = mean(.pred_time), 
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot5a
+
+
+ggplot(plot5a,aes(gender, fit,  color=(gender)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
+  ylim(0, 20) +
+  labs(x = &quot;Gender&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(menc, womenc), name=&quot;Gender&quot;) +
+  geom_text(x=0.7, y=19, label=&quot;A&quot;, size=10, color=&quot;black&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;),
+        legend.position = &quot;none&quot;) -&gt; plot5a
+
+plot5a</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Based on M2: ethnicity only.</p>
+<pre class="r"><code># Calculating predicted probabilities
+M2 %&gt;% predict(type=&quot;response&quot;, conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -&gt; plot5b
+  
+plot5b &lt;- as.data.frame(plot5b)
+
+# excluding gender = missing from the plot
+plot5b$ethnicity &lt;- df_ppf3$ethnicity2
+plot5b &lt;- plot5b[plot5b$ethnicity!=&quot;other&quot;,]
+
+plot5b %&gt;%
+  group_by(ethnicity) %&gt;%
+  summarise(fit = mean(.pred_time), 
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot5b
+
+
+ggplot(plot5b,aes(ethnicity, fit,  color=(ethnicity)))+
+  geom_boxplot(width = .1) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), lwd = 0.8, width = .05) + 
+  ylim(0, 20) +
+  labs(x = &quot;Ethnicity&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(majc, minc), name=&quot;Ethnicity&quot;) +
+  geom_text(x=0.7, y=19, label=&quot;B&quot;, size=10, color=&quot;black&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;),
+        legend.position = &quot;none&quot;) -&gt; plot5b</code></pre>
+<p>Combined: plot 4</p>
+<pre class="r"><code>plot5 &lt;- ggarrange(plot5a, plot5b, ncol = 2, nrow=1, widths=c(1,1))
+
+plot5</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/stopping/plot5_logn.jpg&quot;, height=4, width=8, dpi=1200)
+
+plot5a$data # predicted survival time by gender</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   gender   fit upper lower
+##   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 men     15.8  16.3  15.3
+## 2 women   13.0  13.6  12.5</code></pre>
+<pre class="r"><code>plot5b$data # predicted survival time by ethnicity</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   ethnicity   fit upper lower
+##   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 majority  14.7   15.2 14.3 
+## 2 minority   9.35  10.7  8.16</code></pre>
+</div>
+<div id="figure-6-gender-cohort" class="section level2">
+<h2>Figure 6: Gender * cohort</h2>
+<p>Here, I check the predicted values based on model 3. I found that the
+predicted values based on the full model were extreme in some cases. By
+adding the variables in model 3 one by one, I check which variables lead
+to large deviations from normal predicted values. Inclusion of
+university, field, cohort and veni leads to a small percentage of
+unrealistic predicted values, while previous publications seems to add
+quite a few.</p>
+<pre class="r"><code>M4 %&gt;% predict(type=&quot;response&quot;, conf.int=TRUE, conf.level=.95, newdata=df_ppf3) -&gt; p6
+
+
+plot7 &lt;- plot6 &lt;- as.data.frame(p6) # same data for plot 5 and 6
+
+# excluding gender = missing from the plot
+plot6$gender &lt;- df_ppf3$gender
+plot6$cohort &lt;- df_ppf3$phd_cohort
+plot6 &lt;- plot6[plot6$gender!=&quot;missing&quot;,]
+
+plot6 %&gt;%
+  group_by(gender, cohort) %&gt;%
+  summarise(fit = mean(.pred_time),
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot6</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(plot6, aes(x=as.factor(cohort), y=fit, color=gender)) +
+  geom_boxplot(lwd=.6, position=&quot;dodge&quot;) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position=&quot;dodge&quot;) +
+  labs(x = &quot;PhD cohort&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_x_discrete(labels = c(&quot;0&quot;, c(rep(&quot; &quot;, 4)), &quot;5&quot;, c(rep(&quot; &quot;, 4)), &quot;10&quot;, c(rep(&quot; &quot;, 4)), &quot;15&quot;, c(rep(&quot; &quot;, 4)), &quot;20&quot;, c(rep(&quot; &quot;, 4)), &quot;25&quot;, c(rep(&quot;&quot;, 3)))) +
+  scale_color_manual(values=c(men=menc,women=womenc), name=&quot;Gender&quot;) +
+  theme(axis.title=element_text(face=&quot;bold&quot;), legend.title=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/stopping/plot6_logn.jpg&quot;, height=5, width=8, dpi=1200)</code></pre>
+</div>
+<div id="figure-7-ethnicity-cohort" class="section level2">
+<h2>Figure 7: Ethnicity * cohort</h2>
+<pre class="r"><code># excluding ethnicity = other from the plot
+plot7$ethnicity &lt;- df_ppf3$ethnicity2
+plot7$cohort &lt;- df_ppf3$phd_cohort
+plot7 &lt;- plot7[plot7$ethnicity!=&quot;other&quot;,]
+
+plot7 %&gt;%
+  group_by(ethnicity, cohort) %&gt;%
+  summarise(fit = mean(.pred_time),
+            upper = mean(.pred_upper), 
+            lower = mean(.pred_lower)) -&gt; plot7</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;ethnicity&#39;. You can override using
+## the `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(plot7, aes(x=as.factor(cohort), y=fit, color=ethnicity)) +
+  geom_boxplot(lwd=.6, position=&quot;dodge&quot;) +
+  geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position=&quot;dodge&quot;) +
+  labs(x = &quot;PhD cohort&quot;, y = &quot;Average predicted survival time&quot;) +
+  theme_bw() +
+  scale_color_manual(values=c(majority=majc, minority=minc), name=&quot;Ethnicity&quot;) +
+  scale_x_discrete(labels = c(&quot;0&quot;, c(rep(&quot; &quot;, 4)), &quot;5&quot;, c(rep(&quot; &quot;, 4)), &quot;10&quot;, c(rep(&quot; &quot;, 4)), &quot;15&quot;, c(rep(&quot; &quot;, 4)), &quot;20&quot;, c(rep(&quot; &quot;, 4)), &quot;25&quot;, c(rep(&quot;&quot;, 3)))) +
+  theme(axis.title=element_text(face=&quot;bold&quot;), legend.title=element_text(face=&quot;bold&quot;))</code></pre>
+<p><img src="figures_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>ggsave(&quot;./output/stopping/plot7_logn.jpg&quot;, height=5, width=8, dpi=1200)</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpZ3VyZXMiDQpkYXRlOiAiTGFzdCBjb21waWxlZCBvbiBgciBmb3JtYXQoU3lzLnRpbWUoKSwgJyVCLCAlWScpYCINCm91dHB1dDogDQogIGh0bWxfZG9jdW1lbnQ6DQogICAgY3NzOiB0d2Vha3MuY3NzDQogICAgdG9jOiAgdHJ1ZQ0KICAgIHRvY19mbG9hdDogdHJ1ZQ0KICAgIG51bWJlcl9zZWN0aW9uczogZmFsc2UNCiAgICBjb2RlX2ZvbGRpbmc6IHNob3cNCiAgICBjb2RlX2Rvd25sb2FkOiB5ZXMNCiAgICANCi0tLQ0KDQoNClRoaXMgbGFiIGpvdXJuYWwgcmVwbGljYXRlcyB0aGUgYW5hbHlzZXMgZm9yICdzdGFydGluZyB0byBwdWJsaXNoJy4gDQogIA0KDQotLS0tDQoNCmBgYHtyLCBlY2hvPUZBTFNFfQ0KDQpybShsaXN0ID0gbHMoKSkNCg0KYGBgDQoNCg0KDQojIEN1c3RvbSBmdW5jdGlvbnMNCg0KLSBgZnBhY2thZ2UuY2hlY2tgOiBDaGVjayBpZiBwYWNrYWdlcyBhcmUgaW5zdGFsbGVkIChhbmQgaW5zdGFsbCBpZiBub3QpIGluIFIgKFtzb3VyY2VdKGh0dHBzOi8vdmJhbGlnYS5naXRodWIuaW8vdmVyaWZ5LXRoYXQtci1wYWNrYWdlcy1hcmUtaW5zdGFsbGVkLWFuZC1sb2FkZWQvKSkuICANCg0KDQpgYGB7ciwgcmVzdWx0cz0naGlkZSd9DQoNCmZwYWNrYWdlLmNoZWNrIDwtIGZ1bmN0aW9uKHBhY2thZ2VzKSB7DQogIGxhcHBseShwYWNrYWdlcywgRlVOID0gZnVuY3Rpb24oeCkgew0KICAgIGlmICghcmVxdWlyZSh4LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpKSB7DQogICAgICBpbnN0YWxsLnBhY2thZ2VzKHgsIGRlcGVuZGVuY2llcyA9IFRSVUUpDQogICAgICBsaWJyYXJ5KHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkNCiAgICB9DQogIH0pDQp9DQoNCmZzYXZlIDwtIGZ1bmN0aW9uKHgsIGZpbGUsIGxvY2F0aW9uPSIuL2RhdGEvcHJvY2Vzc2VkLyIpIHsNCiAgZGF0ZW5hbWUgPC0gc3Vic3RyKGdzdWIoIls6LV0iLCAiIiwgU3lzLnRpbWUoKSksIDEsOCkgIA0KICB0b3RhbG5hbWUgPC0gcGFzdGUobG9jYXRpb24sIGRhdGVuYW1lLCBmaWxlLCBzZXA9IiIpDQogIHNhdmUoeCwgZmlsZSA9IHRvdGFsbmFtZSkgIA0KfQ0KDQoNCg0KYGBgDQoNCg0KLS0tICANCg0KIyBQYWNrYWdlcw0KDQotIGB0aWR5dmVyc2VgOiBmb3IgZGF0YSBtYW5pcHVsYXRpb24NCi0gYGdncGxvdDJgOiBmb3IgY3JlYXRpbmcgZmlndXJlcyAyLTQNCi0gYGdncHVicmA6IGZvciBjb21iaW5pbmcgdHdvIGZpZ3VyZXMgaW4gb25lIChwbG90IDIpDQotIGBzcGxpbmVzYCBgc3BsaW5lczJgOiBmb3IgbW9kZWxsaW5nIG5vbi1saW5lYXIgY29ob3J0IHJlbGF0aW9ucw0KDQoNCmBgYHtyLCByZXN1bHRzPSdoaWRlJ30NCg0KcGFja2FnZXMgPSBjKCJ0aWR5dmVyc2UiLCAiZ2dwbG90MiIsICJnZ3B1YnIiLCAic3BsaW5lcyIsICJzcGxpbmVzMiIpDQoNCmZwYWNrYWdlLmNoZWNrKHBhY2thZ2VzKQ0KDQpgYGANCg0KDQoNCg0KIyBJbnB1dA0KDQoNCldlIHVzZSB0d28gcHJvY2Vzc2VkIGRhdGFzZXRzOg0KDQoqIFtkZl9zdGFydGluZy5yZGFdKCIuL2RhdGEvcHJvY2Vzc2VkL2RmX3N0YXJ0aW5nLnJkYSIpOiBkYXRhc2V0IG9mIFBoRHMgd2l0aCBhbGwgcmVsZXZhbnQgdmFyaWFibGVzOiBnZW5kZXIgKyBldGhuaWNpdHkgKyB1bml2ZXJzaXR5ICsgUGhEIHllYXIgIA0KICAgIC0gRm9yIGNvbnN0cnVjdGlvbiBvZiB0aGlzIGRhdGFzZXQgc2VlIFsoZGF0YXByZXBhcmF0aW9ucy5odG1sKV0gIA0KICAgIC0gbmFtZSBvZiBkYXRhc2V0OiBgZGZfc3RhcnRpbmdgIA0KICAgIA0KKiBbZGZfc3RvcHBpbmcucmRhXSgiLi9kYXRhL3Byb2Nlc3NlZC9kZl9zdG9wcGluZy5yZGEiKTogcGVyc29uLXBlcmlvZCBmaWxlIGNvbnRhaW5pbmcgcHVibGljYXRpb25zIGFuZCBhbGwgcmVsZXZhbnQgdmFyaWFibGVzIGZvciB0aGUgc3Vydml2YWwgbW9kZWxzLCB0aW1lIHdpbmRvdyBmb3IgaW5hY3Rpdml0eSBpcyAzIHllYXJzDQogICAgLSBGb3IgY29uc3RydWN0aW9uIG9mIHRoaXMgZGF0YXNldCBzZWUgWyhkYXRhcHJlcGFyYXRpb24uaHRtbCldICANCiAgICAtIG5hbWUgb2YgZGF0YXNldDogYGRmX3BwZjNgIA0KDQoNCkZ1cnRoZXJtb3JlLCB3ZSBsb2FkIGluIHRoZSByZXN1bHRzIGZyb20gb3VyIGFuYWx5c2VzIHRvIGNyZWF0ZSBmaWd1cmVzIDItNy4NCg0KDQpgYGB7ciBkYXRhfQ0KDQpsb2FkKGZpbGUgPSAiLi9kYXRhL3Byb2Nlc3NlZC9kZl9zdGFydGluZy5yZGEiKQ0KDQpsb2FkKGZpbGUgPSAiLi9kYXRhL3Byb2Nlc3NlZC9kZl9zdG9wcGluZy5yZGEiKQ0KDQoNCmBgYA0KDQoNCi0tLQ0KDQoNCkRlZmluaW5nIGNvbG9yIHBhcmFtZXRlcnMgdXAgZnJvbnQNCg0KYGBge3J9DQoNCnRvdCA8LSAiIzQxNDE0MSINCm1lbmMgPC0gIiNEMUMxNjYiDQp3b21lbmMgPC0gIiM0OGEzNjMiDQptYWpjIDwtICIjMzk4MzlEIg0KbWluYyA8LSAiI0I4NTA0MiINCg0KDQpgYGANCg0KDQoNCiMgRmlndXJlIDENCg0KTnVtYmVyIG9mIFBoRHMgZW50ZXJpbmcgdGhlIHNhbXBsZSBwZXIgY29ob3J0LCBzcGxpdCBvdXQgYnkgZ2VuZGVyIGFuZCBldGhuaWNpdHkNCg0KDQpgYGB7cn0NCg0KZGZfc3RhcnRpbmcgJT4lDQogIGdyb3VwX2J5KHBoZF95ZWFyKSAlPiUNCiAgY291bnQoKSAtPiB0b3RhbGVudHJ5DQoNCmRmX3N0YXJ0aW5nICU+JQ0KICBncm91cF9ieShwaGRfeWVhcikgJT4lDQogIGNvdW50KGdlbmRlcikgLT4gZ2VuZGVyZW50cnkNCg0KZGZfc3RhcnRpbmcgJT4lDQogIGdyb3VwX2J5KHBoZF95ZWFyKSAlPiUNCiAgY291bnQoZXRobmljaXR5MikgLT4gZXRobmllbnRyeQ0KDQpnZW5kZXJlbnRyeSA8LSBnZW5kZXJlbnRyeVtnZW5kZXJlbnRyeSRnZW5kZXIhPSJtaXNzaW5nIixdDQoNCmV0aG5pZW50cnkgPC0gZXRobmllbnRyeVtldGhuaWVudHJ5JGV0aG5pY2l0eTIhPSJvdGhlciIsXQ0KDQoNCmdlbmRlcmVudHJ5JHR5cGUgPC0gYXMuY2hhcmFjdGVyKGdlbmRlcmVudHJ5JGdlbmRlcikNCmdlbmRlcmVudHJ5IDwtIGdlbmRlcmVudHJ5WywtMl0NCg0KDQpldGhuaWVudHJ5JHR5cGUgPC0gYXMuY2hhcmFjdGVyKGV0aG5pZW50cnkkZXRobmljaXR5MikNCmV0aG5pZW50cnkgPC0gZXRobmllbnRyeVssLTJdDQoNCnRvdGFsZW50cnkkdHlwZSA8LSByZXAoInRvdGFsIiwgdGltZXM9bnJvdyh0b3RhbGVudHJ5KSkNCg0KZW50cnlfZGYgPC0gcmJpbmQuZGF0YS5mcmFtZSh0b3RhbGVudHJ5LCBnZW5kZXJlbnRyeSwgZXRobmllbnRyeSkNCg0KZW50cnlfZGYkdHlwZSA8LSBpZmVsc2UoZW50cnlfZGYkdHlwZT09Im1pbm9yaXR5IiwgImV0aG5pYyBtaW5vcml0eSIsIGVudHJ5X2RmJHR5cGUpDQplbnRyeV9kZiR0eXBlIDwtIGlmZWxzZShlbnRyeV9kZiR0eXBlPT0ibWFqb3JpdHkiLCAiZXRobmljIG1ham9yaXR5IiwgZW50cnlfZGYkdHlwZSkNCg0KDQpnZ3Bsb3QoZW50cnlfZGYsIGFlcyh5PW4sIHg9cGhkX3llYXIsIGNvbG9yPWZhY3Rvcih0eXBlLCBsZXZlbHM9YygidG90YWwiLCAibWVuIiwgIndvbWVuIiwgImV0aG5pYyBtYWpvcml0eSIsICJldGhuaWMgbWlub3JpdHkiKSkpKSArDQogIGdlb21fbGluZShsd2QgPSAwLjgpKw0KICB0aGVtZV9idygpICsNCiAgc2NhbGVfeF9jb250aW51b3VzKGJyZWFrcz1jKDE5OTAsMTk5NSwyMDAwLDIwMDUsMjAxMCwyMDE1LDIwMTkpKSsNCiAgbGFicyh4ID0gIlllYXIgb2YgZG9jdG9yYXRlIHJlY2VpcHQiLCB5ID0gIkZyZXF1ZW5jeSIpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpKSArDQogIHNjYWxlX2NvbG9yX21hbnVhbCh2YWx1ZXM9Yyh0b3QsIG1lbmMsIHdvbWVuYywgbWFqYywgbWluYyksIG5hbWU9Ikdyb3VwIikNCg0KDQpgYGANCg0KDQpgYGB7cn0NCg0KZ2dzYXZlKCIuL291dHB1dC9zdGFydGluZy9wbG90MS5qcGciLCBoZWlnaHQ9NCwgd2lkdGg9OCwgZHBpPTEyMDApDQoNCmBgYA0KDQoNCg0KDQojIEZpZ3VyZSAyIA0KDQoNCiMjIExvYWRpbmcgaW4gcmVzdWx0cyBmb3IgJ3N0YXJ0aW5nIHRvIHB1Ymxpc2gnDQoNCmBgYHtyfQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdGFydGluZy8yMDIzMDQwNU0xLnJkYSIpDQpNMSA8LSB4DQpybSh4KQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdGFydGluZy8yMDIzMDQwNU0yLnJkYSIpDQpNMiA8LSB4DQpybSh4KQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdGFydGluZy8yMDIzMDQwNU0zLnJkYSIpDQpNMyA8LSB4DQpybSh4KQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdGFydGluZy8yMDIzMDQwNU00LnJkYSIpDQpNNCA8LSB4DQpybSh4KQ0KDQoNCmBgYA0KDQoNCg0KIyMgRmlndXJlIDJhOiBnZW5kZXIgb25seQ0KDQpgYGB7cn0NCg0KIyBDYWxjdWxhdGluZyBwcmVkaWN0ZWQgcHJvYmFiaWxpdGllcw0KTTEgJT4lIHByZWRpY3QoZGZfc3RhcnRpbmcsIHR5cGU9ImxpbmsiLCBzZS5maXQgPSBUUlVFKSAtPiBwbG90MmENCg0KDQojIGNhbGN1bGF0ZSB1cHBlciBhbmQgbG93ZXIgYm91bmRzIGZvciB0aGUgY29uZmlkZW5jZSBpbnRlcnZhbHMNCnBsb3QyYSR1cHBlciA8LSBwbG90MmEkZml0ICsgKDEuOTYgKiBwbG90MmEkc2UuZml0KQ0KcGxvdDJhJGxvd2VyIDwtIHBsb3QyYSRmaXQgLSAoMS45NiAqIHBsb3QyYSRzZS5maXQpDQoNCnBsb3QyYSA8LSBhcy5kYXRhLmZyYW1lKHBsb3QyYSkNCg0KIyBleGNsdWRpbmcgZ2VuZGVyID0gbWlzc2luZyBmcm9tIHRoZSBwbG90DQpwbG90MmEkZ2VuZGVyIDwtIGRmX3N0YXJ0aW5nJGdlbmRlcg0KcGxvdDJhIDwtIHBsb3QyYVtwbG90MmEkZ2VuZGVyIT0ibWlzc2luZyIsXQ0KDQoNCnBsb3QyYSAlPiUNCiAgZ3JvdXBfYnkoZ2VuZGVyKSAlPiUNCiAgc3VtbWFyaXNlKGZpdCA9IHBsb2dpcyhtZWFuKGZpdCkpLCANCiAgICAgICAgICAgIHVwcGVyID0gcGxvZ2lzKG1lYW4odXBwZXIpKSwgDQogICAgICAgICAgICBsb3dlciA9IHBsb2dpcyhtZWFuKGxvd2VyKSkpIC0+IHBsb3QyYQ0KDQoNCmdncGxvdChwbG90MmEsYWVzKGdlbmRlcixmaXQsICBjb2xvcj0oZ2VuZGVyKSkpKw0KICBnZW9tX2JveHBsb3Qod2lkdGggPSAuMSkgKw0KICBnZW9tX2Vycm9yYmFyKGFlcyh5bWluID0gbG93ZXIsIHltYXggPSB1cHBlciksIGx3ZCA9IDAuOCwgd2lkdGggPSAuMDUpICsgeWxpbSgwLCAwLjMpICsNCiAgbGFicyh4ID0gIkdlbmRlciIsIHkgPSAiUHJvYmFiaWxpdHkgb2Ygc3RhcnRpbmcgdG8gcHVibGlzaCIpICsNCiAgdGhlbWVfYncoKSArDQogIHNjYWxlX2NvbG9yX21hbnVhbCh2YWx1ZXM9YyhtZW5jLCB3b21lbmMpLCBuYW1lPSJHZW5kZXIiKSArDQogIGdlb21fdGV4dCh4PTAuNSwgeT0wLjI4LCBsYWJlbD0iQSIsIHNpemU9MTAsIGNvbG9yPSJibGFjayIpKw0KICB0aGVtZShheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChmYWNlPSJib2xkIiksDQogICAgICAgIGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikgLT4gcGxvdDJhDQoNCg0KIyBFeGFjdCBnZW5kZXIgZGlmZmVyZW5jZXMgaW4gcHJvYmFiaWxpdHkgb2Ygc3RhcnRpbmcgdG8gcHVibGlzaA0KcGxvdDJhJGRhdGENCg0KYGBgDQoNCg0KIyMgRmlndXJlIDJiOiBldGhuaWNpdHkgb25seQ0KDQoNCmBgYHtyfQ0KDQojIENhbGN1bGF0aW5nIHByZWRpY3RlZCBwcm9iYWJpbGl0aWVzDQpNMiAlPiUgcHJlZGljdChkZl9zdGFydGluZywgdHlwZSA9ICJsaW5rIiwgc2UuZml0ID0gVFJVRSkgLT4gcGxvdDJiDQoNCg0KIyBDYWxjdWxhdGluZyBjb25maWRlbmNlIGludGVydmFscw0KcGxvdDJiJHVwcGVyIDwtIHBsb3QyYiRmaXQgKyAoMS45NiAqIHBsb3QyYiRzZS5maXQpDQpwbG90MmIkbG93ZXIgPC0gcGxvdDJiJGZpdCAtICgxLjk2ICogcGxvdDJiJHNlLmZpdCkNCg0KcGxvdDJiIDwtIGFzLmRhdGEuZnJhbWUocGxvdDJiKQ0KcGxvdDJiJGV0aG5pY2l0eTIgPC0gZGZfc3RhcnRpbmckZXRobmljaXR5Mg0KDQojIFJlbW92aW5nIGV0aG5pY2l0eSAnb3RoZXInIGZyb20gcGxvdA0KcGxvdDJiIDwtIHBsb3QyYltwbG90MmIkZXRobmljaXR5MiE9Im90aGVyIixdDQoNCg0KcGxvdDJiICU+JQ0KICBncm91cF9ieShldGhuaWNpdHkyKSAlPiUNCiAgc3VtbWFyaXNlKGZpdCA9IHBsb2dpcyhtZWFuKGZpdCkpLCANCiAgICAgICAgICAgIHVwcGVyID0gcGxvZ2lzKG1lYW4odXBwZXIpKSwgDQogICAgICAgICAgICBsb3dlciA9IHBsb2dpcyhtZWFuKGxvd2VyKSkpIC0+IHBsb3QyYg0KDQpnZ3Bsb3QocGxvdDJiLGFlcyhhcy5mYWN0b3IoZXRobmljaXR5MiksZml0LCAgY29sb3I9KGV0aG5pY2l0eTIpKSkrDQogIGdlb21fYm94cGxvdCh3aWR0aCA9IC4xKSArDQogIGdlb21fZXJyb3JiYXIoYWVzKHltaW4gPSBsb3dlciwgeW1heCA9IHVwcGVyKSwgbHdkID0gMC44LCB3aWR0aCA9IC4wNSkgKyB5bGltKDAsIDAuMykgKw0KICBsYWJzKHggPSAiRXRobmljaXR5IiwgeSA9ICJQcm9iYWJpbGl0eSBvZiBzdGFydGluZyB0byBwdWJsaXNoIikgKw0KICB0aGVtZV9idygpICsNCiAgc2NhbGVfY29sb3JfbWFudWFsKHZhbHVlcz1jKG1hamMsIG1pbmMpLCBuYW1lPSJFdGhuaWNpdHkiKSArDQogIGdlb21fdGV4dCh4PTAuNSwgeT0wLjI4LCBsYWJlbD0iQiIsIHNpemU9MTAsIGNvbG9yPSJibGFjayIpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpLA0KICAgICAgICBsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpIC0+IHBsb3QyYg0KDQoNCiMgRXhhY3QgZXRobmljIGRpZmZlcmVuY2VzIGluIHByb2JhYmlsaXR5IG9mIHN0YXJ0aW5nIHRvIHB1Ymxpc2gNCnBsb3QyYiRkYXRhDQoNCg0KYGBgDQoNCg0KDQojIyBGaWd1cmUgMjogY29tYmluaW5nIEEgYW5kIEINCg0KDQpgYGB7ciwgZmlnLndpZHRoPTh9DQoNCnBsb3QyIDwtIGdnYXJyYW5nZShwbG90MmEsIHBsb3QyYiwgbmNvbCA9IDIsIG5yb3c9MSkNCg0KcGxvdDINCg0KYGBgDQoNCmBgYHtyLCBldmFsPUZBTFNFLCBlY2hvPUZBTFNFfQ0KDQpnZ3NhdmUoIi4vb3V0cHV0L3N0YXJ0aW5nL3Bsb3QyLmpwZyIsIGhlaWdodD00LCB3aWR0aD04LCBkcGk9MTIwMCkNCg0KYGBgDQoNCg0KDQoNCiMgRmlndXJlIDMNCg0KUHJlZGljdGVkIHByb2JhYmlsaXR5IHRvIHN0YXJ0IGJ5IGdlbmRlciBhbmQgY29ob3J0DQoNCg0KYGBge3J9DQoNCnBsb3Q0IDwtIHBsb3QzIDwtIE00ICU+JSBwcmVkaWN0KGRmX3N0YXJ0aW5nLCB0eXBlPSJsaW5rIiwgc2UuZml0PVRSVUUpDQoNCnBsb3QzIDwtIGFzLmRhdGEuZnJhbWUocGxvdDMpDQoNCnBsb3QzJGdlbmRlciA8LSBkZl9zdGFydGluZyRnZW5kZXINCnBsb3QzJHBoZF9jb2hvcnQgPC0gZGZfc3RhcnRpbmckcGhkX2NvaG9ydA0KDQpwbG90MyA8LSBwbG90M1twbG90MyRnZW5kZXIhPSJtaXNzaW5nIixdDQoNCnBsb3QzJHVwcGVyIDwtIHBsb3QzJGZpdCArICgxLjk2ICogcGxvdDMkc2UuZml0KQ0KcGxvdDMkbG93ZXIgPC0gcGxvdDMkZml0IC0gKDEuOTYgKiBwbG90MyRzZS5maXQpDQoNCg0KcGxvdDMgJT4lDQogIGdyb3VwX2J5KGdlbmRlciwgcGhkX2NvaG9ydCkgJT4lDQogIHN1bW1hcmlzZShmaXQgPSBwbG9naXMobWVhbihmaXQpKSwgDQogICAgICAgICAgICB1cHBlciA9IHBsb2dpcyhtZWFuKHVwcGVyKSksIA0KICAgICAgICAgICAgbG93ZXIgPSBwbG9naXMobWVhbihsb3dlcikpKSAtPiBwbG90Mw0KDQoNCmdncGxvdChwbG90MywgYWVzKHg9YXMuZmFjdG9yKHBoZF9jb2hvcnQpLCB5PWZpdCwgY29sb3I9Z2VuZGVyKSkgKw0KICBnZW9tX2JveHBsb3QobHdkPS42LCBwb3NpdGlvbj0iZG9kZ2UiKSArDQogIGdlb21fZXJyb3JiYXIoYWVzKHltaW49bG93ZXIsIHltYXg9dXBwZXIpLCBsd2Q9LjcsIHBvc2l0aW9uPSJkb2RnZSIpICsNCiAgeWxpbSgwLCAwLjMpICsNCiAgbGFicyh4ID0gIlBoRCBjb2hvcnQiLCB5ID0gIlByb2JhYmlsaXR5IG9mIHN0YXJ0aW5nIHRvIHB1Ymxpc2giKSArDQogIHRoZW1lX2J3KCkgKw0KICBzY2FsZV94X2Rpc2NyZXRlKGxhYmVscyA9IGMoIjAiLCBjKHJlcCgiICIsIDQpKSwgIjUiLCBjKHJlcCgiICIsIDQpKSwgIjEwIiwgYyhyZXAoIiAiLCA0KSksICIxNSIsIGMocmVwKCIgIiwgNCkpLCAiMjAiLCBjKHJlcCgiICIsIDQpKSwgIjI1IiwgYyhyZXAoIiIsIDMpKSwgIjI5IikpICsNCiAgc2NhbGVfY29sb3JfbWFudWFsKHZhbHVlcz1jKG1lbj1tZW5jLHdvbWVuPXdvbWVuYyksIG5hbWU9IkdlbmRlciIpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpLCBsZWdlbmQudGl0bGU9ZWxlbWVudF90ZXh0KGZhY2U9ImJvbGQiKSkNCg0KYGBgDQoNCg0KYGBge3IsIGV2YWw9RkFMU0UsIGVjaG89RkFMU0V9DQoNCmdnc2F2ZSgiLi9vdXRwdXQvc3RhcnRpbmcvcGxvdDMuanBnIiwgaGVpZ2h0PTUsIHdpZHRoPTgsIGRwaT0xMjAwKQ0KDQpgYGANCg0KDQoNCiMgRmlndXJlIDQNCg0KUHJlZGljdGVkIHByb2JhYmlsaXR5IHRvIHN0YXJ0IGJ5IGV0aG5pY2l0eSBhbmQgY29ob3J0DQoNCg0KYGBge3J9DQoNCnBsb3Q0IDwtIGFzLmRhdGEuZnJhbWUocGxvdDQpDQoNCnBsb3Q0JGV0aG5pY2l0eTIgPC0gZGZfc3RhcnRpbmckZXRobmljaXR5Mg0KcGxvdDQkcGhkX2NvaG9ydCA8LSBkZl9zdGFydGluZyRwaGRfY29ob3J0DQoNCnBsb3Q0IDwtIHBsb3Q0W3Bsb3Q0JGV0aG5pY2l0eTIhPSJvdGhlciIsXQ0KDQpwbG90NCR1cHBlciA8LSBwbG90NCRmaXQgKyAoMS45NiAqIHBsb3Q0JHNlLmZpdCkNCnBsb3Q0JGxvd2VyIDwtIHBsb3Q0JGZpdCAtICgxLjk2ICogcGxvdDQkc2UuZml0KQ0KDQoNCnBsb3Q0ICU+JQ0KICBncm91cF9ieShldGhuaWNpdHkyLCBwaGRfY29ob3J0KSAlPiUNCiAgc3VtbWFyaXNlKGZpdCA9IHBsb2dpcyhtZWFuKGZpdCkpLCANCiAgICAgICAgICAgIHVwcGVyID0gcGxvZ2lzKG1lYW4odXBwZXIpKSwgDQogICAgICAgICAgICBsb3dlciA9IHBsb2dpcyhtZWFuKGxvd2VyKSkpIC0+IHBsb3Q0DQoNCg0KDQpnZ3Bsb3QocGxvdDQsIGFlcyh4PWFzLmZhY3RvcihwaGRfY29ob3J0KSwgeT1maXQsIGNvbG9yPWV0aG5pY2l0eTIpKSArDQogIGdlb21fYm94cGxvdChsd2Q9LjYsIHBvc2l0aW9uPSJkb2RnZSIpICsNCiAgZ2VvbV9lcnJvcmJhcihhZXMoeW1pbj1sb3dlciwgeW1heD11cHBlciksIGx3ZD0uNywgcG9zaXRpb249ImRvZGdlIikgKw0KICB5bGltKDAsIDAuNSkgKw0KICBsYWJzKHggPSAiUGhEIGNvaG9ydCIsIHkgPSAiUHJvYmFiaWxpdHkgb2Ygc3RhcnRpbmcgdG8gcHVibGlzaCIpICsNCiAgdGhlbWVfYncoKSArDQogIHNjYWxlX3hfZGlzY3JldGUobGFiZWxzID0gYygiMCIsIGMocmVwKCIgIiwgNCkpLCAiNSIsIGMocmVwKCIgIiwgNCkpLCAiMTAiLCBjKHJlcCgiICIsIDQpKSwgIjE1IiwgYyhyZXAoIiAiLCA0KSksICIyMCIsIGMocmVwKCIgIiwgNCkpLCAiMjUiLCBjKHJlcCgiIiwgNCkpKSkgKw0KICBzY2FsZV9jb2xvcl9tYW51YWwodmFsdWVzPWMobWFqb3JpdHk9bWFqYywgbWlub3JpdHk9bWluYyksIG5hbWU9IkV0aG5pY2l0eSIpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpLCBsZWdlbmQudGl0bGU9ZWxlbWVudF90ZXh0KGZhY2U9ImJvbGQiKSkNCg0KYGBgDQoNCmBgYHtyLCBldmFsPUZBTFNFLCBlY2hvPUZBTFNFfQ0KDQpnZ3NhdmUoIi4vb3V0cHV0L3N0YXJ0aW5nL3Bsb3Q0LmpwZyIsIGhlaWdodD01LCB3aWR0aD04LCBkcGk9MTIwMCkNCg0KYGBgDQoNCg0KDQoNCg0KIyBGaWd1cmUgNQ0KDQoNCiMjIExvYWRpbmcgaW4gcmVzdWx0cyBmb3IgJ3N0b3BwaW5nIHRvIHB1Ymxpc2gnDQoNCmBgYHtyfQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdG9wcGluZy8yMDIzMDQwNU0xLnJkYSIpDQpNMSA8LSB4DQpybSh4KQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdG9wcGluZy8yMDIzMDQwNU0yLnJkYSIpDQpNMiA8LSB4DQpybSh4KQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdG9wcGluZy8yMDIzMDQwNU0zLnJkYSIpDQpNMyA8LSB4DQpybSh4KQ0KDQpsb2FkKGZpbGUgPSAicmVzdWx0cy9zdG9wcGluZy8yMDIzMDQwNU00LnJkYSIpDQpNNCA8LSB4DQpybSh4KQ0KDQoNCmBgYA0KDQoNClN1cnZpdmFsIHRpbWVzIGJ5IGdlbmRlciBhbmQgZXRobmljaXR5Lg0KQmFzZWQgb24gTTE6IGdlbmRlciBvbmx5Lg0KDQpgYGB7cn0NCg0KIyBDYWxjdWxhdGluZyBwcmVkaWN0ZWQgcHJvYmFiaWxpdGllcw0KTTEgJT4lIHByZWRpY3QodHlwZT0icmVzcG9uc2UiLCBjb25mLmludD1UUlVFLCBjb25mLmxldmVsPS45NSwgbmV3ZGF0YT1kZl9wcGYzKSAtPiBwbG90NWENCg0KY2xhc3MocGxvdDVhKSAgDQpwbG90NWEgPC0gYXMuZGF0YS5mcmFtZShwbG90NWEpDQoNCiMgZXhjbHVkaW5nIGdlbmRlciA9IG1pc3NpbmcgZnJvbSB0aGUgcGxvdA0KcGxvdDVhJGdlbmRlciA8LSBkZl9wcGYzJGdlbmRlcg0KcGxvdDVhIDwtIHBsb3Q1YVtwbG90NWEkZ2VuZGVyIT0ibWlzc2luZyIsXQ0KDQoNCg0KcGxvdDVhICU+JQ0KICBncm91cF9ieShnZW5kZXIpICU+JQ0KICBzdW1tYXJpc2UoZml0ID0gbWVhbigucHJlZF90aW1lKSwgDQogICAgICAgICAgICB1cHBlciA9IG1lYW4oLnByZWRfdXBwZXIpLCANCiAgICAgICAgICAgIGxvd2VyID0gbWVhbigucHJlZF9sb3dlcikpIC0+IHBsb3Q1YQ0KDQoNCmdncGxvdChwbG90NWEsYWVzKGdlbmRlciwgZml0LCAgY29sb3I9KGdlbmRlcikpKSsNCiAgZ2VvbV9ib3hwbG90KHdpZHRoID0gLjEpICsNCiAgZ2VvbV9lcnJvcmJhcihhZXMoeW1pbiA9IGxvd2VyLCB5bWF4ID0gdXBwZXIpLCBsd2QgPSAwLjgsIHdpZHRoID0gLjA1KSArIA0KICB5bGltKDAsIDIwKSArDQogIGxhYnMoeCA9ICJHZW5kZXIiLCB5ID0gIkF2ZXJhZ2UgcHJlZGljdGVkIHN1cnZpdmFsIHRpbWUiKSArDQogIHRoZW1lX2J3KCkgKw0KICBzY2FsZV9jb2xvcl9tYW51YWwodmFsdWVzPWMobWVuYywgd29tZW5jKSwgbmFtZT0iR2VuZGVyIikgKw0KICBnZW9tX3RleHQoeD0wLjcsIHk9MTksIGxhYmVsPSJBIiwgc2l6ZT0xMCwgY29sb3I9ImJsYWNrIikgKw0KICB0aGVtZShheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChmYWNlPSJib2xkIiksDQogICAgICAgIGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikgLT4gcGxvdDVhDQoNCnBsb3Q1YQ0KDQoNCmBgYA0KDQpCYXNlZCBvbiBNMjogZXRobmljaXR5IG9ubHkuDQoNCmBgYHtyfQ0KDQojIENhbGN1bGF0aW5nIHByZWRpY3RlZCBwcm9iYWJpbGl0aWVzDQpNMiAlPiUgcHJlZGljdCh0eXBlPSJyZXNwb25zZSIsIGNvbmYuaW50PVRSVUUsIGNvbmYubGV2ZWw9Ljk1LCBuZXdkYXRhPWRmX3BwZjMpIC0+IHBsb3Q1Yg0KICANCnBsb3Q1YiA8LSBhcy5kYXRhLmZyYW1lKHBsb3Q1YikNCg0KIyBleGNsdWRpbmcgZ2VuZGVyID0gbWlzc2luZyBmcm9tIHRoZSBwbG90DQpwbG90NWIkZXRobmljaXR5IDwtIGRmX3BwZjMkZXRobmljaXR5Mg0KcGxvdDViIDwtIHBsb3Q1YltwbG90NWIkZXRobmljaXR5IT0ib3RoZXIiLF0NCg0KcGxvdDViICU+JQ0KICBncm91cF9ieShldGhuaWNpdHkpICU+JQ0KICBzdW1tYXJpc2UoZml0ID0gbWVhbigucHJlZF90aW1lKSwgDQogICAgICAgICAgICB1cHBlciA9IG1lYW4oLnByZWRfdXBwZXIpLCANCiAgICAgICAgICAgIGxvd2VyID0gbWVhbigucHJlZF9sb3dlcikpIC0+IHBsb3Q1Yg0KDQoNCmdncGxvdChwbG90NWIsYWVzKGV0aG5pY2l0eSwgZml0LCAgY29sb3I9KGV0aG5pY2l0eSkpKSsNCiAgZ2VvbV9ib3hwbG90KHdpZHRoID0gLjEpICsNCiAgZ2VvbV9lcnJvcmJhcihhZXMoeW1pbiA9IGxvd2VyLCB5bWF4ID0gdXBwZXIpLCBsd2QgPSAwLjgsIHdpZHRoID0gLjA1KSArIA0KICB5bGltKDAsIDIwKSArDQogIGxhYnMoeCA9ICJFdGhuaWNpdHkiLCB5ID0gIkF2ZXJhZ2UgcHJlZGljdGVkIHN1cnZpdmFsIHRpbWUiKSArDQogIHRoZW1lX2J3KCkgKw0KICBzY2FsZV9jb2xvcl9tYW51YWwodmFsdWVzPWMobWFqYywgbWluYyksIG5hbWU9IkV0aG5pY2l0eSIpICsNCiAgZ2VvbV90ZXh0KHg9MC43LCB5PTE5LCBsYWJlbD0iQiIsIHNpemU9MTAsIGNvbG9yPSJibGFjayIpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpLA0KICAgICAgICBsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpIC0+IHBsb3Q1Yg0KDQoNCmBgYA0KDQpDb21iaW5lZDogcGxvdCA0DQpgYGB7cn0NCg0KcGxvdDUgPC0gZ2dhcnJhbmdlKHBsb3Q1YSwgcGxvdDViLCBuY29sID0gMiwgbnJvdz0xLCB3aWR0aHM9YygxLDEpKQ0KDQpwbG90NQ0KDQpnZ3NhdmUoIi4vb3V0cHV0L3N0b3BwaW5nL3Bsb3Q1X2xvZ24uanBnIiwgaGVpZ2h0PTQsIHdpZHRoPTgsIGRwaT0xMjAwKQ0KDQpwbG90NWEkZGF0YSAjIHByZWRpY3RlZCBzdXJ2aXZhbCB0aW1lIGJ5IGdlbmRlcg0KcGxvdDViJGRhdGEgIyBwcmVkaWN0ZWQgc3Vydml2YWwgdGltZSBieSBldGhuaWNpdHkNCg0KYGBgDQoNCg0KDQoNCiMjIEZpZ3VyZSA2OiBHZW5kZXIgKiBjb2hvcnQNCg0KSGVyZSwgSSBjaGVjayB0aGUgcHJlZGljdGVkIHZhbHVlcyBiYXNlZCBvbiBtb2RlbCAzLiBJIGZvdW5kIHRoYXQgdGhlIHByZWRpY3RlZCB2YWx1ZXMgYmFzZWQgb24gdGhlIGZ1bGwgbW9kZWwgd2VyZSBleHRyZW1lIGluIHNvbWUgY2FzZXMuIEJ5IGFkZGluZyB0aGUgdmFyaWFibGVzIGluIG1vZGVsIDMgb25lIGJ5IG9uZSwgSSBjaGVjayB3aGljaCB2YXJpYWJsZXMgbGVhZCB0byBsYXJnZSBkZXZpYXRpb25zIGZyb20gbm9ybWFsIHByZWRpY3RlZCB2YWx1ZXMuIEluY2x1c2lvbiBvZiB1bml2ZXJzaXR5LCBmaWVsZCwgY29ob3J0IGFuZCB2ZW5pIGxlYWRzIHRvIGEgc21hbGwgcGVyY2VudGFnZSBvZiB1bnJlYWxpc3RpYyBwcmVkaWN0ZWQgdmFsdWVzLCB3aGlsZSBwcmV2aW91cyBwdWJsaWNhdGlvbnMgc2VlbXMgdG8gYWRkIHF1aXRlIGEgZmV3LiANCg0KYGBge3J9DQoNCk00ICU+JSBwcmVkaWN0KHR5cGU9InJlc3BvbnNlIiwgY29uZi5pbnQ9VFJVRSwgY29uZi5sZXZlbD0uOTUsIG5ld2RhdGE9ZGZfcHBmMykgLT4gcDYNCg0KDQpwbG90NyA8LSBwbG90NiA8LSBhcy5kYXRhLmZyYW1lKHA2KSAjIHNhbWUgZGF0YSBmb3IgcGxvdCA1IGFuZCA2DQoNCiMgZXhjbHVkaW5nIGdlbmRlciA9IG1pc3NpbmcgZnJvbSB0aGUgcGxvdA0KcGxvdDYkZ2VuZGVyIDwtIGRmX3BwZjMkZ2VuZGVyDQpwbG90NiRjb2hvcnQgPC0gZGZfcHBmMyRwaGRfY29ob3J0DQpwbG90NiA8LSBwbG90NltwbG90NiRnZW5kZXIhPSJtaXNzaW5nIixdDQoNCnBsb3Q2ICU+JQ0KICBncm91cF9ieShnZW5kZXIsIGNvaG9ydCkgJT4lDQogIHN1bW1hcmlzZShmaXQgPSBtZWFuKC5wcmVkX3RpbWUpLA0KICAgICAgICAgICAgdXBwZXIgPSBtZWFuKC5wcmVkX3VwcGVyKSwgDQogICAgICAgICAgICBsb3dlciA9IG1lYW4oLnByZWRfbG93ZXIpKSAtPiBwbG90Ng0KDQoNCmdncGxvdChwbG90NiwgYWVzKHg9YXMuZmFjdG9yKGNvaG9ydCksIHk9Zml0LCBjb2xvcj1nZW5kZXIpKSArDQogIGdlb21fYm94cGxvdChsd2Q9LjYsIHBvc2l0aW9uPSJkb2RnZSIpICsNCiAgZ2VvbV9lcnJvcmJhcihhZXMoeW1pbj1sb3dlciwgeW1heD11cHBlciksIGx3ZD0uNywgcG9zaXRpb249ImRvZGdlIikgKw0KICBsYWJzKHggPSAiUGhEIGNvaG9ydCIsIHkgPSAiQXZlcmFnZSBwcmVkaWN0ZWQgc3Vydml2YWwgdGltZSIpICsNCiAgdGhlbWVfYncoKSArDQogIHNjYWxlX3hfZGlzY3JldGUobGFiZWxzID0gYygiMCIsIGMocmVwKCIgIiwgNCkpLCAiNSIsIGMocmVwKCIgIiwgNCkpLCAiMTAiLCBjKHJlcCgiICIsIDQpKSwgIjE1IiwgYyhyZXAoIiAiLCA0KSksICIyMCIsIGMocmVwKCIgIiwgNCkpLCAiMjUiLCBjKHJlcCgiIiwgMykpKSkgKw0KICBzY2FsZV9jb2xvcl9tYW51YWwodmFsdWVzPWMobWVuPW1lbmMsd29tZW49d29tZW5jKSwgbmFtZT0iR2VuZGVyIikgKw0KICB0aGVtZShheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChmYWNlPSJib2xkIiksIGxlZ2VuZC50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpKQ0KDQpnZ3NhdmUoIi4vb3V0cHV0L3N0b3BwaW5nL3Bsb3Q2X2xvZ24uanBnIiwgaGVpZ2h0PTUsIHdpZHRoPTgsIGRwaT0xMjAwKQ0KDQoNCmBgYA0KDQoNCiMjIEZpZ3VyZSA3OiBFdGhuaWNpdHkgKiBjb2hvcnQNCg0KYGBge3J9DQoNCiMgZXhjbHVkaW5nIGV0aG5pY2l0eSA9IG90aGVyIGZyb20gdGhlIHBsb3QNCnBsb3Q3JGV0aG5pY2l0eSA8LSBkZl9wcGYzJGV0aG5pY2l0eTINCnBsb3Q3JGNvaG9ydCA8LSBkZl9wcGYzJHBoZF9jb2hvcnQNCnBsb3Q3IDwtIHBsb3Q3W3Bsb3Q3JGV0aG5pY2l0eSE9Im90aGVyIixdDQoNCnBsb3Q3ICU+JQ0KICBncm91cF9ieShldGhuaWNpdHksIGNvaG9ydCkgJT4lDQogIHN1bW1hcmlzZShmaXQgPSBtZWFuKC5wcmVkX3RpbWUpLA0KICAgICAgICAgICAgdXBwZXIgPSBtZWFuKC5wcmVkX3VwcGVyKSwgDQogICAgICAgICAgICBsb3dlciA9IG1lYW4oLnByZWRfbG93ZXIpKSAtPiBwbG90Nw0KDQoNCmdncGxvdChwbG90NywgYWVzKHg9YXMuZmFjdG9yKGNvaG9ydCksIHk9Zml0LCBjb2xvcj1ldGhuaWNpdHkpKSArDQogIGdlb21fYm94cGxvdChsd2Q9LjYsIHBvc2l0aW9uPSJkb2RnZSIpICsNCiAgZ2VvbV9lcnJvcmJhcihhZXMoeW1pbj1sb3dlciwgeW1heD11cHBlciksIGx3ZD0uNywgcG9zaXRpb249ImRvZGdlIikgKw0KICBsYWJzKHggPSAiUGhEIGNvaG9ydCIsIHkgPSAiQXZlcmFnZSBwcmVkaWN0ZWQgc3Vydml2YWwgdGltZSIpICsNCiAgdGhlbWVfYncoKSArDQogIHNjYWxlX2NvbG9yX21hbnVhbCh2YWx1ZXM9YyhtYWpvcml0eT1tYWpjLCBtaW5vcml0eT1taW5jKSwgbmFtZT0iRXRobmljaXR5IikgKw0KICBzY2FsZV94X2Rpc2NyZXRlKGxhYmVscyA9IGMoIjAiLCBjKHJlcCgiICIsIDQpKSwgIjUiLCBjKHJlcCgiICIsIDQpKSwgIjEwIiwgYyhyZXAoIiAiLCA0KSksICIxNSIsIGMocmVwKCIgIiwgNCkpLCAiMjAiLCBjKHJlcCgiICIsIDQpKSwgIjI1IiwgYyhyZXAoIiIsIDMpKSkpICsNCiAgdGhlbWUoYXhpcy50aXRsZT1lbGVtZW50X3RleHQoZmFjZT0iYm9sZCIpLCBsZWdlbmQudGl0bGU9ZWxlbWVudF90ZXh0KGZhY2U9ImJvbGQiKSkNCg0KDQpnZ3NhdmUoIi4vb3V0cHV0L3N0b3BwaW5nL3Bsb3Q3X2xvZ24uanBnIiwgaGVpZ2h0PTUsIHdpZHRoPTgsIGRwaT0xMjAwKQ0KDQoNCmBgYA0KDQoNCg0KDQoNCg==</div>
+<style>
+  .center {
+    text-align: center;
+    color: red;
+  }
+</style>
+  
+  <hr>
+  <br>
+  <p class="center">Copyright &copy; 2023 </p>
+    
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("figures.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
