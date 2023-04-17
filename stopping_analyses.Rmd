@@ -166,6 +166,7 @@ M1
 # p-values
 
 M1$pvals <- 2*pnorm(-abs(M1$res[,1]/M1$res[,4]))
+
 round(M1$pvals, 4)
 
 ```
@@ -326,7 +327,6 @@ boot.df3$t <- (boot.df3$original / boot.df3$se)
 
 round(boot.df3, 5)
 
-
 ```
 
 
@@ -474,7 +474,7 @@ fsave(b4, file = "boot4.rda", location = "./results/stopping/")
 
 ```{r, echo=FALSE}
 
-load(file= "./results/stopping/boot4.rda")
+load(file= "./results/stopping/20230408boot4.rda")
 
 b4 <- x
 
@@ -591,7 +591,7 @@ ggplot(plot5b,aes(ethnicity, fit,  color=(ethnicity)))+
         legend.position = "none") -> plot5b
 
 
-plot5b
+=
 
 ```
 
