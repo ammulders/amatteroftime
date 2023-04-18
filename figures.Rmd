@@ -18,6 +18,11 @@ This lab journal replicates the analyses for 'starting to publish'.
 
 ----
 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+
 ```{r, echo=FALSE}
 
 rm(list = ls())
@@ -124,7 +129,7 @@ minc <- "#B85042"
 Number of PhDs entering the sample per cohort, split out by gender and ethnicity
 
 
-```{r}
+```{r, warning=FALSE}
 
 df_starting %>%
   group_by(phd_year) %>%
@@ -342,13 +347,17 @@ plot3 %>%
             lower = plogis(mean(lower))) -> plot3
 
 
-ggplot(plot3, aes(x=as.factor(phd_cohort), y=fit, color=gender)) +
+# transform back to years for easier interpretability
+plot3$phdyear <- plot3$phd_cohort+1990
+
+
+ggplot(plot3, aes(x=as.factor(phdyear), y=fit, color=gender)) +
   geom_boxplot(lwd=.6, position="dodge") +
   geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
   ylim(0, 0.3) +
-  labs(x = "PhD cohort", y = "Probability of starting to publish") +
+  labs(x = "PhD year", y = "Probability of starting to publish") +
   theme_bw() +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)), "29")) +
+  scale_x_discrete(labels = c("1990", c(rep(" ", 4)), "1995", c(rep(" ", 4)), "2000", c(rep(" ", 4)), "2005", c(rep(" ", 4)), "2010", c(rep(" ", 4)), "2015", c(rep("", 3)), "2019")) +
   scale_color_manual(values=c(men=menc,women=womenc), name="Gender") +
   theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
 
@@ -388,14 +397,17 @@ plot4 %>%
             lower = plogis(mean(lower))) -> plot4
 
 
+# transform back to years for easier interpretability
+plot4$phdyear <- plot4$phd_cohort+1990
 
-ggplot(plot4, aes(x=as.factor(phd_cohort), y=fit, color=ethnicity2)) +
+
+ggplot(plot4, aes(x=as.factor(phdyear), y=fit, color=ethnicity2)) +
   geom_boxplot(lwd=.6, position="dodge") +
   geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
   ylim(0, 0.5) +
-  labs(x = "PhD cohort", y = "Probability of starting to publish") +
+  labs(x = "PhD year", y = "Probability of starting to publish") +
   theme_bw() +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 4)))) +
+  scale_x_discrete(labels = c("1990", c(rep(" ", 4)), "1995", c(rep(" ", 4)), "2000", c(rep(" ", 4)), "2005", c(rep(" ", 4)), "2010", c(rep(" ", 4)), "2015", c(rep("", 3)), "2019")) + 
   scale_color_manual(values=c(majority=majc, minority=minc), name="Ethnicity") +
   theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
 
@@ -519,17 +531,22 @@ plot5 <- ggarrange(plot5a, plot5b, ncol = 2, nrow=1, widths=c(1,1))
 
 plot5
 
-ggsave("./output/stopping/plot5_logn.jpg", height=4, width=8, dpi=1200)
 
 plot5a$data # predicted survival time by gender
 plot5b$data # predicted survival time by ethnicity
 
 ```
 
+```{r, eval=FALSE, echo=FALSE}
+
+ggsave("./output/stopping/plot5_logn.jpg", height=4, width=8, dpi=1200)
+
+```
 
 
 
-## Figure 6: Gender * cohort
+
+# Figure 6: Gender * cohort
 
 Here, I check the predicted values based on model 3. I found that the predicted values based on the full model were extreme in some cases. By adding the variables in model 3 one by one, I check which variables lead to large deviations from normal predicted values. Inclusion of university, field, cohort and veni leads to a small percentage of unrealistic predicted values, while previous publications seems to add quite a few. 
 
@@ -552,14 +569,25 @@ plot6 %>%
             lower = mean(.pred_lower)) -> plot6
 
 
-ggplot(plot6, aes(x=as.factor(cohort), y=fit, color=gender)) +
+# transform back to years for easier interpretability
+plot6$phdyear <- plot6$cohort + 1990
+
+ggplot(plot6, aes(x=as.factor(phdyear), y=fit, color=gender)) +
   geom_boxplot(lwd=.6, position="dodge") +
   geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
-  labs(x = "PhD cohort", y = "Average predicted survival time") +
+  labs(x = "PhD year", y = "Average predicted survival time") +
   theme_bw() +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)))) +
+  scale_x_discrete(labels = c("1990", c(rep(" ", 4)), "1995", c(rep(" ", 4)), "2000", c(rep(" ", 4)), "2005", c(rep(" ", 4)), "2010", c(rep(" ", 4)), "2015", c(rep("", 2)), "2018")) +
   scale_color_manual(values=c(men=menc,women=womenc), name="Gender") +
   theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
+
+
+
+```
+
+
+
+```{r, eval=FALSE, echo=FALSE}
 
 ggsave("./output/stopping/plot6_logn.jpg", height=5, width=8, dpi=1200)
 
@@ -567,7 +595,11 @@ ggsave("./output/stopping/plot6_logn.jpg", height=5, width=8, dpi=1200)
 ```
 
 
-## Figure 7: Ethnicity * cohort
+
+
+
+
+# Figure 7: Ethnicity * cohort
 
 ```{r}
 
@@ -582,21 +614,31 @@ plot7 %>%
             upper = mean(.pred_upper), 
             lower = mean(.pred_lower)) -> plot7
 
+# transform back to years for better interpretability
+plot7$phdyear <- plot7$cohort + 1990
 
-ggplot(plot7, aes(x=as.factor(cohort), y=fit, color=ethnicity)) +
+ggplot(plot7, aes(x=as.factor(phdyear), y=fit, color=ethnicity)) +
   geom_boxplot(lwd=.6, position="dodge") +
   geom_errorbar(aes(ymin=lower, ymax=upper), lwd=.7, position="dodge") +
-  labs(x = "PhD cohort", y = "Average predicted survival time") +
+  labs(x = "PhD year", y = "Average predicted survival time") +
   theme_bw() +
   scale_color_manual(values=c(majority=majc, minority=minc), name="Ethnicity") +
-  scale_x_discrete(labels = c("0", c(rep(" ", 4)), "5", c(rep(" ", 4)), "10", c(rep(" ", 4)), "15", c(rep(" ", 4)), "20", c(rep(" ", 4)), "25", c(rep("", 3)))) +
+  scale_x_discrete(labels = c("1990", c(rep(" ", 4)), "1995", c(rep(" ", 4)), "2000", c(rep(" ", 4)), "2005", c(rep(" ", 4)), "2010", c(rep(" ", 4)), "2015", c(rep("", 2)), "2018")) +
   theme(axis.title=element_text(face="bold"), legend.title=element_text(face="bold"))
 
+
+```
+
+
+
+```{r, eval=FALSE, echo=FALSE}
 
 ggsave("./output/stopping/plot7_logn.jpg", height=5, width=8, dpi=1200)
 
 
 ```
+
+
 
 
 
