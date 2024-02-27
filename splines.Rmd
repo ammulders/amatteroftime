@@ -14,7 +14,7 @@ output:
 
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
@@ -50,9 +50,6 @@ rm(list = ls())
 # Custom functions
 
 - `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
-
-- `ddlogis`: double derivative function for calculating marginal interaction effects 
-([source](https://jochemtolsma.github.io/MarginalEffects/#5_Logistic_with_model_interactions)).
 
 
 ```{r, results='hide'}
@@ -91,8 +88,8 @@ fpackage.check(packages)
 
 We use one processed dataset.
 
-* [df_starting.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
-    - For construction of this dataset see [(datapreparations.html)]  
+* [df_starting.rda](https://github.com/ammulders/amatteroftime/data/processed/df_starting.rda): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)
     - name of dataset: `df_starting` 
     
 

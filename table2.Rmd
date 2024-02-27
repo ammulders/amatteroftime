@@ -1,5 +1,4 @@
 ---
-
 title: "Table 2"
 date: "Last compiled on `r format(Sys.time(), '%B, %Y')`"
 output: 
@@ -14,7 +13,7 @@ output:
 ---
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
@@ -87,7 +86,7 @@ fpackage.check(packages)
 We use one processed dataset.
 
 * [df_stopping.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + field + university + PhD year  
-    - For construction of this dataset see [(datapreparations.html)]  
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)  
     - name of dataset: `df_ppf3` 
     
 

@@ -10,3 +10,9 @@ dplyr
 stringr
 forcats
 kableExtra
+lubridate
+ggpubr
+splines2
+survival
+flexsurv
+boot

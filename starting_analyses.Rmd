@@ -14,7 +14,7 @@ output:
 
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
@@ -93,7 +93,7 @@ ddlogis <- function(X) {
 - `boot`: bootstrapping for SEs of AMEs
 - `kableExtra`: formatting tables
 
-```{r, results='hide'}
+```{r, results='hide', warning=FALSE}
 
 packages = c("tidyverse", "ggplot2", "ggpubr", "splines", "splines2", "boot", "kableExtra")
 
@@ -110,8 +110,8 @@ fpackage.check(packages)
 
 We use one processed dataset.
 
-* [df_starting.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
-    - For construction of this dataset see [(datapreparations.html)]  
+* [df_starting.rda](https://github.com/ammulders/amatteroftime/data/processed/df_starting.rda): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)  
     - name of dataset: `df_starting` 
     
 
@@ -626,5 +626,44 @@ summary(M4b)
 
 
 ```
+
+
+## Ethnicity by PhD year
+
+```{r}
+
+df_starting %>%
+  group_by(phd_year, ethnicity3) %>%
+  summarize(frequency = n()) -> ethnicity_year
+
+
+
+ethnicity_year
+
+ey_1994 <- ethnicity_year[ethnicity_year$phd_year<1995 & ethnicity_year$ethnicity3=="minority",]
+
+mean(ey_1994$frequency)
+
+
+ey_1999 <- ethnicity_year[ethnicity_year$phd_year<2000 & ethnicity_year$phd_year>1994 & ethnicity_year$ethnicity3=="minority",] # 95-99
+
+mean(ey_1999$frequency)
+
+
+
+ey_2009 <- ethnicity_year[ethnicity_year$phd_year>1999 & ethnicity_year$phd_year<2010 & ethnicity_year$ethnicity3=="minority",] # 00-09
+
+mean(ey_2009$frequency)
+
+
+ey_2010p <- ethnicity_year[ethnicity_year$phd_year>2009 & ethnicity_year$ethnicity3=="minority",] # 00-09
+
+mean(ey_2010p$frequency)
+
+
+```
+
+
+
 
 -----

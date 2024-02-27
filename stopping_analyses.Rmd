@@ -67,7 +67,7 @@ fsave <- function(x, file, location="./data/processed/") {
 - `ggpubr`: for combining two figures in one (plot 5)
 - `kableExtra`: formatting tables
 
-```{r, results='hide'}
+```{r, results='hide', warning=FALSE}
 
 packages = c("survival", "flexsurv", "boot", "tidyverse", "ggplot2", "ggpubr", "kableExtra") 
 
@@ -84,12 +84,12 @@ fpackage.check(packages)
 
 We use two processed datasets.
 
-* [df_stopping.rda]("./data/processed/df_stopping.rda"): person-period file containing publications and all relevant variables for the survival models, time window for inactivity is 3 years
-    - For construction of this dataset see [(datapreparation.html)]  
+* [df_stopping.rda]("https://github.com/ammulders/amatteroftime/data/processed/df_stopping.rda"): person-period file containing publications and all relevant variables for the survival models, time window for inactivity is 3 years
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)  
     - name of dataset: `df_ppf3` 
 
-* [df_stopping5.rda]("data/processed/df_stopping_5.rda"): person-period file containing publications and all relevant variables for the survival models, time-window for inactivity is years
-    - For construction of this dataset see [(datapreparation.html)]  
+* [df_stopping5.rda]("https://github.com/ammulders/amatteroftime/data/processed/df_stopping_5.rda"): person-period file containing publications and all relevant variables for the survival models, time-window for inactivity is years
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)  
     - name of dataset: `df_ppf5` 
 
 
@@ -610,7 +610,211 @@ R4
 ```
 
 
-## R2: ethnicity-missing excluded
+
+
+AMEs Model 3 (no SEs)
+```{r, eval=FALSE}
+
+dfmaj <- dfmin <- dfmen <- dfwomen <- df_ppf5
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity2 <- "minority" # one dataset all minority
+    dfmaj$ethnicity2 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df_ppf5$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df_ppf5$gender))
+    dfmin$ethnicity2 <- factor(dfmin$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+    dfmaj$ethnicity2 <- factor(dfmaj$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(R3, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(R3, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(R3, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(R3, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+    
+AME_gender
+AME_ethnicity
+
+```
+
+AMEs Model 4 (no SEs)
+
+```{r, eval=FALSE}
+
+    dfmaj <- dfmin <- dfmen <- dfwomen <- df_ppf5
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity2 <- "minority" # one dataset all minority
+    dfmaj$ethnicity2 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df_ppf5$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df_ppf5$gender))
+    dfmin$ethnicity2 <- factor(dfmin$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+    dfmaj$ethnicity2 <- factor(dfmaj$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(R4, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(R4, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(R4, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(R4, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+    
+    # cohort interactions
+    
+    s <- 0.1
+    # copying our data into separate dataframes
+    dfwomencp <- dfwomencm <- dfmencp <- dfmencm <- df_ppf5
+    dfmincp <- dfmincm <- dfmajcp <- dfmajcm <- df_ppf5
+    
+    # assigning gender to each of the dataframes
+    dfwomencp$gender <- dfwomencm$gender <- "women"
+    dfmencp$gender <- dfmencm$gender <- "men"
+    dfwomencp$gender <- factor(dfwomencp$gender, levels=levels(df_ppf5$gender))
+    dfwomencm$gender <- factor(dfwomencm$gender, levels=levels(df_ppf5$gender))
+    dfmencp$gender <- factor(dfmencp$gender, levels=levels(df_ppf5$gender))
+    dfmencm$gender <- factor(dfmencm$gender, levels=levels(df_ppf5$gender))
+    
+    # assigning ethnicity to the dataframes
+    dfmincp$ethnicity2 <- dfmincm$ethnicity2 <- "minority"
+    dfmajcp$ethnicity2 <- dfmajcm$ethnicity2 <- "majority"
+    dfmincp$ethnicity2 <- factor(dfmincp$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+    dfmincm$ethnicity2 <- factor(dfmincm$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+    dfmajcp$ethnicity2 <- factor(dfmajcp$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+    dfmajcm$ethnicity2 <- factor(dfmajcm$ethnicity2, levels=levels(df_ppf5$ethnicity2))
+    
+    
+    # adding/subtracting small changes PhD cohort
+    dfwomencp$phd_cohort <- dfmencp$phd_cohort <- df_ppf5$phd_cohort + s
+    dfwomencm$phd_cohort <- dfmencm$phd_cohort <- df_ppf5$phd_cohort - s
+    
+    dfmajcp$phd_cohort <- dfmincp$phd_cohort <- df_ppf5$phd_cohort + s
+    dfmajcm$phd_cohort <- dfmincm$phd_cohort <- df_ppf5$phd_cohort - s
+    
+    # calculating predicted probabilities
+    pwp <- as.numeric(unlist(predict(R4, type="response", newdata=dfwomencp)))
+    pwm <- as.numeric(unlist(predict(R4, type="response", newdata=dfwomencm)))
+    pmp <- as.numeric(unlist(predict(R4, type="response", newdata=dfmencp)))
+    pmm <- as.numeric(unlist(predict(R4, type="response", newdata=dfmencm)))
+    
+    pnp <- as.numeric(unlist(predict(R4, type="response", newdata=dfmincp)))
+    pnm <- as.numeric(unlist(predict(R4, type="response", newdata=dfmincm)))
+    pjp <- as.numeric(unlist(predict(R4, type="response", newdata=dfmajcp)))
+    pjm <- as.numeric(unlist(predict(R4, type="response", newdata=dfmajcm)))
+    
+    
+# marginal effects
+AME_gendercoh <- mean(((pwp - pmp) - (pwm - pmm)) / (2*s))
+
+AME_ethnicitycoh <- mean(((pnp - pjp) - (pnm - pjm)) / (2*s))
+
+```
+
+
+
+
+Model 3 SEs
+
+```{r, eval=FALSE}
+
+
+bootFunc <- function(data, i) {
+  df <- data[i,] #bootstrap datasets
+  
+  
+  M <- flexsurv::flexsurvreg(survival::Surv((time -1), time, inactive) ~ gender + ethnicity2 + uni + field2 + phd_cohort + npubs_prev_s, data = df, dist = "lognormal")
+  
+  suppressWarnings({
+  
+    dfmaj <- dfmin <- dfmen <- dfwomen <- df
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity2 <- "minority" # one dataset all minority
+    dfmaj$ethnicity2 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df$gender))
+    dfmin$ethnicity2 <- factor(dfmin$ethnicity2, levels=levels(df$ethnicity2))
+    dfmaj$ethnicity2 <- factor(dfmaj$ethnicity2, levels=levels(df$ethnicity2))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(M, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(M, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(M, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(M, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+  })
+  
+  c(AME_gender, AME_ethnicity)
+   #save results
+}
+
+b3 <- boot(df_ppf5, bootFunc, R = 100, parallel="snow", ncpus=10)
+
+
+fsave(b3, file = "boot3_R1.rda", location = "./results/stopping/robustness/")
+
+
+```
+
+```{r, echo=FALSE}
+
+load("./results/stopping/robustness/20240115boot3_R1.rda")
+b3 <- x
+rm(x)
+
+```
+
+
+```{r}
+
+original <- b3$t0
+bias <- colMeans(b3$t) - b3$t0
+se <- apply(b3$t, 2, sd)
+
+boot.df3 <- data.frame(original=original, bias=bias, se=se)
+row.names(boot.df3) <- c("AME_gender", "AME_ethnicity")
+
+boot.df3$t <- (boot.df3$original / boot.df3$se)
+
+round(boot.df3, 5)
+
+```
+
+
+
+
+
+
+
+## R2: ethnicity-missing included separately
 
 
 ```{r, eval=FALSE}
@@ -618,11 +822,138 @@ R4
 R5 <- flexsurvreg(Surv((time -1), time, inactive) ~ ethnicity3 , data = df_ppf3, dist = "lognormal")
 R5
 
-R6 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + veni, data = df_ppf3, dist = "lognormal")
+R6 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s, data = df_ppf3, dist = "lognormal")
 R6
 
-R7 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + veni + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf3, dist = "lognormal")
+R7 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity3 + uni + field2 + phd_cohort + npubs_prev_s + phd_cohort*gender + phd_cohort*ethnicity2, data = df_ppf3, dist = "lognormal")
 R7
+
+
+```
+
+
+
+
+AMEs Model 3 (no SEs)
+```{r, eval=FALSE}
+
+dfmaj <- dfmin <- dfmen <- dfwomen <- df_ppf5
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity3 <- "minority" # one dataset all minority
+    dfmaj$ethnicity3 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df_ppf5$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df_ppf5$gender))
+    dfmin$ethnicity3 <- factor(dfmin$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+    dfmaj$ethnicity3 <- factor(dfmaj$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(R6, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(R6, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(R6, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(R6, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+    
+AME_gender
+AME_ethnicity
+
+```
+
+AMEs Model 4 (no SEs)
+
+```{r, eval=FALSE}
+
+    dfmaj <- dfmin <- dfmen <- dfwomen <- df_ppf5
+    dfwomen$gender <- "women" # one dataset of all women
+    dfmen$gender <- "men" # one dataset of all men
+    dfmin$ethnicity3 <- "minority" # one dataset all minority
+    dfmaj$ethnicity3 <- "majority" # one dataset all majority
+    
+    dfwomen$gender <- factor(dfwomen$gender, levels=levels(df_ppf5$gender))
+    dfmen$gender <- factor(dfmen$gender, levels=levels(df_ppf5$gender))
+    dfmin$ethnicity3 <- factor(dfmin$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+    dfmaj$ethnicity3 <- factor(dfmaj$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+
+
+    #calculate the predicted probabilities for gender
+    pw <- as.numeric(unlist(predict(R7, type="response", newdata=dfwomen)))
+    pm <- as.numeric(unlist(predict(R7, type="response", newdata=dfmen)))
+    
+    # average marginal effects
+    AME_gender <- mean(pw - pm)
+    
+    #calculate the predicted probabilities for ethnicity
+    pmn <- as.numeric(unlist(predict(R7, type="response", newdata=dfmin)))
+    pmj <- as.numeric(unlist(predict(R7, type="response", newdata=dfmaj)))
+
+    # average marginal effects
+    AME_ethnicity <- mean(pmn - pmj)
+    
+    
+    # cohort interactions
+    
+    s <- 0.1
+    # copying our data into separate dataframes
+    dfwomencp <- dfwomencm <- dfmencp <- dfmencm <- df_ppf5
+    dfmincp <- dfmincm <- dfmajcp <- dfmajcm <- df_ppf5
+    
+    # assigning gender to each of the dataframes
+    dfwomencp$gender <- dfwomencm$gender <- "women"
+    dfmencp$gender <- dfmencm$gender <- "men"
+    dfwomencp$gender <- factor(dfwomencp$gender, levels=levels(df_ppf5$gender))
+    dfwomencm$gender <- factor(dfwomencm$gender, levels=levels(df_ppf5$gender))
+    dfmencp$gender <- factor(dfmencp$gender, levels=levels(df_ppf5$gender))
+    dfmencm$gender <- factor(dfmencm$gender, levels=levels(df_ppf5$gender))
+    
+    # assigning ethnicity to the dataframes
+    dfmincp$ethnicity3 <- dfmincm$ethnicity3 <- "minority"
+    dfmajcp$ethnicity3 <- dfmajcm$ethnicity3 <- "majority"
+    dfmincp$ethnicity3 <- factor(dfmincp$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+    dfmincm$ethnicity3 <- factor(dfmincm$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+    dfmajcp$ethnicity3 <- factor(dfmajcp$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+    dfmajcm$ethnicity3 <- factor(dfmajcm$ethnicity3, levels=levels(df_ppf5$ethnicity3))
+    
+    
+    # adding/subtracting small changes PhD cohort
+    dfwomencp$phd_cohort <- dfmencp$phd_cohort <- df_ppf5$phd_cohort + s
+    dfwomencm$phd_cohort <- dfmencm$phd_cohort <- df_ppf5$phd_cohort - s
+    
+    dfmajcp$phd_cohort <- dfmincp$phd_cohort <- df_ppf5$phd_cohort + s
+    dfmajcm$phd_cohort <- dfmincm$phd_cohort <- df_ppf5$phd_cohort - s
+    
+    # calculating predicted probabilities
+    pwp <- as.numeric(unlist(predict(R7, type="response", newdata=dfwomencp)))
+    pwm <- as.numeric(unlist(predict(R7, type="response", newdata=dfwomencm)))
+    pmp <- as.numeric(unlist(predict(R7, type="response", newdata=dfmencp)))
+    pmm <- as.numeric(unlist(predict(R7, type="response", newdata=dfmencm)))
+    
+    pnp <- as.numeric(unlist(predict(R7, type="response", newdata=dfmincp)))
+    pnm <- as.numeric(unlist(predict(R7, type="response", newdata=dfmincm)))
+    pjp <- as.numeric(unlist(predict(R7, type="response", newdata=dfmajcp)))
+    pjm <- as.numeric(unlist(predict(R7, type="response", newdata=dfmajcm)))
+    
+    
+# marginal effects
+AME_gendercoh <- mean(((pwp - pmp) - (pwm - pmm)) / (2*s))
+
+AME_ethnicitycoh <- mean(((pnp - pjp) - (pnm - pjm)) / (2*s))
+
+
+AME_gender
+AME_gendercoh
+
+AME_ethnicity
+AME_ethnicitycoh
 
 ```
 
@@ -704,3 +1035,4 @@ M4_no04 <- flexsurvreg(Surv((time -1), time, inactive) ~ gender + ethnicity2 + u
 M4_no04
 
 ```
+

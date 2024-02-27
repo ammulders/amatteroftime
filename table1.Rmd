@@ -87,7 +87,7 @@ fpackage.check(packages)
 We use one processed dataset.
 
 * [df_starting.rda](): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
-    - For construction of this dataset see [(datapreparations.html)]  
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)  
     - name of dataset: `df_starting` 
     
 

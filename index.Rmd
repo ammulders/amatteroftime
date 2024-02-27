@@ -10,7 +10,7 @@ output:
     
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, results="hide"}
 
 library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,15 +36,15 @@ klippy::klippy(position = c('top', 'right'))
 ----
 
 
-This website contains supplementary information for the paper "A Matter of Time? Gender and Ethnic Inequality in the Academic Publishing Careers of Dutch PhDs". 
+This website contains supplementary information for the article "A Matter of Time? Gender and Ethnic Inequality in the Academic Publishing Careers of Dutch PhDs", published in Quantitative Science Studies. 
 
-Navigate through the menu at the top of this page to find information on the creation of our independent and dependent variables and to replicate our analyses, figures and tables. Supplementary information can be found under 'appendices'. All code is written in R.
+Navigate through the menu at the top of this page to find information on the creation of our independent and dependent variables and to replicate our analyses, figures and tables. All code is written in R.
 
 
 ----
 
 ## Contact  
 
-Questions can be addressed to the first author of the corresponding article [omitted]. 
+Questions can be addressed to the corresponding author of the article: [Anne Maaike Mulders](mailto:mulders.annemaaike@gmail.com).
 
 

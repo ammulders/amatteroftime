@@ -14,7 +14,7 @@ output:
 
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE)
@@ -36,7 +36,7 @@ klippy::klippy(position = c('top', 'right'))
 
 ----
 
-This lab journal demonstrates how first names of doctoral recipients are used to infer gender, using the mock dataset created in [(names.html)]   
+This lab journal demonstrates how first names of doctoral recipients are used to infer gender, using the mock dataset created in [Names](names.html)   
   
 ----
 
@@ -66,9 +66,13 @@ fpackage.check <- function(packages) {
 
 # Packages
 
+- `tidyverse`: For general data manipulaion
 
 - `rrapply`: For detecting empty nested lists  
-- `stringr`: For string manipulations  
+
+- `stringr`: For string manipulations
+
+- `dplyr`: for data manipulation
 
 
 ```{r, results='hide'}
@@ -86,23 +90,23 @@ fpackage.check(packages)
 
 We use two processed datasets
 
-* [phdnames.rda](): example dataset of 8 (fictional) PhDs with first and last names
-    - For construction of this dataset see [(names.html)]  
+* [phdethnicity](https://github.com/ammulders/amatteroftime/data/processed/phdethnicity.rda): example dataset of 8 (fictional) PhDs with first and last names, and ethnicity attached
+    - For construction of this dataset see [Independent variables: names](names.html) & [Independent variables: ethnicity](ethnicity.html)
     - name of dataset: `phdnames` 
 
-* [gender.rda](): web scraped gender data for the 8 first names in the example data, from Meertens Voornamenbank
+* [gender.rda](https://github.com/ammulders/amatteroftime/data/processed/gender.rda): web scraped gender data for the 8 first names in the example data, from Meertens Voornamenbank
     - name of dataset: `gender` 
     
-* [genderizer_all.rda](): web scraped gender data for the 8 first names in the example data, from Genderizer global
+* [genderizer_all.rda](https://github.com/ammulders/amatteroftime/data/genderizer_all.rda): web scraped gender data for the 8 first names in the example data, from Genderizer global
     - name of dataset: `genderizer_all`
     
-* [genderizer_nl.rda](): web scraped gender data for the 8 first names in the example data, from Genderizer Netherlands
+* [genderizer_nl.rda](https://github.com/ammulders/amatteroftime/data/genderizer/genderizer_nl.rda): web scraped gender data for the 8 first names in the example data, from Genderizer Netherlands
     - name of dataset: `genderizer_nl` 
 
-* [genderizer_ma.rda](): web scraped gender data for the 8 first names in the example data, from Genderizer Morocco
+* [genderizer_ma.rda](https://github.com/ammulders/amatteroftime/data/genderizer/genderizer_ma.rda): web scraped gender data for the 8 first names in the example data, from Genderizer Morocco
     - name of dataset: `genderizer_ma` 
 
-* [genderizer_tr.rda](): web scraped gender data for the 8 first names in the example data, from Genderizer Turkey
+* [genderizer_tr.rda](https://github.com/ammulders/amatteroftime/data/genderizer/genderizer_tr.rda): web scraped gender data for the 8 first names in the example data, from Genderizer Turkey
     - name of dataset: `genderizer_tr` 
 
 
@@ -117,8 +121,6 @@ load(file = "data/genderizer/genderizer_all.rda")
 load(file = "data/genderizer/genderizer_nl.rda")
 load(file = "data/genderizer/genderizer_ma.rda")
 load(file = "data/genderizer/genderizer_tr.rda")
-
-
 
 ```
 

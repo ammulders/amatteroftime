@@ -12,7 +12,7 @@ output:
     
 ---
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 library(knitr)
 library(formatR)
@@ -54,7 +54,7 @@ rm(list = ls())
 
 # Custom functions
 
-- `pacage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+- `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
 
 
 ```{r, results='hide'}
@@ -72,12 +72,17 @@ fpackage.check <- function(packages) {
 
 # Packages
 
+- `tidyverse`: general package for data manipulation
 
 - `stringr`: to execute various string manipulations
+
 - `stringi`: to remove diacritics
 
+- `kableExtra`: to make tables in Rmarkdown
+
+
 ```{r, results='hide'}
-packages = c("tidyverse", "stringr", "stringi", "formatR")
+packages = c("tidyverse", "stringr", "stringi", "kableExtra")
 
 fpackage.check(packages)
 
@@ -88,6 +93,10 @@ fpackage.check(packages)
 
 # Input
 
+We use one mock dataset:
+
+* [phd_metadf.rda](https://github.com/ammulders/amatteroftime/data/phd_metadf.rda): this dataset mimicks the structure of our raw data, but contains 8 example rows to maintain anonymity.
+    - name of dataset: `phd_metadf` 
 
 ```{r datasets, cache=FALSE}
 
@@ -108,9 +117,12 @@ For this, we use an example dataframe containing 8 observations (4 ethnic majori
 Below you can see the example data, 
 
 
-```{r}
+```{r, echo=FALSE}
 
-phd_metadf
+phd_metadf %>%
+  kable() %>%
+  kable_styling() %>%
+  scroll_box(width="100%")
 
 ```
 
@@ -120,7 +132,7 @@ phd_metadf
 
 
 
-# 1: Gathering first names from 'auteur'(Author) on NARCIS dissertation pages
+# Gathering first names from 'auteur'(Author) on NARCIS dissertation pages
 
 
 Some dissertations appear to have multiple authors. We only want the first author, so remove everything after ";"
@@ -277,7 +289,7 @@ phd_metadf$firstname <- ifelse(nchar(phd_metadf$firstname)==1, NA, phd_metadf$fi
 ```
 
 
-# 2: Last names from 'auteur' on NARCIS dissertation page
+# Last names from 'auteur' on NARCIS dissertation page
 
 
 First, we extract last names in the format "lastname comma firstname"
@@ -363,7 +375,7 @@ phd_metadf %>%
 
 
 
-# 3: Extracting first names from personal NARCIS profiles
+# Extracting first names from personal NARCIS profiles
 
 In the following part of the script, first names from personal NARCIS profiles will be cleaned. The method here is roughly the same as the method used to clean the first names from the 'Author' section of dissertation NARCIS pages. 
 
@@ -449,7 +461,7 @@ phd_metadf$int <- ifelse(nchar(phd_metadf$int)==1, NA, phd_metadf$int) # remove 
 
 
 
-# 4: Combining first name information from dissertation & personal NARCIS pages
+# Combining first name information from dissertation & personal NARCIS pages
 
 We give priority to names from the dissertation pages, because these appear to be the formal first names, while personal NARCIS page names correspond to the given first name. 
 Given that we match individuals based on the name which is formally registered, it seems appropriate to take the 'auteur' name as the basis and replace with 'narcisname' when the name based on 'auteur' is unknown. 
@@ -473,7 +485,7 @@ phd_metadf <- subset(phd_metadf, select = -int)
 
 
 
-# 5: First names from dissertation PDFs
+# First names from dissertation PDFs
 
 There are two name objects gathered from the pdfs: pdfname (consisting of names that were extracted from running text in the dissertation, often from dissertation front pages) and pdfnamep1 (names on standardized dissertation frontpages that are provided by a subset of universities, which contain a specific header for the PhD name)
 
@@ -644,7 +656,7 @@ phd_metadf <- subset(phd_metadf, select = -firstnamepdf2) # remove intermediate 
 
 
 
-# 6: Gathering last names from the dissertation PDFs
+# Gathering last names from the dissertation PDFs
 
 There is a *very* small number of individuals for whom the last name is unknown. To fill this, we use the name object from the dissertation data. Given the formatting of names in this object as "first name(s) last name(s)", we just take the last word of the string, and then add potential nobiliary particles that are mentioned in the middle of the string. 
 
@@ -667,7 +679,7 @@ phd_metadf$lastnamepdf <- ifelse(nchar(phd_metadf$lastnamepdf)==1, NA, phd_metad
 
 
 
-# 7: Harmonizing names from NARCIS pages and dissertation text
+# Harmonizing names from NARCIS pages and dissertation text
 
 Next, we harmonize the names we now have based on NARCIS pages (personal and dissertation page), with names gathered from dissertation PDF text. We give priority to names from NARCIS pages, because they contain less noise than names from the dissertation text. 
 
@@ -686,10 +698,15 @@ phd_metadf$lastname <- ifelse(is.na(phd_metadf$lastname), phd_metadf$lastnamepdf
 
 After all of this cleaning, we now have a dataframe that contains a cleaned first name and last name (with nobiliary particles if present). This dataframe is used as input for our gender and ethnicity variables. 
 
-```{r datapreview}
+```{r datapreview, echo=FALSE}
+
+outputview <- phd_metadf[,c(8,1,2,3,4,9,11,10,12,5,6,7)]
 
 
-phd_metadf[,c(8,1,2,3,4,9,11,10,12,5,6,7)]
+outputview %>%
+  kable() %>%
+  kable_styling() %>%
+  scroll_box(width="100%")
 
 
 ```

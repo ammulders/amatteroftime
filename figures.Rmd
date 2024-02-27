@@ -18,7 +18,7 @@ This lab journal replicates the analyses for 'starting to publish'.
 
 ----
 
-```{r setup, include=FALSE} 
+```{r setup, include=FALSE, results="hide"} 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
@@ -84,12 +84,12 @@ fpackage.check(packages)
 
 We use two processed datasets:
 
-* [df_starting.rda]("./data/processed/df_starting.rda"): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
-    - For construction of this dataset see [(datapreparations.html)]  
+* [df_starting.rda]("https://github.com/ammulders/amatteroftime/data/processed/df_starting.rda"): dataset of PhDs with all relevant variables: gender + ethnicity + university + PhD year  
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)  
     - name of dataset: `df_starting` 
     
-* [df_stopping.rda]("./data/processed/df_stopping.rda"): person-period file containing publications and all relevant variables for the survival models, time window for inactivity is 3 years
-    - For construction of this dataset see [(datapreparation.html)]  
+* [df_stopping.rda]("https://github.com/ammulders/amatteroftime/data/processed/df_stopping.rda"): person-period file containing publications and all relevant variables for the survival models, time window for inactivity is 3 years
+    - For construction of this dataset see [Dependent Variables : Starting and Stopping to Publish](datapreparation.html)
     - name of dataset: `df_ppf3` 
 
 

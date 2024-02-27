@@ -13,7 +13,7 @@ output:
 
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 require(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE, eval = FALSE)
@@ -67,11 +67,14 @@ fpackage.check <- function(packages) {
 # Packages
 
 - `tidyverse`: some tidy data crunching later on
+
 - `data.table`: the reduce computing time, especially using the `unique` function with big data
+
+- `kableExtra`: to make HTML tables
 
 ```{r, results='hide'}
 
-packages = c("tidyverse", "data.table")
+packages = c("tidyverse", "data.table", "kableExtra")
 
 fpackage.check(packages)
 
@@ -83,17 +86,17 @@ fpackage.check(packages)
 
 We use four datasets in this file:
 
-* [journals_wos](./data/journals_discipline/journals_wos.rda): Journals in WoS and associated disciplines (example)
-    - Name: journals_wos  
+* [journals_wos](https://github.com/ammulders/amatteroftime/data/journals_discipline/journals_wos.rda): Journals in WoS and associated disciplines (example)
+    - Name: `journals_wos`  
   
-* [pubs_metadf](./data/pubs_metadf.rda): Publication metadata for three PhDs from the example dataset
-    - Name: pubs_metadf
+* [pubs_metadf](https://github.com/ammulders/amatteroftime/data/pubs_metadf.rda): Publication metadata for three PhDs from the example dataset
+    - Name: `pubs_metadf`
 
-* [pubs_field](./data/journals_discipline/pubs_field.rda): Matched publication and field dataset for the three PhDs in [(pubs_metadf)]
-    - Name: pubs_metadf
+* [pubs_field](https://github.com/ammulders/amatteroftime/data/journals_discipline/pubs_field.rda): Matched publication and field dataset for the three PhDs in [(pubs_metadf)]
+    - Name: `pubs_metadf`
     
-* [phdgender](./data/processed/phdgender.rda): Processed PhD data including gender and ethnicity variables
-    - Name: phdgender  
+* [phdgender](https://github.com/ammulders/amatteroftime/data/processed/phdgender.rda): Processed PhD data including gender and ethnicity variables
+    - Name: `phdgender`  
  
 
 ``` {r data loading, cache = TRUE}
@@ -272,9 +275,13 @@ phdfield <- subset(phdfield, select=c(id, firstname, lastname_full, field, field
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 
-knitr::kable(phdfield, format='markdown')
+phdfield %>%
+  kable() %>%
+  kable_styling() %>%
+  scroll_box(width="100%")
+
 
 ```
 

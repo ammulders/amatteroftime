@@ -15,7 +15,7 @@ output:
 
 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 
 library(knitr)
 #library(rgl)
@@ -93,11 +93,11 @@ fpackage.check(packages)
 
 We use one processed dataset:
 
-* [phdfield]("./data/processed/phdfield.rda"): processed example dataset of PhDs with gender, ethnicity and field variables
+* [phdfield]("https://github.com/ammulders/amatteroftime/data/processed/phdfield.rda"): processed example dataset of PhDs with gender, ethnicity and field variables
     - name of dataset: `phd_field` / `phd_df` 
     
 Further, we use one raw dataset:
-* [pubs_metadf]("./data/pubs_metadf.rda"): publications dataset   
+* [pubs_metadf]("https://github.com/ammulders/amatteroftime/data/pubs_metadf.rda"): publications dataset   
     - name of dataset: `pubs_metadf` 
 
 

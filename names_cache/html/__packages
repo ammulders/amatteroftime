@@ -10,3 +10,9 @@ stringr
 forcats
 stringi
 formatR
+lubridate
+ggpubr
+splines2
+rrapply
+kableExtra
+zoo

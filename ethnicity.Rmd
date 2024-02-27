@@ -14,7 +14,7 @@ output:
 
 <!---please be aware that caching large objects is problematic, hence cache.lazy=FALSE and you may need to turn cache=FALSE for chuncks in which you load large datasets ---> 
 
-```{r, globalsettings, echo=FALSE, warning=FALSE}
+```{r, globalsettings, echo=FALSE, warning=FALSE, results="hide"}
 library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"), cache.lazy = FALSE, eval=FALSE)
 options(width = 100)
@@ -50,10 +50,14 @@ We determine ethnic backgrounds based on last names. For this, we use informatio
 
 # Custom functions
 
-- `pacage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
+- `fpackage.check`: Check if packages are installed (and install if not) in R ([source](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/)).  
 
 
 ```{r, results='hide'}
+
+rm(list = ls())
+
+
 fpackage.check <- function(packages) {
   lapply(packages, FUN = function(x) {
     if (!require(x, character.only = TRUE)) {
@@ -75,8 +79,14 @@ fsave <- function(x, file, location="./data/processed/") {
 
 # Packages
 
+- `tidyverse`: For general data manipulaion
 
 - `stringr`: for string manipulations
+
+- `dplyr`: for data manipulation
+
+- `rvest`: for 
+
 
 ```{r, results='hide'}
 
@@ -94,41 +104,14 @@ fpackage.check(packages)
 
 We use two processed datasets
 
-* [phdnames.rda](): example dataset of 8 (fictional) PhDs with first and last names
-    - For construction of this dataset see [(names.html)]  
+* [phdnames.rda](https://github.com/ammulders/amatteroftime/data/processed/phdnames.rda): example dataset of 8 (fictional) PhDs with first and last names
+    - For construction of this dataset see [Independent variables: names](names.html)  
     - name of dataset: `phdnames` 
 
-* [ethnicity.rda](): web scraped ethnicity data for the 8 last names in the example data
+* [lastname_origin.rda](https://github.com/ammulders/amatteroftime/data/processed/lastname_origin.rda): web scraped ethnicity data for the 8 last names in the example data from de Nederlandse Familienamenbank
     - name of dataset: `gender` 
-    
-    
-    
-
-* [phd_metadf.rda](./data/processed/phd_metadf.rda): dataset of PhDs with cleaned names + addendum  
-    - For construction of this dataset see [(names.html)]  
-    - name of dataset: `phd_metadf` 
-
-
-* [familienamenbank.rda](./data/familienamenbank.rda): contains last names and origin information scraped from Meertens Familienamenbank  
-    - For construction of this dataset see [1_scraper_freq_origin.R](./name_data/global/lname/1_scraper_freq_origin.R) & [2_cleaning_origin.RMD](./name_data/global/lname/2_cleaning_origin.RMD)  
-    - name of dataset: `origin_ln` 
-
-
-* [diss_info](./data/processed/diss_info.rda): we use the dissertation PDF files to construct origin based on birth countries
-    - For construction of this dataset see [(names_dissertation.Rmd)]  
-    - name of dataset: `diss_info` 
-
-
-* [genderizer.rda](./data/processed/genderizer.rda): first names and genders based on Genderizer
-    - For construction of this dataset see [(genderizer.html)]  
-    - name of dataset: `genderizer` 
-
-
-<!---if loading large datafiles, please add cache=FALSE to chunk---> 
 
 ```{r datasets, cache=FALSE}
-
-rm(list = ls())
 
 load(file = "./data/processed/phdnames.rda")
 
@@ -531,13 +514,19 @@ phdethnicity <- subset(phdethnicity, select=c(id, firstname, np, lastname, lastn
 # Output
 
 
-```{r eval=FALSE}
+```{r, eval=FALSE}
 
-# origin1
-save(phdethnicity, file = "./data/processed/phdethnicity.rda")
+
+phdethnicity
 
 ```
 
+
+```{r, eval=FALSE, echo=FALSE}
+
+save(phdethnicity, file = "./data/processed/phdethnicity.rda")
+
+```
 
 
 
